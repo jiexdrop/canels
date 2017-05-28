@@ -12,7 +12,7 @@ public class Player extends Entity {
     protected Behaviour moveBehaviour;
 
     public Player(){
-        super(new Texture(GameVariables.TERRAIN_TILES));
+        super(new Texture(GameVariables.PLAYER_BASE));
     }
 
     public Behaviour getAttackBehaviour() {

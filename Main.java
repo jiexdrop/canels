@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.model.entity.behaviours.WeaponBehaviour;
+import com.jiedro.canels.model.input.MainInputProcessor;
 import com.jiedro.canels.model.world.Terrain;
 
 public class Main extends Game {
@@ -22,7 +23,7 @@ public class Main extends Game {
 
     @Override
     public void create() {
-        int zoom_level = 1024;
+        int zoom_level = 256;
 
         batch = new SpriteBatch();
         font = new BitmapFont();
@@ -35,11 +36,14 @@ public class Main extends Game {
         camera.update();
 
         player = new Player();
+        player.setPosition(camera.position.x, camera.position.y);
         player.setAttackBehaviour(new WeaponBehaviour());
 
         player.attack();
 
         terrain = new Terrain();
+
+        Gdx.input.setInputProcessor(new MainInputProcessor(camera, player));
     }
 
     @Override
@@ -48,12 +52,15 @@ public class Main extends Game {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
+        camera.position.x = player.getX();
+        camera.position.y = player.getY();
 
         terrain.getRenderer().setView(camera);
         terrain.getRenderer().render();
 
         batch.begin();
         player.draw(batch);
+
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
         batch.end();
     }
