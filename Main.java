@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jiedro.canels.model.entity.Player;
-import com.jiedro.canels.model.entity.behaviours.WeaponBehaviour;
 import com.jiedro.canels.model.input.MainInputProcessor;
 import com.jiedro.canels.model.world.Terrain;
 
@@ -35,11 +34,11 @@ public class Main extends Game {
         camera.update();
 
         player = new Player();
-        player.setPosition(camera.position.x, camera.position.y);
-        player.setAttackBehaviour(new WeaponBehaviour());
+        player.setPosition(w/2, h/2);
 
+        camera.position.x =  player.getX() ;
+        camera.position.y = player.getY();
 
-        player.attack();
 
         terrain = new Terrain();
 
@@ -52,9 +51,9 @@ public class Main extends Game {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
-        camera.position.x = player.getX();
-        camera.position.y = player.getY();
 
+
+        terrain.generateLayers(player.getMapX(), player.getMapY());
         terrain.getRenderer().setView(camera);
         terrain.getRenderer().render();
 

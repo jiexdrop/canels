@@ -28,27 +28,26 @@ public class Terrain {
         splicedTiles = TextureRegion.split(tiles, GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
         map = new TiledMap();
 
-        generateLayers();
+        generateLayers(0,0);
 
         renderer = new OrthogonalTiledMapRenderer(map);
     }
 
-    private void generateLayers(){
+    public void generateLayers(int x, int y){
         MapLayers layers = map.getLayers();
-
-
-        layers.add(generateChunk(0,0));
-        layers.add(generateChunk(16,0));
+        if(layers.getCount()>0)
+            layers.remove(0);
+        layers.add(update(x,y));
     }
 
 
-    private TiledMapTileLayer generateChunk(int x, int y){
-        TiledMapTileLayer layer = new TiledMapTileLayer(GameVariables.CHUNK_SIZE+x,
-                GameVariables.CHUNK_SIZE+y,
+    private TiledMapTileLayer update(int x, int y){
+        TiledMapTileLayer layer = new TiledMapTileLayer(GameVariables.CHUNK_SIZE*2,
+                GameVariables.CHUNK_SIZE,
                 GameVariables.TILES_SIZE,
                 GameVariables.TILES_SIZE);
 
-        for (int i = 0; i < GameVariables.CHUNK_SIZE; i++) {
+        for (int i = 0; i < GameVariables.CHUNK_SIZE*2; i++) {
             for (int j = 0; j < GameVariables.CHUNK_SIZE; j++) {
 
                 TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
@@ -58,7 +57,7 @@ public class Terrain {
                 } else {
                     cell.setTile(new StaticTiledMapTile(splicedTiles[1][0]));
                 }
-                layer.setCell(i+x, j+y, cell);
+                layer.setCell(i, j, cell);
             }
         }
 
