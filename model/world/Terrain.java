@@ -1,6 +1,5 @@
 package com.jiedro.canels.model.world;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
@@ -20,44 +19,50 @@ public class Terrain {
     TiledMap map;
     TiledMapRenderer renderer;
     TiledMapTileLayer[] chunksLayers;
+    TextureRegion[][] splicedTiles;
 
     public Terrain(){
         tiles = new Texture(GameVariables.TERRAIN_TILES);
         chunksLayers = new TiledMapTileLayer[GameVariables.TOTAL_CHUNKS];
 
-        TextureRegion[][] splicedTiles = TextureRegion.split(tiles, GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
+        splicedTiles = TextureRegion.split(tiles, GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
         map = new TiledMap();
 
-        generateLayers(splicedTiles);
+        generateLayers();
 
         renderer = new OrthogonalTiledMapRenderer(map);
     }
 
-    private void generateLayers(TextureRegion[][] splicedTiles){
+    private void generateLayers(){
         MapLayers layers = map.getLayers();
 
 
-        TiledMapTileLayer layer = new TiledMapTileLayer(GameVariables.CHUNK_SIZE, GameVariables.CHUNK_SIZE, GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
-        for (int x = 0; x < GameVariables.CHUNK_SIZE; x++) {
-            for (int y = 0; y < GameVariables.CHUNK_SIZE; y++) {
+        layers.add(generateChunk(0,0));
+        layers.add(generateChunk(16,0));
+    }
+
+
+    private TiledMapTileLayer generateChunk(int x, int y){
+        TiledMapTileLayer layer = new TiledMapTileLayer(GameVariables.CHUNK_SIZE+x,
+                GameVariables.CHUNK_SIZE+y,
+                GameVariables.TILES_SIZE,
+                GameVariables.TILES_SIZE);
+
+        for (int i = 0; i < GameVariables.CHUNK_SIZE; i++) {
+            for (int j = 0; j < GameVariables.CHUNK_SIZE; j++) {
 
                 TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
 
-                if(SimplexNoise.noise(GameVariables.FREQUENCY*x,GameVariables.FREQUENCY*y)<0) {
+                if(SimplexNoise.noise(GameVariables.FREQUENCY*(i+x),GameVariables.FREQUENCY*(j+y))<0) {
                     cell.setTile(new StaticTiledMapTile(splicedTiles[0][1]));
                 } else {
                     cell.setTile(new StaticTiledMapTile(splicedTiles[1][0]));
                 }
-                layer.setCell(x, y, cell);
+                layer.setCell(i+x, j+y, cell);
             }
         }
 
-        layers.add(layer);
-    }
-
-
-    private boolean generateChunk(int x, int y){
-        return false;
+        return layer;
     }
 
     public TiledMapRenderer getRenderer() {

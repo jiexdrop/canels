@@ -1,8 +1,10 @@
 package com.jiedro.canels.model.input;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.jiedro.canels.model.entity.Direction;
 import com.jiedro.canels.model.entity.Player;
 
 /**
@@ -21,6 +23,21 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        switch (keycode){
+            case Input.Keys.UP:
+                player.move(Direction.UP);
+                break;
+            case Input.Keys.DOWN:
+                player.move(Direction.DOWN);
+                break;
+            case Input.Keys.LEFT:
+                player.move(Direction.LEFT);
+                break;
+            case Input.Keys.RIGHT:
+                player.move(Direction.RIGHT);
+                break;
+        }
+
         return false;
     }
 

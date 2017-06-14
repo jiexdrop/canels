@@ -9,7 +9,6 @@ import com.jiedro.canels.GameVariables;
 
 public class Player extends Entity {
     protected Behaviour attackBehaviour;
-    protected Behaviour moveBehaviour;
 
     public Player(){
         super(new Texture(GameVariables.PLAYER_BASE));
@@ -23,20 +22,26 @@ public class Player extends Entity {
         this.attackBehaviour = attackBehaviour;
     }
 
-    public Behaviour getMoveBehaviour() {
-        return moveBehaviour;
-    }
-
-    public void setMoveBehaviour(Behaviour moveBehaviour) {
-        this.moveBehaviour = moveBehaviour;
-    }
-
     public void attack(){
         attackBehaviour.behave();
     }
 
-    public void move(){
-        moveBehaviour.behave();
+
+    public void move(Direction direction){
+        switch (direction){
+            case UP:
+                setPosition(getX(), getY()+ GameVariables.TILES_SIZE );
+                break;
+            case DOWN:
+                setPosition(getX(), getY()- GameVariables.TILES_SIZE );
+                break;
+            case LEFT:
+                setPosition(getX() - GameVariables.TILES_SIZE, getY());
+                break;
+            case RIGHT:
+                setPosition(getX() + GameVariables.TILES_SIZE, getY() );
+                break;
+        }
     }
 
 
