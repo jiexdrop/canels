@@ -6,19 +6,23 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jiedro.canels.model.entity.Direction;
 import com.jiedro.canels.model.entity.Player;
+import com.jiedro.canels.model.world.Terrain;
 
 /**
+
  * Created by jorge on 25/05/17.
  */
 
 public class MainInputProcessor implements InputProcessor {
 
-    OrthographicCamera camera;
-    Player player;
+    private OrthographicCamera camera;
+    private Player player;
+    private Terrain terrain;
 
-    public MainInputProcessor(OrthographicCamera camera, Player player){
+    public MainInputProcessor(OrthographicCamera camera, Player player, Terrain terrain){
         this.camera = camera;
         this.player = player;
+        this.terrain = terrain;
     }
 
     @Override
@@ -37,6 +41,8 @@ public class MainInputProcessor implements InputProcessor {
                 player.move(Direction.RIGHT);
                 break;
         }
+
+        terrain.generateLayers(player);
 
         return false;
     }

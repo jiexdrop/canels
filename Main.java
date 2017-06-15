@@ -11,13 +11,13 @@ import com.jiedro.canels.model.input.MainInputProcessor;
 import com.jiedro.canels.model.world.Terrain;
 
 public class Main extends Game {
-    SpriteBatch batch;
+    private SpriteBatch batch;
 
-    OrthographicCamera camera;
-    BitmapFont font;
-    Player player;
+    private OrthographicCamera camera;
+    private BitmapFont font;
+    private Player player;
 
-    Terrain terrain;
+    private Terrain terrain;
 
     @Override
     public void create() {
@@ -34,15 +34,9 @@ public class Main extends Game {
         camera.update();
 
         player = new Player();
-        player.setPosition(w/2, h/2);
-
-        camera.position.x =  player.getX() ;
-        camera.position.y = player.getY();
-
-
         terrain = new Terrain();
 
-        Gdx.input.setInputProcessor(new MainInputProcessor(camera, player));
+        Gdx.input.setInputProcessor(new MainInputProcessor(camera, player, terrain));
     }
 
     @Override
@@ -52,13 +46,10 @@ public class Main extends Game {
 
         camera.update();
 
-
-        terrain.generateLayers(player.getMapX(), player.getMapY());
         terrain.getRenderer().setView(camera);
         terrain.getRenderer().render();
 
         batch.begin();
-        player.draw(batch);
 
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
         batch.end();

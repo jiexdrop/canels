@@ -1,7 +1,9 @@
 package com.jiedro.canels.model.entity;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jiedro.canels.GameVariables;
+import com.jiedro.canels.model.world.Tiles;
 
 /**
  * Created by jorge on 23/05/17.
@@ -12,7 +14,7 @@ public class Player extends Entity {
     private int y = 0;
 
     public Player(){
-        super(new Texture(GameVariables.PLAYER_BASE));
+        super(Tiles.getPlayerTexture());
     }
 
     public void move(Direction direction){
