@@ -1,20 +1,20 @@
 package com.jiedro.canels.model.entity;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.jiedro.canels.GameVariables;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.jiedro.canels.model.world.Tiles;
 
 /**
+ *
  * Created by jorge on 23/05/17.
  */
 
-public class Player extends Entity {
+public class Player extends StaticTiledMapTile {
     private int x = 0;
     private int y = 0;
 
     public Player(){
-        super(Tiles.getPlayerTexture());
+        super(Tiles.getPlayerTile());
     }
 
     public void move(Direction direction){

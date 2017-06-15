@@ -9,20 +9,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.model.input.MainInputProcessor;
 import com.jiedro.canels.model.world.Terrain;
+import com.jiedro.canels.model.world.World;
 
 public class Main extends Game {
     private SpriteBatch batch;
 
     private OrthographicCamera camera;
     private BitmapFont font;
-    private Player player;
 
-    private Terrain terrain;
+    private World world;
 
     @Override
     public void create() {
-        int zoom_level = 256;
-
         batch = new SpriteBatch();
         font = new BitmapFont();
 
@@ -30,13 +28,11 @@ public class Main extends Game {
         float h = Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * zoom_level, zoom_level);
+        camera.setToOrtho(false, (w / h) * GameVariables.ZOOM_LEVEL, GameVariables.ZOOM_LEVEL);
         camera.update();
 
-        player = new Player();
-        terrain = new Terrain();
+        world = new World();
 
-        Gdx.input.setInputProcessor(new MainInputProcessor(camera, player, terrain));
     }
 
     @Override
@@ -46,11 +42,9 @@ public class Main extends Game {
 
         camera.update();
 
-        terrain.getRenderer().setView(camera);
-        terrain.getRenderer().render();
+        world.renderTerrain(camera);
 
         batch.begin();
-
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
         batch.end();
     }
@@ -59,7 +53,7 @@ public class Main extends Game {
     public void dispose() {
         batch.dispose();
         font.dispose();
-        terrain.dispose();
+        world.dispose();
     }
 
 

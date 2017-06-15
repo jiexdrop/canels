@@ -15,12 +15,10 @@ import com.jiedro.canels.model.world.Terrain;
 
 public class MainInputProcessor implements InputProcessor {
 
-    private OrthographicCamera camera;
     private Player player;
     private Terrain terrain;
 
-    public MainInputProcessor(OrthographicCamera camera, Player player, Terrain terrain){
-        this.camera = camera;
+    public MainInputProcessor(Player player, Terrain terrain){
         this.player = player;
         this.terrain = terrain;
     }

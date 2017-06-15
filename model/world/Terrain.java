@@ -17,37 +17,21 @@ import com.jiedro.canels.model.entity.Player;
  */
 
 public class Terrain {
-    Texture tiles;
-    TiledMap map;
-    TiledMapRenderer renderer;
-    TiledMapTileLayer[] chunksLayers;
-    TextureRegion[][] splicedTiles;
+    private TiledMap map;
+    private TiledMapRenderer renderer;
 
     public Terrain(){
-        tiles = new Texture(GameVariables.TERRAIN_TILES);
-        chunksLayers = new TiledMapTileLayer[GameVariables.TOTAL_CHUNKS];
-
-        splicedTiles = TextureRegion.split(tiles, GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
         map = new TiledMap();
-
-        map.getLayers().add(updateWorld(0,0));
 
         renderer = new OrthogonalTiledMapRenderer(map);
     }
 
     public void generateLayers(Player player){
+        clearLayers();
         MapLayers layers = map.getLayers();
-        System.out.println(layers.getCount());
-        if(layers.getCount()==2){
-            layers.remove(0);
-            layers.remove(0);
-        } else if(layers.getCount()==1){
-            layers.remove(0);
-        }
         layers.add(updateWorld(player.getMapX(), player.getMapY()));
         layers.add(placePlayer(player));
     }
-
 
     private TiledMapTileLayer placePlayer(Player player){
         TiledMapTileLayer layer = new TiledMapTileLayer(GameVariables.CHUNK_SIZE,
@@ -74,9 +58,9 @@ public class Terrain {
 
                 layer.setCell(i, j, cell);
                 if(SimplexNoise.noise(GameVariables.FREQUENCY*(i+x),GameVariables.FREQUENCY*(j+y))<0) {
-                    cell.setTile(new StaticTiledMapTile(splicedTiles[0][1]));
+                    cell.setTile(Tiles.getWaterTile());
                 } else {
-                    cell.setTile(new StaticTiledMapTile(splicedTiles[1][0]));
+                    cell.setTile(Tiles.getGroundTile());
                 }
             }
         }
@@ -84,12 +68,19 @@ public class Terrain {
         return layer;
     }
 
+    private void clearLayers(){
+        MapLayers layers = map.getLayers();
+
+        for (int i = 0; i<layers.getCount(); i++){
+            layers.remove(i);
+        }
+    }
+
     public TiledMapRenderer getRenderer() {
         return renderer;
     }
 
     public void dispose(){
-        tiles.dispose();
         map.dispose();
     }
 
