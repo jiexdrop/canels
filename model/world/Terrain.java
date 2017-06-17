@@ -1,17 +1,23 @@
 package com.jiedro.canels.model.world;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Player;
+import com.jiedro.canels.view.Tile;
+import com.jiedro.canels.view.Tiles;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
+ * The terain is where we render tiles
  *
  * Created by jorge on 25/05/17.
  */
@@ -20,59 +26,99 @@ public class Terrain {
     private TiledMap map;
     private TiledMapRenderer renderer;
 
+    private TiledMapTileLayer entities = new TiledMapTileLayer(GameVariables.CHUNK_SIZE,
+            GameVariables.CHUNK_SIZE,
+            GameVariables.TILES_SIZE,
+            GameVariables.TILES_SIZE);
+    private TiledMapTileLayer ground = new TiledMapTileLayer(GameVariables.CHUNK_SIZE*2,
+            GameVariables.CHUNK_SIZE,
+            GameVariables.TILES_SIZE,
+            GameVariables.TILES_SIZE);
+
+
+    private Map<Vector2, com.jiedro.canels.view.Tile> terrain = new HashMap<Vector2, com.jiedro.canels.view.Tile>();
+
+    private Map<Vector2, com.jiedro.canels.view.Tile> terrainEntities = new HashMap<Vector2, com.jiedro.canels.view.Tile>();
+
     public Terrain(){
         map = new TiledMap();
+        MapLayers layers = map.getLayers();
+        layers.add(ground);
+        layers.add(entities);
+
+
 
         renderer = new OrthogonalTiledMapRenderer(map);
     }
 
-    public void generateLayers(Player player){
-        clearLayers();
-        MapLayers layers = map.getLayers();
-        layers.add(updateWorld(player.getMapX(), player.getMapY()));
-        layers.add(placePlayer(player));
+    public Tile generateStructure(int x, int y){
+        if(Math.random()>0.99) {
+            terrain.put(new Vector2(x, y), Tiles.getWallTile());
+            return Tiles.getWallTile();
+        }
+        return Tiles.getGrassTile();
     }
 
-    private TiledMapTileLayer placePlayer(Player player){
-        TiledMapTileLayer layer = new TiledMapTileLayer(GameVariables.CHUNK_SIZE,
-                GameVariables.CHUNK_SIZE,
-                GameVariables.TILES_SIZE,
-                GameVariables.TILES_SIZE);
+    public void update(Player player){
+        updateWorld(player.getMapX(), player.getMapY());
+        updatePlayer(player);
+    }
+
+    public void placeTile(int x, int y, Tile tile){
+        TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
+        cell.setTile(tile);
+        ground.setCell(x,y,cell);
+        terrain.put(new Vector2(x,y), tile);
+    }
+
+    public Vector2 screenToMap(int x, int y){
+
+        return new Vector2(x / (GameVariables.TILES_SIZE*2 - 2),
+                (Gdx.graphics.getHeight()-y)/ (GameVariables.TILES_SIZE - 2));
+    }
+
+    public Vector2 mapToScreen(int x, int y){
+        return null;
+    }
+
+    private void updatePlayer(Player player){
         TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
         cell.setTile(player);
-        layer.setCell(GameVariables.CHUNK_SIZE-2, GameVariables.CHUNK_SIZE/2, cell);
-
-        return layer;
+        entities.setCell(GameVariables.CHUNK_SIZE-2, GameVariables.CHUNK_SIZE/2, cell);
     }
 
-    private TiledMapTileLayer updateWorld(int x, int y){
-        TiledMapTileLayer layer = new TiledMapTileLayer(GameVariables.CHUNK_SIZE*2,
-                GameVariables.CHUNK_SIZE,
-                GameVariables.TILES_SIZE,
-                GameVariables.TILES_SIZE);
+    private void updateWorld(int x, int y){
 
         for (int i = 0; i < GameVariables.CHUNK_SIZE*2; i++) {
             for (int j = 0; j < GameVariables.CHUNK_SIZE; j++) {
 
                 TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
 
-                layer.setCell(i, j, cell);
-                if(SimplexNoise.noise(GameVariables.FREQUENCY*(i+x),GameVariables.FREQUENCY*(j+y))<0) {
-                    cell.setTile(Tiles.getWaterTile());
+
+                ground.setCell(i, j, cell);
+
+                if(!terrain.containsKey(new Vector2(i+x,j+y))) {
+
+                    if (SimplexNoise.noise(GameVariables.FREQUENCY * (i + x), GameVariables.FREQUENCY * (j + y)) < 0) {
+                        cell.setTile(Tiles.getWaterTile());
+                        terrain.put(new Vector2(i + x, j + y), Tiles.getWaterTile());
+                    } else if ((SimplexNoise.noise(GameVariables.FREQUENCY * (i + x), GameVariables.FREQUENCY * (j + y)) > 0.35)
+                            && (SimplexNoise.noise(GameVariables.FREQUENCY * (i + x), GameVariables.FREQUENCY * (j + y)) < 1)) {
+                        Tile tile = generateStructure(i+x, j+y);
+                        cell.setTile(tile);
+                        terrain.put(new Vector2(i + x, j + y), tile);
+
+                    } else {
+                        cell.setTile(Tiles.getGroundTile());
+                        terrain.put(new Vector2(i + x, j + y), Tiles.getGroundTile());
+                    }
+
+
                 } else {
-                    cell.setTile(Tiles.getGroundTile());
+                    cell.setTile(terrain.get(new Vector2(i + x, j + y)));
                 }
+
             }
-        }
-
-        return layer;
-    }
-
-    private void clearLayers(){
-        MapLayers layers = map.getLayers();
-
-        for (int i = 0; i<layers.getCount(); i++){
-            layers.remove(i);
         }
     }
 

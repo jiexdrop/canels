@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Direction;
 import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.model.world.Terrain;
+import com.jiedro.canels.view.Tile;
+import com.jiedro.canels.view.Tiles;
 
 /**
 
@@ -40,7 +43,7 @@ public class MainInputProcessor implements InputProcessor {
                 break;
         }
 
-        terrain.generateLayers(player);
+        terrain.update(player);
 
         return false;
     }
@@ -57,6 +60,9 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        System.out.println(terrain.screenToMap(screenX,screenY));
+        terrain.placeTile((int)terrain.screenToMap(screenX,screenY).x, (int)terrain.screenToMap(screenX,screenY).y, Tiles.getGrassTile());
+
         return false;
     }
 

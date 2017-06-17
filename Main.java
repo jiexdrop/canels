@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.jiedro.canels.model.entity.Player;
-import com.jiedro.canels.model.input.MainInputProcessor;
-import com.jiedro.canels.model.world.Terrain;
-import com.jiedro.canels.model.world.World;
+import com.jiedro.canels.view.World;
 
 public class Main extends Game {
     private SpriteBatch batch;

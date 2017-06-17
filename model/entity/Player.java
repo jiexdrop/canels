@@ -1,8 +1,7 @@
 package com.jiedro.canels.model.entity;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import com.jiedro.canels.model.world.Tiles;
+import com.jiedro.canels.view.Tiles;
 
 /**
  *

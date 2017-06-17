@@ -1,9 +1,10 @@
-package com.jiedro.canels.model.world;
+package com.jiedro.canels.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.model.input.MainInputProcessor;
+import com.jiedro.canels.model.world.Terrain;
 
 /**
  *
@@ -18,7 +19,8 @@ public class World {
     public World(){
         player = new Player();
         terrain = new Terrain();
-        terrain.generateLayers(player);
+
+        terrain.update(player);
 
         Gdx.input.setInputProcessor(new MainInputProcessor(player, terrain));
     }
