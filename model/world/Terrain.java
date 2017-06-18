@@ -64,21 +64,12 @@ public class Terrain {
         updatePlayer(player);
     }
 
-    public void placeTile(int x, int y, Tile tile){
+    public void placeTile(int x, int y, int playerX, int playerY, Tile tile){
         TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
         cell.setTile(tile);
         ground.setCell(x,y,cell);
-        terrain.put(new Vector2(x,y), tile);
-    }
 
-    public Vector2 screenToMap(int x, int y){
-
-        return new Vector2(x / (GameVariables.TILES_SIZE*2 - 2),
-                (Gdx.graphics.getHeight()-y)/ (GameVariables.TILES_SIZE - 2));
-    }
-
-    public Vector2 mapToScreen(int x, int y){
-        return null;
+        terrain.put(new Vector2(x + playerX ,y + playerY), tile);
     }
 
     private void updatePlayer(Player player){
@@ -88,6 +79,7 @@ public class Terrain {
     }
 
     private void updateWorld(int x, int y){
+
 
         for (int i = 0; i < GameVariables.CHUNK_SIZE*2; i++) {
             for (int j = 0; j < GameVariables.CHUNK_SIZE; j++) {

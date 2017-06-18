@@ -10,8 +10,7 @@ import com.jiedro.canels.view.World;
 
 public class Main extends Game {
     private SpriteBatch batch;
-
-    private OrthographicCamera camera;
+    
     private BitmapFont font;
 
     private World world;
@@ -20,16 +19,7 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         font = new BitmapFont();
-
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * GameVariables.ZOOM_LEVEL, GameVariables.ZOOM_LEVEL);
-        camera.update();
-
         world = new World();
-
     }
 
     @Override
@@ -37,9 +27,7 @@ public class Main extends Game {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-
-        world.renderTerrain(camera);
+        world.renderTerrain();
 
         batch.begin();
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
