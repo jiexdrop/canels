@@ -60,8 +60,7 @@ public class Terrain {
     }
 
     public void update(Player player){
-        updateWorld(player.getMapX(), player.getMapY());
-        updatePlayer(player);
+        updateWorld((int)player.getMapX(), (int)player.getMapY());
     }
 
     public void placeTile(int x, int y, int playerX, int playerY, Tile tile){
@@ -70,12 +69,6 @@ public class Terrain {
         ground.setCell(x,y,cell);
 
         terrain.put(new Vector2(x + playerX ,y + playerY), tile);
-    }
-
-    private void updatePlayer(Player player){
-        TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
-        cell.setTile(player);
-        entities.setCell(GameVariables.CHUNK_SIZE-2, GameVariables.CHUNK_SIZE/2, cell);
     }
 
     private void updateWorld(int x, int y){

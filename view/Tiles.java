@@ -11,11 +11,6 @@ import com.jiedro.canels.GameVariables;
  */
 
 public class Tiles {
-    private static final Tile playerTile = new Tile(new TextureRegion(new Texture(GameVariables.PLAYER)),0)
-            .addTextureRegion(new TextureRegion(new Texture(GameVariables.PLAYER_CLOTH_HELMET)))
-            .addTextureRegion(new TextureRegion(new Texture(GameVariables.PLAYER_CLOTH_CHEST)))
-            .addTextureRegion(new TextureRegion(new Texture(GameVariables.PLAYER_CLOTH_PANTS)));
-
     private static final Tile waterTile = new Tile(new TextureRegion(new Texture(GameVariables.WATER)),1);
     private static final Tile groundTile = new Tile(new TextureRegion(new Texture(GameVariables.GROUND)),2);
     private static final Tile grassTile = new Tile(new TextureRegion(new Texture(GameVariables.GRASS)),3);
@@ -42,8 +37,5 @@ public class Tiles {
         return doorTile;
     }
 
-    public static Tile getPlayerTile(){
-        return playerTile;
-    }
 
 }

@@ -8,15 +8,15 @@ package com.jiedro.canels;
 public class GameVariables {
     
     //FOLDERS
-    public static final String TERRAIN_FOLDER = "textures/terrain/";
+    private static final String TERRAIN_FOLDER = "textures/terrain/";
 
-    public static final String PLAYER_FOLDER = "textures/player/";
+    private static final String PLAYER_FOLDER = "textures/player/";
     
-    public static final String PLAYER_CHEST_FOLDER = PLAYER_FOLDER + "chest/";
+    private static final String PLAYER_CHEST_FOLDER = PLAYER_FOLDER + "chest/";
 
-    public static final String PLAYER_HELMET_FOLDER = PLAYER_FOLDER + "helmet/";
+    private static final String PLAYER_HELMET_FOLDER = PLAYER_FOLDER + "helmet/";
 
-    public static final String PLAYER_PANTS_FOLDER = PLAYER_FOLDER + "pants/";
+    private static final String PLAYER_PANTS_FOLDER = PLAYER_FOLDER + "pants/";
 
     //TERRAIN_FOLDER
     public static final String WATER = TERRAIN_FOLDER + "water.png";
@@ -41,11 +41,13 @@ public class GameVariables {
     //CONSTANTS
     public static int ZOOM_LEVEL = 256;
 
-    public static double FREQUENCY = 0.01;//0.01
+    public static double FREQUENCY = 0.01d;//0.01d
 
     public static int TILES_SIZE = 16;
 
     public static int TOTAL_CHUNKS = 9;
 
     public static int CHUNK_SIZE = 16;
+
+    public static final double PLAYER_SPEED = 0.2;
 }
