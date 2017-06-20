@@ -90,7 +90,7 @@ public class World {
     }
 
     public void move(Entity entity, int x, int y, double xVelocity, double yVelocity){
-        if(terrain.canMove((int)entity.getSprite().getX()/GameVariables.TILES_SIZE+x, (int)entity.getSprite().getY()/GameVariables.TILES_SIZE+y)){
+        if(terrain.canMove(entity.getScreenX()+x, entity.getScreenY()+y)){
             entity.move(xVelocity,yVelocity);
         } else {
             entity.move(0,0);
