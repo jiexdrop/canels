@@ -6,12 +6,12 @@ package com.jiedro.canels;
  */
 
 public class GameVariables {
-    
+
     //FOLDERS
     private static final String TERRAIN_FOLDER = "textures/terrain/";
 
     private static final String PLAYER_FOLDER = "textures/player/";
-    
+
     private static final String PLAYER_CHEST_FOLDER = PLAYER_FOLDER + "chest/";
 
     private static final String PLAYER_HELMET_FOLDER = PLAYER_FOLDER + "helmet/";
@@ -49,5 +49,6 @@ public class GameVariables {
 
     public static int CHUNK_SIZE = 16;
 
-    public static final double PLAYER_SPEED = 0.2;
+    public static final double PLAYER_SPEED = 0.8;
+
 }

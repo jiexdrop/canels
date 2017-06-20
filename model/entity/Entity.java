@@ -8,7 +8,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 
 public abstract class Entity {
-    private Sprite sprite;
+    protected Sprite sprite;
+
+    protected double x = 0;
+    protected double y = 0;
+
+    protected double xVelocity = 0;
+    protected double yVelocity = 0;
 
     public Entity(Sprite sprite){
         this.sprite = sprite;
@@ -21,6 +27,16 @@ public abstract class Entity {
     public void setTint(Color color) {
         this.sprite.setColor(color);
     }
+
+    public int getMapX() {
+        return (int)x;
+    }
+
+    public int getMapY() {
+        return (int)y;
+    }
+
+    public abstract void move(double xVelocity, double yVelocity);
 
     public abstract void update();
 }

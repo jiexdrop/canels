@@ -5,8 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.jiedro.canels.GameVariables;
+import com.jiedro.canels.model.entity.Entity;
 import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.model.input.MainInputProcessor;
 import com.jiedro.canels.model.world.Terrain;
@@ -72,20 +74,27 @@ public class World {
 
     public void update(){
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.move(0,GameVariables.PLAYER_SPEED);
+            this.move(player,0,1, 0, GameVariables.PLAYER_SPEED);
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            player.move(0,-GameVariables.PLAYER_SPEED);
+            this.move(player,0,-1, 0, -GameVariables.PLAYER_SPEED);
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.move(-GameVariables.PLAYER_SPEED,0);
+            this.move(player,-1,0, -GameVariables.PLAYER_SPEED, 0);
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.move(GameVariables.PLAYER_SPEED, 0);
+            this.move(player,1, 0, GameVariables.PLAYER_SPEED, 0);
         } else {
             player.move(0,0);
         }
 
-
         player.update();
         terrain.update(player);
+    }
+
+    public void move(Entity entity, int x, int y, double xVelocity, double yVelocity){
+        if(terrain.canMove((int)entity.getSprite().getX()/GameVariables.TILES_SIZE+x, (int)entity.getSprite().getY()/GameVariables.TILES_SIZE+y)){
+            entity.move(xVelocity,yVelocity);
+        } else {
+            entity.move(0,0);
+        }
     }
 
     public void dispose(){

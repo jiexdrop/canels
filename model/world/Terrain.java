@@ -71,6 +71,13 @@ public class Terrain {
         terrain.put(new Vector2(x + playerX ,y + playerY), tile);
     }
 
+    public boolean canMove(int x, int y){
+        if(ground.getCell(x,y).getTile()!=Tiles.getWaterTile()){
+            return true;
+        }
+        return false;
+    }
+
     private void updateWorld(int x, int y){
 
 

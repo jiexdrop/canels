@@ -17,23 +17,23 @@ public class Tiles {
     private static final Tile wallTile = new Tile(new TextureRegion(new Texture(GameVariables.WALL)),4);
     private static final Tile doorTile = new Tile(new TextureRegion(new Texture(GameVariables.DOOR)),5);
 
-    public static Tile getWaterTile() {
+    public static final Tile getWaterTile() {
         return waterTile;
     }
 
-    public static Tile getGroundTile() {
+    public static final Tile getGroundTile() {
         return groundTile;
     }
 
-    public static Tile getGrassTile() {
+    public static final Tile getGrassTile() {
         return grassTile;
     }
 
-    public static Tile getWallTile() {
+    public static final Tile getWallTile() {
         return wallTile;
     }
 
-    public static Tile getDoorTile() {
+    public static final Tile getDoorTile() {
         return doorTile;
     }
 

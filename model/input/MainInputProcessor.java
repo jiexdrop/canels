@@ -49,7 +49,7 @@ public class MainInputProcessor implements InputProcessor {
         Vector3 convert = camera.unproject(new Vector3(screenX,screenY,0));
         Vector2 result = new Vector2(convert.x/GameVariables.TILES_SIZE, convert.y/GameVariables.TILES_SIZE);
 
-        terrain.placeTile((int)result.x, (int)result.y, (int)player.getMapX(), (int)player.getMapY(), Tiles.getGrassTile());
+        terrain.placeTile((int)result.x, (int)result.y, player.getMapX(), player.getMapY(), Tiles.getGrassTile());
 
         return false;
     }
@@ -64,7 +64,7 @@ public class MainInputProcessor implements InputProcessor {
         Vector3 convert = camera.unproject(new Vector3(screenX,screenY,0));
         Vector2 result = new Vector2(convert.x/GameVariables.TILES_SIZE, convert.y/GameVariables.TILES_SIZE);
 
-        terrain.placeTile((int)result.x, (int)result.y, (int)player.getMapX(), (int)player.getMapY(), Tiles.getGrassTile());
+        terrain.placeTile((int)result.x, (int)result.y, player.getMapX(), player.getMapY(), Tiles.getGrassTile());
 
         return false;
     }

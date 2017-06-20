@@ -13,27 +13,15 @@ import com.jiedro.canels.view.Tiles;
  */
 
 public class Player extends Entity {
-    private double x = 0;
-    private double y = 0;
-
-    private double xVelocity = 0;
-    private double yVelocity = 0;
 
     public Player(){
         super(new Sprite(new Texture(GameVariables.PLAYER)));
     }
 
+    @Override
     public void move(double xVelocity, double yVelocity){
         this.xVelocity = xVelocity;
         this.yVelocity = yVelocity;
-    }
-
-    public int getMapX() {
-        return (int)x;
-    }
-
-    public int getMapY() {
-        return (int)y;
     }
 
     @Override
