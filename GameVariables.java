@@ -49,6 +49,6 @@ public class GameVariables {
 
     public static int CHUNK_SIZE = 16;
 
-    public static final double PLAYER_SPEED = 0.1;
+    public static final double PLAYER_SPEED = 1;
 
 }

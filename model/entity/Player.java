@@ -9,13 +9,14 @@ import com.jiedro.canels.view.Tiles;
 
 /**
  *
- * Created by jorge on 23/05/17.
+ * Created by on 23/05/17.
  */
 
 public class Player extends Entity {
 
     public Player(){
         super(new Sprite(new Texture(GameVariables.PLAYER)));
+        super.getSprite().setColor(Color.FIREBRICK);
     }
 
     @Override
@@ -28,5 +29,8 @@ public class Player extends Entity {
     public void update() {
         this.x += xVelocity;
         this.y += yVelocity;
+
+        this.mapX = (int) this.x/GameVariables.TILES_SIZE;
+        this.mapY = (int) this.y/GameVariables.TILES_SIZE;
     }
 }

@@ -23,9 +23,13 @@ public class World {
 
     private Terrain terrain;
 
-    private OrthographicCamera camera;
+    private OrthographicCamera entitiesCamera;
 
-    private SpriteBatch batch;
+    private OrthographicCamera tilemapCamera;
+
+    private SpriteBatch tilemapBatch;
+
+    private SpriteBatch entitiesBatch;
 
     private BitmapFont font;
 
@@ -35,23 +39,29 @@ public class World {
     public World(){
         player = new Player();
         terrain = new Terrain();
-        batch = new SpriteBatch();
+        entitiesBatch = new SpriteBatch();
+        tilemapBatch = new SpriteBatch();
         font = new BitmapFont();
 
-        terrain.update(player);
+
 
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, (w / h) * GameVariables.ZOOM_LEVEL, GameVariables.ZOOM_LEVEL);
-        camera.update();
+        tilemapCamera = new OrthographicCamera();
+        tilemapCamera.setToOrtho(false, (w / h) * GameVariables.ZOOM_LEVEL, GameVariables.ZOOM_LEVEL);
+        tilemapCamera.update();
+
+
+        entitiesCamera = new OrthographicCamera();
+        entitiesCamera.setToOrtho(false, (w / h) * GameVariables.ZOOM_LEVEL, GameVariables.ZOOM_LEVEL);
+        entitiesCamera.update();
 
 
         player.getSprite().setPosition((GameVariables.CHUNK_SIZE)*GameVariables.TILES_SIZE, (GameVariables.CHUNK_SIZE/2)*GameVariables.TILES_SIZE);
 
-        mainInputProcessor = new MainInputProcessor(player, terrain, camera);
+        mainInputProcessor = new MainInputProcessor(player, terrain, tilemapCamera, entitiesCamera);
 
         Gdx.input.setInputProcessor(mainInputProcessor);
     }
@@ -60,44 +70,49 @@ public class World {
     public void renderTerrain(){
         update();
 
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        terrain.getRenderer().setView(camera);
-        terrain.getRenderer().render();
+        tilemapCamera.update();
+        entitiesCamera.update();
 
-        batch.begin();
+        entitiesBatch.setProjectionMatrix(entitiesCamera.combined);
+        tilemapBatch.setProjectionMatrix(tilemapCamera.combined);
 
-        player.getSprite().draw(batch);
-        font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
-        batch.end();
+
+        tilemapBatch.begin();
+        terrain.draw(tilemapBatch, player);
+        tilemapBatch.end();
+
+        entitiesBatch.begin();
+        player.getSprite().draw(entitiesBatch);
+        font.draw(entitiesBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
+        entitiesBatch.end();
     }
 
     public void update(){
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            this.move(player,0,1, 0, GameVariables.PLAYER_SPEED);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            this.move(player,0,-1, 0, -GameVariables.PLAYER_SPEED);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.move(player,-1,0, -GameVariables.PLAYER_SPEED, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.move(player,1, 0, GameVariables.PLAYER_SPEED, 0);
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+            player.move(0,(float)GameVariables.PLAYER_SPEED);
+            tilemapCamera.position.set(player.getX(), player.getY(), 0.f);
+            terrain.updateWorld(player.getMapX()-GameVariables.CHUNK_SIZE,player.getMapY()-GameVariables.CHUNK_SIZE);
+        } else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+            player.move(0,-(float)GameVariables.PLAYER_SPEED);
+            tilemapCamera.position.set(player.getX(), player.getY(), 0.f);
+            terrain.updateWorld(player.getMapX()-GameVariables.CHUNK_SIZE,player.getMapY()-GameVariables.CHUNK_SIZE);
+        } else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+            player.move(-(float)GameVariables.PLAYER_SPEED,0);
+            tilemapCamera.position.set(player.getX(), player.getY(), 0.f);
+            terrain.updateWorld(player.getMapX()-GameVariables.CHUNK_SIZE,player.getMapY()-GameVariables.CHUNK_SIZE);
+        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+            player.move((float)GameVariables.PLAYER_SPEED,0);
+            tilemapCamera.position.set(player.getX(), player.getY(), 0.f);
+            terrain.updateWorld(player.getMapX()-GameVariables.CHUNK_SIZE,player.getMapY()-GameVariables.CHUNK_SIZE);
         } else {
             player.move(0,0);
         }
 
         player.update();
-        terrain.update(player);
-    }
 
-    public void move(Entity entity, int x, int y, double xVelocity, double yVelocity){
-        if(terrain.canMove(entity.getScreenX()+x, entity.getScreenY()+y)){
-            entity.move(xVelocity,yVelocity);
-        } else {
-            entity.move(0,0);
-        }
     }
 
     public void dispose(){
-        terrain.dispose();
+
     }
 }

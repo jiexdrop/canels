@@ -11,11 +11,11 @@ import com.jiedro.canels.GameVariables;
  */
 
 public class Tiles {
-    private static final Tile waterTile = new Tile(new TextureRegion(new Texture(GameVariables.WATER)),1);
-    private static final Tile groundTile = new Tile(new TextureRegion(new Texture(GameVariables.GROUND)),2);
-    private static final Tile grassTile = new Tile(new TextureRegion(new Texture(GameVariables.GRASS)),3);
-    private static final Tile wallTile = new Tile(new TextureRegion(new Texture(GameVariables.WALL)),4);
-    private static final Tile doorTile = new Tile(new TextureRegion(new Texture(GameVariables.DOOR)),5);
+    private static final Tile waterTile = new Tile(new Texture(GameVariables.WATER),1);
+    private static final Tile groundTile = new Tile(new Texture(GameVariables.GROUND),2);
+    private static final Tile grassTile = new Tile(new Texture(GameVariables.GRASS),3);
+    private static final Tile wallTile = new Tile(new Texture(GameVariables.WALL),4);
+    private static final Tile doorTile = new Tile(new Texture(GameVariables.DOOR),5);
 
     public static final Tile getWaterTile() {
         return waterTile;

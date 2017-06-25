@@ -13,19 +13,22 @@ import com.jiedro.canels.view.Tiles;
 
 /**
 
- * Created by jorge on 25/05/17.
+ * Created by jied on 25/05/17.
  */
 
 public class MainInputProcessor implements InputProcessor {
 
     private Player player;
     private Terrain terrain;
-    private OrthographicCamera camera;
+    private OrthographicCamera tilemapCamera;
+    private OrthographicCamera entitiesCamera;
 
-    public MainInputProcessor(Player player, Terrain terrain, OrthographicCamera camera){
+    public MainInputProcessor(Player player, Terrain terrain, OrthographicCamera tilemapCamera,
+                              OrthographicCamera entitiesCamera){
         this.player = player;
         this.terrain = terrain;
-        this.camera = camera;
+        this.tilemapCamera = tilemapCamera;
+        this.entitiesCamera = entitiesCamera;
     }
 
 
@@ -46,10 +49,10 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector3 convert = camera.unproject(new Vector3(screenX,screenY,0));
+        Vector3 convert = tilemapCamera.unproject(new Vector3(screenX,screenY,0));
         Vector2 result = new Vector2(convert.x/GameVariables.TILES_SIZE, convert.y/GameVariables.TILES_SIZE);
 
-        terrain.placeTile((int)result.x, (int)result.y, player.getMapX(), player.getMapY(), Tiles.getGrassTile());
+        terrain.placeTile((int)result.x , (int)result.y, Tiles.getWaterTile());
 
         return false;
     }
@@ -61,10 +64,10 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Vector3 convert = camera.unproject(new Vector3(screenX,screenY,0));
+        Vector3 convert = tilemapCamera.unproject(new Vector3(screenX,screenY,0));
         Vector2 result = new Vector2(convert.x/GameVariables.TILES_SIZE, convert.y/GameVariables.TILES_SIZE);
 
-        terrain.placeTile((int)result.x, (int)result.y, player.getMapX(), player.getMapY(), Tiles.getGrassTile());
+        terrain.placeTile((int)result.x , (int)result.y, Tiles.getGrassTile());
 
         return false;
     }
