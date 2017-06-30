@@ -1,5 +1,6 @@
 package com.jiedro.canels.model.world;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
@@ -32,21 +33,36 @@ public class Terrain {
         return Tiles.getGrassTile();
     }
 
-    public void placeTile(int x, int y, Tile tile){
-        terrain.put(new Vector2(x ,y), tile);
+    public void placeTile(double x, double y, Tile tile){
+        terrain.put(screenToMap(x,y), tile);
     }
 
-    public boolean canMove(int x, int y){
-        if(terrain.get(new Vector2(x,y))!=Tiles.getWaterTile()){
+    public boolean canMove(double x, double y){
+        if(terrain.get(screenToMap(x,y))!=Tiles.getWaterTile()){
             return true;
         }
         return false;
     }
 
-    public void updateWorld(int x, int y){
+    public Vector2 screenToMap(double x, double y){
+        if(x<0 && y>0){
+            return new Vector2((Math.round(x)/GameVariables.TILES_SIZE)-1,Math.round(y)/GameVariables.TILES_SIZE);
+        } else if(x>0 && y<0) {
+            return new Vector2((Math.round(x)/GameVariables.TILES_SIZE),(Math.round(y)/GameVariables.TILES_SIZE)-1);
+        } else if(x<0 && y<0) {
+            return new Vector2((Math.round(x)/GameVariables.TILES_SIZE)-1,(Math.round(y)/GameVariables.TILES_SIZE)-1);
+        } else {
+            return new Vector2(Math.round(x)/GameVariables.TILES_SIZE,Math.round(y)/GameVariables.TILES_SIZE);
+        }
+    }
 
-        for (int i = 0; i < GameVariables.CHUNK_SIZE*2; i++) {
-            for (int j = 0; j < GameVariables.CHUNK_SIZE*2; j++) {
+    public void updateWorld(double xPos, double yPos){
+        Vector2 playerMapPos = screenToMap(xPos, yPos);
+        int x = (int)playerMapPos.x;
+        int y = (int)playerMapPos.y;
+
+        for (int i = 0; i < GameVariables.CHUNK_SIZE; i++) {
+            for (int j = 0; j < GameVariables.CHUNK_SIZE; j++) {
 
                 if(!terrain.containsKey(new Vector2(i+x,j+y))) {
 
@@ -67,18 +83,12 @@ public class Terrain {
 
     }
 
-    public void draw(Batch batch, Player player) {
+    public void draw(Batch batch) {
         for (Map.Entry<Vector2, Tile> tile:terrain.entrySet()) {
-            if(tile.getKey().x>player.getMapX()-GameVariables.CHUNK_SIZE
-                    && tile.getKey().x<player.getMapX()+GameVariables.CHUNK_SIZE
-                    && tile.getKey().y>player.getMapY()-GameVariables.CHUNK_SIZE
-                    && tile.getKey().y<player.getMapY()+GameVariables.CHUNK_SIZE) {
-                batch.draw(tile.getValue().getTexture(),
-                        tile.getKey().x * GameVariables.TILES_SIZE,
-                        tile.getKey().y * GameVariables.TILES_SIZE);
-            }
+            batch.draw(tile.getValue().getTexture(),
+                    tile.getKey().x * GameVariables.TILES_SIZE,
+                    tile.getKey().y * GameVariables.TILES_SIZE);
         }
     }
-
 
 }

@@ -17,8 +17,6 @@ package com.jiedro.canels.model.world;
  *
  */
 
-import com.jiedro.canels.Main;
-
 import java.util.Random;
 
 public class SimplexNoise {  // Simplex noise in 2D
@@ -120,7 +118,5 @@ public class SimplexNoise {  // Simplex noise in 2D
             this.y = y;
             this.z = z;
         }
-
-
     }
 }

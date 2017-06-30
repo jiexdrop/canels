@@ -12,11 +12,8 @@ import com.jiedro.canels.GameVariables;
 public abstract class Entity {
     protected Sprite sprite;
 
-    protected int mapX = 0;
-    protected int mapY = 0;
-
-    protected float x = 0;
-    protected float y = 0;
+    protected double x = 0;
+    protected double y = 0;
 
     protected double xVelocity = 0;
     protected double yVelocity = 0;
@@ -33,37 +30,14 @@ public abstract class Entity {
         this.sprite.setColor(color);
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    /**
-     *
-     * @return the
-     */
-    public int getScreenX(){
-        return (int)this.getSprite().getX()/ GameVariables.TILES_SIZE;
-    }
-
-    /**
-     *
-     * @return the
-     */
-    public int getScreenY(){
-        return (int)this.getSprite().getY()/ GameVariables.TILES_SIZE;
-    }
-
-    public int getMapX() {
-        return mapX;
-    }
-
-    public int getMapY() {
-        return mapY;
-    }
 
     public abstract void move(double xVelocity, double yVelocity);
 

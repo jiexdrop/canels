@@ -29,8 +29,5 @@ public class Player extends Entity {
     public void update() {
         this.x += xVelocity;
         this.y += yVelocity;
-
-        this.mapX = (int) this.x/GameVariables.TILES_SIZE;
-        this.mapY = (int) this.y/GameVariables.TILES_SIZE;
     }
 }

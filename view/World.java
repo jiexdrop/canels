@@ -2,15 +2,14 @@ package com.jiedro.canels.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.jiedro.canels.GameVariables;
-import com.jiedro.canels.model.entity.Entity;
 import com.jiedro.canels.model.entity.Player;
-import com.jiedro.canels.model.input.MainInputProcessor;
 import com.jiedro.canels.model.world.Terrain;
 
 /**
@@ -18,7 +17,7 @@ import com.jiedro.canels.model.world.Terrain;
  * Created by jiexdrop on 14/06/17.
  */
 
-public class World {
+public class World implements InputProcessor {
     private Player player;
 
     private Terrain terrain;
@@ -33,18 +32,14 @@ public class World {
 
     private BitmapFont font;
 
-
-    private MainInputProcessor mainInputProcessor;
-
     public World(){
+        Gdx.input.setInputProcessor(this);
+
         player = new Player();
         terrain = new Terrain();
         entitiesBatch = new SpriteBatch();
         tilemapBatch = new SpriteBatch();
         font = new BitmapFont();
-
-
-
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -53,17 +48,14 @@ public class World {
         tilemapCamera.setToOrtho(false, (w / h) * GameVariables.ZOOM_LEVEL, GameVariables.ZOOM_LEVEL);
         tilemapCamera.update();
 
-
         entitiesCamera = new OrthographicCamera();
         entitiesCamera.setToOrtho(false, (w / h) * GameVariables.ZOOM_LEVEL, GameVariables.ZOOM_LEVEL);
         entitiesCamera.update();
 
+        player.getSprite().setPosition(tilemapCamera.viewportWidth/2 - GameVariables.TILES_SIZE/2,
+                tilemapCamera.viewportHeight/2);
 
-        player.getSprite().setPosition((GameVariables.CHUNK_SIZE)*GameVariables.TILES_SIZE, (GameVariables.CHUNK_SIZE/2)*GameVariables.TILES_SIZE);
 
-        mainInputProcessor = new MainInputProcessor(player, terrain, tilemapCamera, entitiesCamera);
-
-        Gdx.input.setInputProcessor(mainInputProcessor);
     }
 
 
@@ -76,9 +68,8 @@ public class World {
         entitiesBatch.setProjectionMatrix(entitiesCamera.combined);
         tilemapBatch.setProjectionMatrix(tilemapCamera.combined);
 
-
         tilemapBatch.begin();
-        terrain.draw(tilemapBatch, player);
+        terrain.draw(tilemapBatch);
         tilemapBatch.end();
 
         entitiesBatch.begin();
@@ -88,31 +79,78 @@ public class World {
     }
 
     public void update(){
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-            player.move(0,(float)GameVariables.PLAYER_SPEED);
-            tilemapCamera.position.set(player.getX(), player.getY(), 0.f);
-            terrain.updateWorld(player.getMapX()-GameVariables.CHUNK_SIZE,player.getMapY()-GameVariables.CHUNK_SIZE);
-        } else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            player.move(0,-(float)GameVariables.PLAYER_SPEED);
-            tilemapCamera.position.set(player.getX(), player.getY(), 0.f);
-            terrain.updateWorld(player.getMapX()-GameVariables.CHUNK_SIZE,player.getMapY()-GameVariables.CHUNK_SIZE);
-        } else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            player.move(-(float)GameVariables.PLAYER_SPEED,0);
-            tilemapCamera.position.set(player.getX(), player.getY(), 0.f);
-            terrain.updateWorld(player.getMapX()-GameVariables.CHUNK_SIZE,player.getMapY()-GameVariables.CHUNK_SIZE);
-        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            player.move((float)GameVariables.PLAYER_SPEED,0);
-            tilemapCamera.position.set(player.getX(), player.getY(), 0.f);
-            terrain.updateWorld(player.getMapX()-GameVariables.CHUNK_SIZE,player.getMapY()-GameVariables.CHUNK_SIZE);
-        } else {
-            player.move(0,0);
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            if (terrain.canMove(tilemapCamera.position.x, tilemapCamera.position.y+1)){
+                tilemapCamera.translate(0.f, GameVariables.PLAYER_SPEED);
+            }
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+            if (terrain.canMove(tilemapCamera.position.x, tilemapCamera.position.y-1)) {
+                tilemapCamera.translate(0.f, -GameVariables.PLAYER_SPEED);
+            }
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+            if (terrain.canMove(tilemapCamera.position.x-1, tilemapCamera.position.y)) {
+                tilemapCamera.translate(-GameVariables.PLAYER_SPEED, 0.f);
+            }
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+            if (terrain.canMove(tilemapCamera.position.x+1, tilemapCamera.position.y)) {
+                tilemapCamera.translate(GameVariables.PLAYER_SPEED, 0.f);
+            }
         }
 
-        player.update();
+        terrain.updateWorld(tilemapCamera.position.x - ((GameVariables.CHUNK_SIZE-2)*GameVariables.CHUNK_SIZE),
+                tilemapCamera.position.y - ((GameVariables.CHUNK_SIZE-2)*GameVariables.CHUNK_SIZE));
 
+        //terrain.placeTile(tilemapCamera.position.x, tilemapCamera.position.y, Tiles.getDoorTile());
     }
 
     public void dispose(){
 
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Vector3 result = tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
+        terrain.placeTile(result.x, result.y, Tiles.getDoorTile());
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        Vector3 result = tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
+        terrain.placeTile(result.x, result.y, Tiles.getDoorTile());
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

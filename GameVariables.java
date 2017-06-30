@@ -45,10 +45,8 @@ public class GameVariables {
 
     public static int TILES_SIZE = 16;
 
-    public static int TOTAL_CHUNKS = 9;
+    public static int CHUNK_SIZE = 9;
 
-    public static int CHUNK_SIZE = 16;
-
-    public static final double PLAYER_SPEED = 1;
+    public static final float PLAYER_SPEED = 1;
 
 }
