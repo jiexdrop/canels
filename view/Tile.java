@@ -16,12 +16,12 @@ public class Tile extends Sprite {
     private boolean walkable = true;
 
     public Tile(TextureRegion textureRegion, int id){
-        super(textureRegion.getTexture());
+        this.setRegion(textureRegion);
         this.id = id;
     }
 
     public Tile(TextureRegion textureRegion, int id, boolean walkable){
-        super(textureRegion.getTexture());
+        this.setRegion(textureRegion);
         this.id = id;
         this.walkable = walkable;
     }

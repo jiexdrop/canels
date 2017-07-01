@@ -12,6 +12,8 @@ public class GameVariables {
 
     private static final String PLAYER_FOLDER = "textures/player/";
 
+    private static final String USER_INTERFACE_FOLDER = "ui/";
+
     private static final String PLAYER_CHEST_FOLDER = PLAYER_FOLDER + "chest/";
 
     private static final String PLAYER_HELMET_FOLDER = PLAYER_FOLDER + "helmet/";
@@ -21,16 +23,6 @@ public class GameVariables {
     //TERRAIN_FOLDER
     public static final String MAIN_TEXTURES = TERRAIN_FOLDER + "main_textures.png";
 
-    public static final String WATER = TERRAIN_FOLDER + "water.png";
-
-    public static final String GROUND = TERRAIN_FOLDER + "ground.png";
-
-    public static final String GRASS = TERRAIN_FOLDER + "grass.png";
-
-    public static final String WALL = TERRAIN_FOLDER + "wall.png";
-
-    public static final String DOOR = TERRAIN_FOLDER + "door.png";
-
     //PLAYER
     public static final String PLAYER = PLAYER_FOLDER + "player.png";
 
@@ -39,6 +31,17 @@ public class GameVariables {
     public static final String PLAYER_CLOTH_CHEST = PLAYER_CHEST_FOLDER + "cloth.png";
 
     public static final String PLAYER_CLOTH_PANTS = PLAYER_PANTS_FOLDER + "cloth.png";
+
+    //USER INTERFACE
+    public static final String TOUCH_PAD_KNOB = USER_INTERFACE_FOLDER + "touch_pad_knob.png";
+
+    public static final String TOUCH_PAD_BACKGROUND = USER_INTERFACE_FOLDER + "touch_pad_background.png";
+
+    public static final int TOUCH_PAD_SIZE = 200;
+
+    public static final int TOUCH_PAD_OFFSET_X = 10;
+
+    public static final int TOUCH_PAD_OFFSET_Y = 10;
 
     //CONSTANTS
     public static int TEXTURES_NUMBER = 256;

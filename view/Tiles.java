@@ -17,11 +17,11 @@ public class Tiles {
             GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
 
 
-    private static Tile waterTile = new Tile(textureRegions[1][0],1, false);
-    private static Tile groundTile = new Tile(textureRegions[1][0],2);
-    private static Tile grassTile = new Tile(textureRegions[1][0],3);
+    private static Tile waterTile = new Tile(textureRegions[0][0],1, false);
+    private static Tile groundTile = new Tile(textureRegions[0][1],2);
+    private static Tile grassTile = new Tile(textureRegions[0][2],3);
     private static Tile wallTile = new Tile(textureRegions[1][0], 4, false);
-    private static Tile doorTile = new Tile(textureRegions[1][0],5, false);
+    private static Tile doorTile = new Tile(textureRegions[1][1],5, false);
 
     public static final Tile getWaterTile() {
         return waterTile;

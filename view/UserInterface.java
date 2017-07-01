@@ -33,10 +33,9 @@ public class UserInterface implements InputProcessor{
         this.world = world;
         this.stage = new Stage(viewport, batch);
         touchpad = new Touchpad(10,getTouchpadStyle());
-        touchpad.setBounds(0, 0, 150, 150);
-        touchpad.setSize(150,150);
+        touchpad.setBounds(0, 0, GameVariables.TOUCH_PAD_SIZE, GameVariables.TOUCH_PAD_SIZE);
 
-        touchpad.setPosition(10,10);
+        touchpad.setPosition(GameVariables.TOUCH_PAD_OFFSET_X,GameVariables.TOUCH_PAD_OFFSET_Y);
         stage.addActor(touchpad);
 
         //TODO
@@ -68,9 +67,9 @@ public class UserInterface implements InputProcessor{
     private static Touchpad.TouchpadStyle getTouchpadStyle() {
         Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
         Skin touchpadSkin = new Skin();
-        touchpadSkin.add("touchBackground", new Texture(GameVariables.GRASS));
+        touchpadSkin.add("touchBackground", new Texture(GameVariables.TOUCH_PAD_BACKGROUND));
 
-        touchpadSkin.add("touchKnob", new Texture(GameVariables.WATER));
+        touchpadSkin.add("touchKnob", new Texture(GameVariables.TOUCH_PAD_KNOB));
 
         touchpadStyle.background  = touchpadSkin.getDrawable("touchBackground");
         touchpadStyle.knob  = touchpadSkin.getDrawable("touchKnob");

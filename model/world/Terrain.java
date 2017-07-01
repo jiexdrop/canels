@@ -84,6 +84,8 @@ public class Terrain {
         Vector2 playerMapPos = screenToMap(xPos, yPos);
         int x = (int)playerMapPos.x;
         int y = (int)playerMapPos.y;
+
+        //TODO it should not run over all the tiles but by chunk
         for (Map.Entry<Vector2, Tile> tile:terrain.entrySet()) {
             if(tile.getKey().x > x - GameVariables.CHUNK_SIZE
                     && tile.getKey().x < x + GameVariables.CHUNK_SIZE
@@ -91,7 +93,11 @@ public class Terrain {
                     && tile.getKey().y < y + GameVariables.CHUNK_SIZE) {
                 batch.draw(tile.getValue().getTexture(),
                         tile.getKey().x * GameVariables.TILES_SIZE,
-                        tile.getKey().y * GameVariables.TILES_SIZE);
+                        tile.getKey().y * GameVariables.TILES_SIZE,
+                        tile.getValue().getRegionX(),
+                        tile.getValue().getRegionY(),
+                        GameVariables.TILES_SIZE,
+                        GameVariables.TILES_SIZE);
 
             }
         }
