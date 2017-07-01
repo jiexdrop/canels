@@ -17,7 +17,7 @@ import com.jiedro.canels.model.world.Terrain;
  * Created by jiexdrop on 14/06/17.
  */
 
-public class World implements InputProcessor {
+public class World {
     private Player player;
 
     private Terrain terrain;
@@ -30,16 +30,15 @@ public class World implements InputProcessor {
 
     private SpriteBatch entitiesBatch;
 
-    private BitmapFont font;
+    private UserInterface userInterface;
+
+    public int totalRenderCalls = 0;
 
     public World(){
-        Gdx.input.setInputProcessor(this);
-
         player = new Player();
         terrain = new Terrain();
         entitiesBatch = new SpriteBatch();
         tilemapBatch = new SpriteBatch();
-        font = new BitmapFont();
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -55,12 +54,14 @@ public class World implements InputProcessor {
         player.getSprite().setPosition(tilemapCamera.viewportWidth/2 - GameVariables.TILES_SIZE/2,
                 tilemapCamera.viewportHeight/2);
 
-
+        userInterface = new UserInterface(this, entitiesBatch);
     }
 
 
     public void renderTerrain(){
         update();
+
+        tilemapBatch.totalRenderCalls = 0;
 
         tilemapCamera.update();
         entitiesCamera.update();
@@ -69,88 +70,67 @@ public class World implements InputProcessor {
         tilemapBatch.setProjectionMatrix(tilemapCamera.combined);
 
         tilemapBatch.begin();
-        terrain.draw(tilemapBatch);
+        terrain.draw(tilemapBatch,
+                tilemapCamera.position.x - GameVariables.TILEMAP_CENTER,
+                tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
         tilemapBatch.end();
 
         entitiesBatch.begin();
         player.getSprite().draw(entitiesBatch);
-        font.draw(entitiesBatch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
         entitiesBatch.end();
+
+        totalRenderCalls = tilemapBatch.totalRenderCalls;
+
+        userInterface.draw();
     }
 
     public void update(){
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if (terrain.canMove(tilemapCamera.position.x, tilemapCamera.position.y+1)){
                 tilemapCamera.translate(0.f, GameVariables.PLAYER_SPEED);
+                terrain.updateWorld(tilemapCamera.position.x - GameVariables.TILEMAP_CENTER,
+                        tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
             if (terrain.canMove(tilemapCamera.position.x, tilemapCamera.position.y-1)) {
                 tilemapCamera.translate(0.f, -GameVariables.PLAYER_SPEED);
+                terrain.updateWorld(tilemapCamera.position.x - GameVariables.TILEMAP_CENTER,
+                        tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             if (terrain.canMove(tilemapCamera.position.x-1, tilemapCamera.position.y)) {
                 tilemapCamera.translate(-GameVariables.PLAYER_SPEED, 0.f);
+                terrain.updateWorld(tilemapCamera.position.x - GameVariables.TILEMAP_CENTER,
+                        tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
             if (terrain.canMove(tilemapCamera.position.x+1, tilemapCamera.position.y)) {
                 tilemapCamera.translate(GameVariables.PLAYER_SPEED, 0.f);
+                terrain.updateWorld(tilemapCamera.position.x - GameVariables.TILEMAP_CENTER,
+                        tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
             }
         }
 
-        terrain.updateWorld(tilemapCamera.position.x - ((GameVariables.CHUNK_SIZE-2)*GameVariables.CHUNK_SIZE),
-                tilemapCamera.position.y - ((GameVariables.CHUNK_SIZE-2)*GameVariables.CHUNK_SIZE));
 
-        //terrain.placeTile(tilemapCamera.position.x, tilemapCamera.position.y, Tiles.getDoorTile());
+
     }
 
     public void dispose(){
 
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
+    public OrthographicCamera getEntitiesCamera() {
+        return entitiesCamera;
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
+    public OrthographicCamera getTilemapCamera() {
+        return tilemapCamera;
     }
 
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector3 result = tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
-        terrain.placeTile(result.x, result.y, Tiles.getDoorTile());
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Vector3 result = tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
-        terrain.placeTile(result.x, result.y, Tiles.getDoorTile());
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
+    public Terrain getTerrain() {
+        return terrain;
     }
 }

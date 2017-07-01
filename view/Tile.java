@@ -1,16 +1,9 @@
 package com.jiedro.canels.view;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.jiedro.canels.GameVariables;
-
-import java.util.ArrayList;
 
 /**
  *
@@ -19,9 +12,18 @@ import java.util.ArrayList;
 
 public class Tile extends Sprite {
     private int id = 0;
-    public Tile(Texture texture, int id){
-        super(texture);
+
+    private boolean walkable = true;
+
+    public Tile(TextureRegion textureRegion, int id){
+        super(textureRegion.getTexture());
         this.id = id;
+    }
+
+    public Tile(TextureRegion textureRegion, int id, boolean walkable){
+        super(textureRegion.getTexture());
+        this.id = id;
+        this.walkable = walkable;
     }
 
 
@@ -40,5 +42,9 @@ public class Tile extends Sprite {
 
         this.setTexture(new Texture(pixmap));
         return this;
+    }
+
+    public boolean isWalkable(){
+        return this.walkable;
     }
 }

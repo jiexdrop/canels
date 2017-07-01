@@ -19,6 +19,8 @@ public class GameVariables {
     private static final String PLAYER_PANTS_FOLDER = PLAYER_FOLDER + "pants/";
 
     //TERRAIN_FOLDER
+    public static final String MAIN_TEXTURES = TERRAIN_FOLDER + "main_textures.png";
+
     public static final String WATER = TERRAIN_FOLDER + "water.png";
 
     public static final String GROUND = TERRAIN_FOLDER + "ground.png";
@@ -39,14 +41,18 @@ public class GameVariables {
     public static final String PLAYER_CLOTH_PANTS = PLAYER_PANTS_FOLDER + "cloth.png";
 
     //CONSTANTS
+    public static int TEXTURES_NUMBER = 256;
+
     public static int ZOOM_LEVEL = 256;
 
     public static double FREQUENCY = 0.01d;//0.01d
 
     public static int TILES_SIZE = 16;
 
-    public static int CHUNK_SIZE = 9;
+    public static int CHUNK_SIZE = TILES_SIZE;
 
     public static final float PLAYER_SPEED = 1;
+
+    public static final int TILEMAP_CENTER = (GameVariables.CHUNK_SIZE*GameVariables.CHUNK_SIZE)/2;
 
 }

@@ -38,10 +38,7 @@ public class Terrain {
     }
 
     public boolean canMove(double x, double y){
-        if(terrain.get(screenToMap(x,y))!=Tiles.getWaterTile()){
-            return true;
-        }
-        return false;
+        return terrain.get(screenToMap(x,y))==null?false:terrain.get(screenToMap(x,y)).isWalkable();
     }
 
     public Vector2 screenToMap(double x, double y){
@@ -83,11 +80,20 @@ public class Terrain {
 
     }
 
-    public void draw(Batch batch) {
+    public void draw(Batch batch, double xPos, double yPos) {
+        Vector2 playerMapPos = screenToMap(xPos, yPos);
+        int x = (int)playerMapPos.x;
+        int y = (int)playerMapPos.y;
         for (Map.Entry<Vector2, Tile> tile:terrain.entrySet()) {
-            batch.draw(tile.getValue().getTexture(),
-                    tile.getKey().x * GameVariables.TILES_SIZE,
-                    tile.getKey().y * GameVariables.TILES_SIZE);
+            if(tile.getKey().x > x - GameVariables.CHUNK_SIZE
+                    && tile.getKey().x < x + GameVariables.CHUNK_SIZE
+                    && tile.getKey().y > y - GameVariables.CHUNK_SIZE
+                    && tile.getKey().y < y + GameVariables.CHUNK_SIZE) {
+                batch.draw(tile.getValue().getTexture(),
+                        tile.getKey().x * GameVariables.TILES_SIZE,
+                        tile.getKey().y * GameVariables.TILES_SIZE);
+
+            }
         }
     }
 
