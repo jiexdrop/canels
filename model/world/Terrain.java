@@ -24,8 +24,6 @@ public class Terrain {
     private Vector2 p = new Vector2(0,0);
     private Vector2 t = new Vector2(0,0);
 
-    private Vector2 screenToMap = new Vector2(0,0);
-
     public Terrain(){
         terrain = new HashMap<Vector2, Tile>();
     }
@@ -46,7 +44,8 @@ public class Terrain {
         return terrain.get(screenToMap(x,y))==null?false:terrain.get(screenToMap(x,y)).isWalkable();
     }
 
-    public Vector2 screenToMap(double x, double y){
+    public static final Vector2 screenToMap(double x, double y){
+        final Vector2 screenToMap = new Vector2();
         if(x<0 && y>0){
             screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE)-1;
             screenToMap.y = Math.round(y)/GameVariables.TILES_SIZE;

@@ -3,6 +3,7 @@ package com.jiedro.canels;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.jiedro.canels.view.WorldRender;
 
 public class Main extends Game {

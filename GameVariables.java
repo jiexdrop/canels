@@ -58,4 +58,10 @@ public class GameVariables {
 
     public static final int TILEMAP_CENTER = (GameVariables.CHUNK_SIZE*GameVariables.CHUNK_SIZE)/2;
 
+    public static final int POSITION_ITERATIONS = 2;
+
+    public static final int VELOCITY_ITERATIONS = 6;
+
+    public static final float TIME_STEP = 1/60f;
+
 }

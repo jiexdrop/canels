@@ -2,6 +2,9 @@ package com.jiedro.canels.model.entity;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.jiedro.canels.GameVariables;
 
 /**
@@ -17,6 +20,10 @@ public abstract class Entity {
 
     protected double xVelocity = 0;
     protected double yVelocity = 0;
+
+    protected BodyDef bodyDef = new BodyDef();
+    protected FixtureDef fixtureDef = new FixtureDef();
+    protected PolygonShape polygonShape = new PolygonShape();
 
     public Entity(Sprite sprite){
         this.sprite = sprite;
@@ -42,4 +49,12 @@ public abstract class Entity {
     public abstract void move(double xVelocity, double yVelocity);
 
     public abstract void update();
+
+    public BodyDef getBodyDef() {
+        return bodyDef;
+    }
+
+    public FixtureDef getFixtureDef() {
+        return fixtureDef;
+    }
 }

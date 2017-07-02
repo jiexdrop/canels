@@ -6,8 +6,17 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.model.world.Terrain;
@@ -34,7 +43,18 @@ public class WorldRender {
 
     public int totalRenderCalls = 0;
 
+    World world;
+
+    private Box2DDebugRenderer debugRenderer;
+
+    private float accumulator = 0;
+
     public WorldRender(){
+        Box2D.init();
+        world = new World(new Vector2(0, 0), true);
+
+        debugRenderer = new Box2DDebugRenderer();
+
         player = new Player();
         terrain = new Terrain();
         entitiesBatch = new SpriteBatch();
@@ -51,15 +71,30 @@ public class WorldRender {
         entitiesCamera.setToOrtho(false, (w / h) * GameVariables.ZOOM_LEVEL, GameVariables.ZOOM_LEVEL);
         entitiesCamera.update();
 
-        player.getSprite().setPosition(tilemapCamera.viewportWidth/2 - GameVariables.TILES_SIZE/2,
-                tilemapCamera.viewportHeight/2);
+        player.getSprite().setPosition((GameVariables.TILES_SIZE*GameVariables.TILES_SIZE),
+                (GameVariables.TILES_SIZE*GameVariables.TILES_SIZE)/2);
+
 
         userInterface = new UserInterface(this, entitiesBatch);
+        Body body = world.createBody(player.getBodyDef());
+
+        body.createFixture(player.getFixtureDef());
+    }
+
+    private void doPhysicsStep(float deltaTime) {
+        // fixed time step
+        // max frame time to avoid spiral of death (on slow devices)
+        float frameTime = Math.min(deltaTime, 0.25f);
+        accumulator += frameTime;
+        while (accumulator >= GameVariables.TIME_STEP) {
+            world.step(GameVariables.TIME_STEP, GameVariables.VELOCITY_ITERATIONS, GameVariables.POSITION_ITERATIONS);
+            accumulator -= GameVariables.TIME_STEP;
+        }
     }
 
 
     public void renderTerrain(){
-        //desktopUpdate();
+        doPhysicsStep(Gdx.graphics.getDeltaTime());
 
         tilemapBatch.totalRenderCalls = 0;
 
@@ -81,39 +116,12 @@ public class WorldRender {
 
         totalRenderCalls = tilemapBatch.totalRenderCalls;
 
+
+        Matrix4 cameraCopy = tilemapCamera.combined.cpy();
+        cameraCopy.translate(GameVariables.TILES_SIZE/2,GameVariables.TILES_SIZE/2,0f);
+        debugRenderer.render(world, cameraCopy.scl(GameVariables.TILES_SIZE));
+
         userInterface.draw();
-    }
-
-    public void desktopUpdate(){
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            if (terrain.canMove(tilemapCamera.position.x, tilemapCamera.position.y+1)){
-                tilemapCamera.translate(0.f, GameVariables.PLAYER_SPEED);
-                terrain.updateWorld(tilemapCamera.position.x - GameVariables.TILEMAP_CENTER,
-                        tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
-            }
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            if (terrain.canMove(tilemapCamera.position.x, tilemapCamera.position.y-1)) {
-                tilemapCamera.translate(0.f, -GameVariables.PLAYER_SPEED);
-                terrain.updateWorld(tilemapCamera.position.x - GameVariables.TILEMAP_CENTER,
-                        tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
-            }
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            if (terrain.canMove(tilemapCamera.position.x-1, tilemapCamera.position.y)) {
-                tilemapCamera.translate(-GameVariables.PLAYER_SPEED, 0.f);
-                terrain.updateWorld(tilemapCamera.position.x - GameVariables.TILEMAP_CENTER,
-                        tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
-            }
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            if (terrain.canMove(tilemapCamera.position.x+1, tilemapCamera.position.y)) {
-                tilemapCamera.translate(GameVariables.PLAYER_SPEED, 0.f);
-                terrain.updateWorld(tilemapCamera.position.x - GameVariables.TILEMAP_CENTER,
-                        tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
-            }
-        }
-
     }
 
     public void dispose(){
