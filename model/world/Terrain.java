@@ -1,10 +1,10 @@
 package com.jiedro.canels.model.world;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
-import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.view.Tile;
 import com.jiedro.canels.view.Tiles;
 
@@ -20,6 +20,11 @@ import java.util.Map;
 public class Terrain {
 
     private Map<Vector2, Tile> terrain = new HashMap<Vector2, com.jiedro.canels.view.Tile>();
+
+    private Vector2 p = new Vector2(0,0);
+    private Vector2 t = new Vector2(0,0);
+
+    private Vector2 screenToMap = new Vector2(0,0);
 
     public Terrain(){
         terrain = new HashMap<Vector2, Tile>();
@@ -43,14 +48,19 @@ public class Terrain {
 
     public Vector2 screenToMap(double x, double y){
         if(x<0 && y>0){
-            return new Vector2((Math.round(x)/GameVariables.TILES_SIZE)-1,Math.round(y)/GameVariables.TILES_SIZE);
+            screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE)-1;
+            screenToMap.y = Math.round(y)/GameVariables.TILES_SIZE;
         } else if(x>0 && y<0) {
-            return new Vector2((Math.round(x)/GameVariables.TILES_SIZE),(Math.round(y)/GameVariables.TILES_SIZE)-1);
+            screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE);
+            screenToMap.y = (Math.round(y)/GameVariables.TILES_SIZE)-1;
         } else if(x<0 && y<0) {
-            return new Vector2((Math.round(x)/GameVariables.TILES_SIZE)-1,(Math.round(y)/GameVariables.TILES_SIZE)-1);
+            screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE)-1;
+            screenToMap.y = (Math.round(y)/GameVariables.TILES_SIZE)-1;
         } else {
-            return new Vector2(Math.round(x)/GameVariables.TILES_SIZE,Math.round(y)/GameVariables.TILES_SIZE);
+            screenToMap.x = Math.round(x)/GameVariables.TILES_SIZE;
+            screenToMap.y = Math.round(y)/GameVariables.TILES_SIZE;
         }
+        return screenToMap;
     }
 
     public void updateWorld(double xPos, double yPos){
@@ -58,10 +68,12 @@ public class Terrain {
         int x = (int)playerMapPos.x;
         int y = (int)playerMapPos.y;
 
-        for (int i = 0; i < GameVariables.CHUNK_SIZE; i++) {
-            for (int j = 0; j < GameVariables.CHUNK_SIZE; j++) {
+        for (int i = 0  - (GameVariables.CHUNK_SIZE/2); i < GameVariables.CHUNK_SIZE*2; i++) {
+            for (int j = 0 ; j < GameVariables.CHUNK_SIZE +1; j++) {
+                t.x = i+x;
+                t.y = j+y;
 
-                if(!terrain.containsKey(new Vector2(i+x,j+y))) {
+                if(!terrain.containsKey(t)) {
 
                     if (SimplexNoise.noise(GameVariables.FREQUENCY * (i+x), GameVariables.FREQUENCY * (j+y)) < 0) {
                         terrain.put(new Vector2(i+x, j+y), Tiles.getWaterTile());
@@ -85,20 +97,21 @@ public class Terrain {
         int x = (int)playerMapPos.x;
         int y = (int)playerMapPos.y;
 
-        //TODO it should not run over all the tiles but by chunk
-        for (Map.Entry<Vector2, Tile> tile:terrain.entrySet()) {
-            if(tile.getKey().x > x - GameVariables.CHUNK_SIZE
-                    && tile.getKey().x < x + GameVariables.CHUNK_SIZE
-                    && tile.getKey().y > y - GameVariables.CHUNK_SIZE
-                    && tile.getKey().y < y + GameVariables.CHUNK_SIZE) {
-                batch.draw(tile.getValue().getTexture(),
-                        tile.getKey().x * GameVariables.TILES_SIZE,
-                        tile.getKey().y * GameVariables.TILES_SIZE,
-                        tile.getValue().getRegionX(),
-                        tile.getValue().getRegionY(),
-                        GameVariables.TILES_SIZE,
-                        GameVariables.TILES_SIZE);
 
+        for (int i = x-GameVariables.CHUNK_SIZE/2 ; i< x + GameVariables.CHUNK_SIZE*2; i++){
+            for (int j = y; j< y + GameVariables.CHUNK_SIZE + 1; j++) {
+                p.x = i;
+                p.y = j;
+                Tile tile = terrain.get(p);
+                if(tile!=null) {
+                    batch.draw(tile.getTexture(),
+                            p.x * GameVariables.TILES_SIZE,
+                            p.y * GameVariables.TILES_SIZE,
+                            tile.getRegionX(),
+                            tile.getRegionY(),
+                            GameVariables.TILES_SIZE,
+                            GameVariables.TILES_SIZE);
+                }
             }
         }
     }

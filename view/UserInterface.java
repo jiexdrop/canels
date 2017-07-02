@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jiedro.canels.GameVariables;
@@ -22,15 +21,15 @@ import com.jiedro.canels.GameVariables;
 
 public class UserInterface implements InputProcessor{
     private Touchpad touchpad;
-    private World world;
+    private WorldRender worldRender;
     private Stage stage;
     private InputMultiplexer inputMultiplexer;
     private Viewport viewport = new ScreenViewport();
     private BitmapFont font;
 
 
-    public UserInterface(World world, Batch batch){
-        this.world = world;
+    public UserInterface(WorldRender worldRender, Batch batch){
+        this.worldRender = worldRender;
         this.stage = new Stage(viewport, batch);
         touchpad = new Touchpad(10,getTouchpadStyle());
         touchpad.setBounds(0, 0, GameVariables.TOUCH_PAD_SIZE, GameVariables.TOUCH_PAD_SIZE);
@@ -49,18 +48,20 @@ public class UserInterface implements InputProcessor{
     }
 
     public void draw(){
-        if(world.getTerrain().canMove(world.getTilemapCamera().position.x + touchpad.getKnobPercentX(),
-                world.getTilemapCamera().position.y +touchpad.getKnobPercentY())) {
-            world.getTilemapCamera().translate(touchpad.getKnobPercentX(), touchpad.getKnobPercentY());
-            world.getTerrain().updateWorld(world.getTilemapCamera().position.x - GameVariables.TILEMAP_CENTER,
-                    world.getTilemapCamera().position.y - GameVariables.TILEMAP_CENTER);
+        float dt = Gdx.graphics.getDeltaTime();
+        if(worldRender.getTerrain().canMove(worldRender.getTilemapCamera().position.x + touchpad.getKnobPercentX(),
+                worldRender.getTilemapCamera().position.y +touchpad.getKnobPercentY())) {
+            worldRender.getTilemapCamera().translate(touchpad.getKnobPercentX() * (dt *GameVariables.PLAYER_SPEED),
+                    touchpad.getKnobPercentY() * (dt *GameVariables.PLAYER_SPEED));
+            worldRender.getTerrain().updateWorld(worldRender.getTilemapCamera().position.x - GameVariables.TILEMAP_CENTER,
+                    worldRender.getTilemapCamera().position.y - GameVariables.TILEMAP_CENTER);
         }
 
         stage.draw();
 
         stage.getBatch().begin();
         font.draw(stage.getBatch(), "FPS: " + Gdx.graphics.getFramesPerSecond()
-                + " RC: " + world.totalRenderCalls, 10, Gdx.graphics.getHeight()-10);
+                + " RC: " + worldRender.totalRenderCalls, 10, Gdx.graphics.getHeight()-10);
         stage.getBatch().end();
     }
 
@@ -95,8 +96,8 @@ public class UserInterface implements InputProcessor{
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector3 result = world.getTilemapCamera().unproject(new Vector3(screenX, screenY, 0.f));
-        world.getTerrain().placeTile(result.x, result.y, Tiles.getGroundTile());
+        Vector3 result = worldRender.getTilemapCamera().unproject(new Vector3(screenX, screenY, 0.f));
+        worldRender.getTerrain().placeTile(result.x, result.y, Tiles.getGroundTile());
         return false;
     }
 
@@ -107,8 +108,8 @@ public class UserInterface implements InputProcessor{
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Vector3 result =  world.getTilemapCamera().unproject(new Vector3(screenX, screenY, 0.f));
-        world.getTerrain().placeTile(result.x, result.y, Tiles.getGroundTile());
+        Vector3 result =  worldRender.getTilemapCamera().unproject(new Vector3(screenX, screenY, 0.f));
+        worldRender.getTerrain().placeTile(result.x, result.y, Tiles.getGroundTile());
         return false;
     }
 

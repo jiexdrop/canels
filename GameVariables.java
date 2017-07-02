@@ -54,7 +54,7 @@ public class GameVariables {
 
     public static int CHUNK_SIZE = TILES_SIZE;
 
-    public static final float PLAYER_SPEED = 1;
+    public static final float PLAYER_SPEED = 100;
 
     public static final int TILEMAP_CENTER = (GameVariables.CHUNK_SIZE*GameVariables.CHUNK_SIZE)/2;
 

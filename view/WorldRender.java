@@ -17,7 +17,7 @@ import com.jiedro.canels.model.world.Terrain;
  * Created by jiexdrop on 14/06/17.
  */
 
-public class World {
+public class WorldRender {
     private Player player;
 
     private Terrain terrain;
@@ -34,7 +34,7 @@ public class World {
 
     public int totalRenderCalls = 0;
 
-    public World(){
+    public WorldRender(){
         player = new Player();
         terrain = new Terrain();
         entitiesBatch = new SpriteBatch();
@@ -59,7 +59,7 @@ public class World {
 
 
     public void renderTerrain(){
-        update();
+        //desktopUpdate();
 
         tilemapBatch.totalRenderCalls = 0;
 
@@ -84,7 +84,7 @@ public class World {
         userInterface.draw();
     }
 
-    public void update(){
+    public void desktopUpdate(){
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if (terrain.canMove(tilemapCamera.position.x, tilemapCamera.position.y+1)){
                 tilemapCamera.translate(0.f, GameVariables.PLAYER_SPEED);
@@ -113,8 +113,6 @@ public class World {
                         tilemapCamera.position.y - GameVariables.TILEMAP_CENTER);
             }
         }
-
-
 
     }
 
