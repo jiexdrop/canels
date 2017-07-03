@@ -15,15 +15,11 @@ import com.jiedro.canels.GameVariables;
 public abstract class Entity {
     protected Sprite sprite;
 
-    protected double x = 0;
-    protected double y = 0;
+    protected float x;
+    protected float y;
 
-    protected double xVelocity = 0;
-    protected double yVelocity = 0;
-
-    protected BodyDef bodyDef = new BodyDef();
-    protected FixtureDef fixtureDef = new FixtureDef();
-    protected PolygonShape polygonShape = new PolygonShape();
+    protected float velocityX;
+    protected float velocityY;
 
     public Entity(Sprite sprite){
         this.sprite = sprite;
@@ -37,24 +33,21 @@ public abstract class Entity {
         this.sprite.setColor(color);
     }
 
-    public double getX() {
+    public void move(float velocityX, float velocityY){
+        this.velocityX = velocityX;
+        this.velocityY = velocityY;
+    }
+
+    public float getX() {
         return x;
     }
 
-    public double getY() {
+    public float getY() {
         return y;
     }
 
-
-    public abstract void move(double xVelocity, double yVelocity);
-
-    public abstract void update();
-
-    public BodyDef getBodyDef() {
-        return bodyDef;
-    }
-
-    public FixtureDef getFixtureDef() {
-        return fixtureDef;
+    public void update() {
+        this.x += velocityX;
+        this.y += velocityY;
     }
 }
