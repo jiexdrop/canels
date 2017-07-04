@@ -19,8 +19,8 @@ public class Player extends Entity {
 
     public Player(){
         super(new Sprite(new Texture(GameVariables.PLAYER)));
-        super.setTint(Color.FIREBRICK);
-        sprite.setPosition(GameVariables.CHUNK_SIZE*GameVariables.CHUNK_SIZE,
+        super.setTint(new Color(Color.rgba4444(178,106,70,255)));
+        sprite.setPosition(GameVariables.CHUNK_SIZE*(GameVariables.CHUNK_SIZE-2),
                 (GameVariables.CHUNK_SIZE*GameVariables.CHUNK_SIZE)/2);
     }
 

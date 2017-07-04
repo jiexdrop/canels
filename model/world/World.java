@@ -26,11 +26,16 @@ public class World {
     public void movePlayer(float knobPercentX, float knobPercentY) {
         float dt = Gdx.graphics.getDeltaTime();
 
-        player.move(knobPercentX * (dt *GameVariables.PLAYER_SPEED),
-                knobPercentY * (dt *GameVariables.PLAYER_SPEED));
+        if (terrain.canMove(player.getX() + (knobPercentX * (dt * GameVariables.PLAYER_SPEED)),
+                player.getY() + (knobPercentY * (dt * GameVariables.PLAYER_SPEED)))){
+            player.move(knobPercentX * (dt * GameVariables.PLAYER_SPEED),
+                    knobPercentY * (dt * GameVariables.PLAYER_SPEED));
 
-        terrain.updateWorld(player.getX() - GameVariables.TILEMAP_CENTER,
-                player.getY() - GameVariables.TILEMAP_CENTER);
+            terrain.updateWorld(player.getX() - GameVariables.TILEMAP_CENTER,
+                    player.getY() - GameVariables.TILEMAP_CENTER);
+        } else {
+            player.move(0,0);
+        }
 
     }
 

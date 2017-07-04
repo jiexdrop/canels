@@ -27,7 +27,18 @@ public abstract class Entity {
 
     public Sprite getSprite() {
         return sprite;
-    };
+    }
+
+    public void setOrientation(Orientation orientation){
+        switch (orientation){
+            case LEFT:
+                sprite.setFlip(true,false);
+                break;
+            case RIGHT:
+                sprite.setFlip(false,false);
+                break;
+        }
+    }
 
     public void setTint(Color color) {
         this.sprite.setColor(color);
@@ -47,6 +58,11 @@ public abstract class Entity {
     }
 
     public void update() {
+        if(velocityX<0){
+            this.setOrientation(Orientation.LEFT);
+        } else if(velocityX>0) {
+            this.setOrientation(Orientation.RIGHT);
+        }
         this.x += velocityX;
         this.y += velocityY;
     }

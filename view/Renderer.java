@@ -31,7 +31,7 @@ public class Renderer implements Disposable {
 
     private InputMultiplexer inputMultiplexer;
 
-    public int totalRenderCalls = 0;
+    private int totalRenderCalls = 0;
 
 
     public Renderer(){
@@ -43,7 +43,7 @@ public class Renderer implements Disposable {
         tilemapCamera = setupCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         entitiesCamera = setupCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
-        worldInput = new WorldInput(world, tilemapCamera);
+        worldInput = new WorldInput(world, tilemapCamera, entitiesCamera);
         userInterface = new UserInterface(world, entitiesBatch);
 
         inputMultiplexer = new InputMultiplexer();

@@ -1,8 +1,11 @@
 package com.jiedro.canels.view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.world.Terrain;
 import com.jiedro.canels.model.world.World;
 
@@ -16,13 +19,24 @@ public class WorldInput implements InputProcessor {
 
     private OrthographicCamera tilemapCamera;
 
-    public WorldInput(World world, OrthographicCamera tilemapCamera){
+    private OrthographicCamera entitiesCamera;
+
+    public WorldInput(World world, OrthographicCamera tilemapCamera, OrthographicCamera entitiesCamera){
         this.world = world;
         this.tilemapCamera = tilemapCamera;
+        this.entitiesCamera = entitiesCamera;
     }
 
     @Override
     public boolean keyDown(int keycode) {
+        if(keycode== Input.Keys.PLUS){
+            tilemapCamera.zoom -= GameVariables.ZOOM_INPUT;
+            entitiesCamera.zoom -= GameVariables.ZOOM_INPUT;
+        }
+        if(keycode== Input.Keys.MINUS){
+            tilemapCamera.zoom += GameVariables.ZOOM_INPUT;
+            entitiesCamera.zoom += GameVariables.ZOOM_INPUT;
+        }
         return false;
     }
 

@@ -41,10 +41,10 @@ public class Terrain {
     }
 
     public boolean canMove(double x, double y){
-        return terrain.get(screenToMap(x,y))==null?false:terrain.get(screenToMap(x,y)).isWalkable();
+        return terrain.get(screenToMap(x, y)) != null && terrain.get(screenToMap(x, y)).isWalkable();
     }
 
-    public static final Vector2 screenToMap(double x, double y){
+    public static Vector2 screenToMap(double x, double y){
         final Vector2 screenToMap = new Vector2();
         if(x<0 && y>0){
             screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE)-1;
@@ -97,7 +97,8 @@ public class Terrain {
         int y = (int)playerMapPos.y;
 
 
-        for (int i = x-GameVariables.CHUNK_SIZE/2 ; i< x + GameVariables.CHUNK_SIZE*2; i++){
+        for (int i = x-GameVariables.CHUNK_SIZE/2 ;
+             i< x + GameVariables.CHUNK_SIZE+(GameVariables.CHUNK_SIZE/2); i++){
             for (int j = y; j< y + GameVariables.CHUNK_SIZE + 1; j++) {
                 p.x = i;
                 p.y = j;

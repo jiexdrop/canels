@@ -48,6 +48,8 @@ public class GameVariables {
 
     public static int ZOOM_LEVEL = 256;
 
+    public static float ZOOM_INPUT = 0.1f;
+
     public static double FREQUENCY = 0.01d;//0.01d
 
     public static int TILES_SIZE = 16;
