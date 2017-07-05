@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.jiedro.canels.GameVariables;
 
+import java.util.Random;
+
 /**
  *
  * Created by jiexdrop on 19/06/17.
@@ -20,6 +22,10 @@ public abstract class Entity {
 
     protected float velocityX;
     protected float velocityY;
+
+    protected Entity moveTo;
+
+    Random random = new Random();
 
     public Entity(Sprite sprite){
         this.sprite = sprite;
@@ -49,6 +55,10 @@ public abstract class Entity {
         this.velocityY = velocityY;
     }
 
+    public void moveTo(Entity e){
+        this.moveTo = e;
+    }
+
     public float getX() {
         return x;
     }
@@ -63,7 +73,25 @@ public abstract class Entity {
         } else if(velocityX>0) {
             this.setOrientation(Orientation.RIGHT);
         }
+
+        if(this.moveTo !=null){
+            if(checkcirclecollide(moveTo.getX(), moveTo.getY(),
+                    GameVariables.CHUNK_SIZE*4, this.x, this.y, GameVariables.CHUNK_SIZE*4)) {
+                move((moveTo.getX() - this.x) / (GameVariables.ENTITIES_SPEED + random.nextInt(16 * 16)),
+                        (moveTo.getY() - this.y) / (GameVariables.ENTITIES_SPEED + random.nextInt(16 * 16)));
+            } else {
+                moveTo(null);
+                velocityX = 0;
+                velocityY = 0;
+            }
+        }
+
         this.x += velocityX;
         this.y += velocityY;
+        sprite.setPosition(this.x, this.y);
+    }
+
+    boolean checkcirclecollide(double x1, double y1, float r1, double x2, double y2, float r2){
+        return Math.abs((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < (r1 + r2) * (r1 + r2);
     }
 }

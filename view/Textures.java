@@ -11,9 +11,13 @@ import com.jiedro.canels.GameVariables;
  * Created by jiexdrop on 14/06/17.
  */
 
-public class Tiles {
+public class Textures {
     private static final Texture mainTextures = new Texture(GameVariables.MAIN_TEXTURES);
     private static final TextureRegion[][] textureRegions = TextureRegion.split(mainTextures,
+            GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
+
+    private static final Texture mainEnemiesTextures = new Texture(GameVariables.MAIN_ENEMIES);
+    private static final TextureRegion[][] enemiesTextureRegions = TextureRegion.split(mainEnemiesTextures,
             GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
 
 
@@ -43,6 +47,8 @@ public class Tiles {
         return doorTile;
     }
 
-
+    public static final TextureRegion getSlimeSprite() {
+        return enemiesTextureRegions[0][0];
+    }
 
 }

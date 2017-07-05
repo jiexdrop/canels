@@ -1,12 +1,10 @@
 package com.jiedro.canels.model.world;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.view.Tile;
-import com.jiedro.canels.view.Tiles;
+import com.jiedro.canels.view.Textures;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,10 +28,10 @@ public class Terrain {
 
     public Tile generateStructure(int x, int y){
         if(Math.random()>0.99) {
-            terrain.put(new Vector2(x, y), Tiles.getWallTile());
-            return Tiles.getWallTile();
+            terrain.put(new Vector2(x, y), Textures.getWallTile());
+            return Textures.getWallTile();
         }
-        return Tiles.getGrassTile();
+        return Textures.getGrassTile();
     }
 
     public void placeTile(double x, double y, Tile tile){
@@ -75,14 +73,14 @@ public class Terrain {
                 if(!terrain.containsKey(t)) {
 
                     if (SimplexNoise.noise(GameVariables.FREQUENCY * (i+x), GameVariables.FREQUENCY * (j+y)) < 0) {
-                        terrain.put(new Vector2(i+x, j+y), Tiles.getWaterTile());
+                        terrain.put(new Vector2(i+x, j+y), Textures.getWaterTile());
                     } else if ((SimplexNoise.noise(GameVariables.FREQUENCY * (i+x), GameVariables.FREQUENCY * (j+y)) > 0.35)
                             && (SimplexNoise.noise(GameVariables.FREQUENCY * (i+x), GameVariables.FREQUENCY * (j+y)) < 1)) {
                         Tile tile = generateStructure(i+x, j+y);
                         terrain.put(new Vector2(i+x, j+y), tile);
 
                     } else {
-                        terrain.put(new Vector2(i+x, j+y), Tiles.getGroundTile());
+                        terrain.put(new Vector2(i+x, j+y), Textures.getGroundTile());
                     }
                 }
 

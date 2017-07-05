@@ -1,16 +1,13 @@
 package com.jiedro.canels.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.jiedro.canels.GameVariables;
-import com.jiedro.canels.model.world.Terrain;
 import com.jiedro.canels.model.world.World;
 
 /**
- * Allows to control the world
  * Created by jiexdrop on 03/07/17.
  */
 
@@ -53,7 +50,7 @@ public class WorldInput implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 result = tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
-        world.placeTile(result.x, result.y, Tiles.getGroundTile());
+        world.placeTile(result.x, result.y, Textures.getGroundTile());
         return false;
     }
 
@@ -65,7 +62,7 @@ public class WorldInput implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         Vector3 result =  tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
-        world.placeTile(result.x, result.y, Tiles.getGroundTile());
+        world.placeTile(result.x, result.y, Textures.getGroundTile());
         return false;
     }
 

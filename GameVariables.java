@@ -8,11 +8,17 @@ package com.jiedro.canels;
 public class GameVariables {
 
     //FOLDERS
-    private static final String TERRAIN_FOLDER = "textures/terrain/";
-
-    private static final String PLAYER_FOLDER = "textures/player/";
+    private static final String TEXTURES_FOLDER = "textures/";
 
     private static final String USER_INTERFACE_FOLDER = "ui/";
+
+    private static final String TERRAIN_FOLDER = TEXTURES_FOLDER + "terrain/";
+
+    private static final String ENTITIES_FOLDER = TEXTURES_FOLDER + "entities/";
+
+    private static final String PLAYER_FOLDER = ENTITIES_FOLDER + "player/";
+
+    private static final String ENEMIES_FOLDER = ENTITIES_FOLDER + "enemies/";
 
     private static final String PLAYER_CHEST_FOLDER = PLAYER_FOLDER + "chest/";
 
@@ -20,8 +26,11 @@ public class GameVariables {
 
     private static final String PLAYER_PANTS_FOLDER = PLAYER_FOLDER + "pants/";
 
-    //TERRAIN_FOLDER
+    //TERRAIN
     public static final String MAIN_TEXTURES = TERRAIN_FOLDER + "main_textures.png";
+
+    //ENEMIES
+    public static final String MAIN_ENEMIES = ENEMIES_FOLDER + "main_enemies.png";
 
     //PLAYER
     public static final String PLAYER = PLAYER_FOLDER + "player.png";
@@ -58,11 +67,13 @@ public class GameVariables {
 
     public static final float PLAYER_SPEED = 100;
 
+    public static final float ENTITIES_SPEED = 100;
+
     public static final int TILEMAP_CENTER = (GameVariables.CHUNK_SIZE*GameVariables.CHUNK_SIZE)/2;
 
-    public static final int POSITION_ITERATIONS = 2;
+    public static final int ENEMIES_PAR_LEVEL = 10;
 
-    public static final int VELOCITY_ITERATIONS = 6;
+    public static final int ENEMIES_SPACING = 256;
 
     public static final float TIME_STEP = 1/60f;
 
