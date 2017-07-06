@@ -3,13 +3,19 @@ package com.jiedro.canels.model.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Enemy;
 import com.jiedro.canels.model.entity.Entity;
 import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.view.Tile;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
 
 /**
@@ -45,6 +51,35 @@ public class World {
         }
     }
 
+
+    public HashMap<Vector2, Vector2> breadthFirstSearch(float startX, float startY, float destinationX, float destinationY){
+        Deque<Vector2> frontier = new ArrayDeque<Vector2>();
+        Vector2 fromCoords = new Vector2(startX, startY);
+        frontier.push(fromCoords);
+        HashMap<Vector2, Vector2> came_from = new HashMap<Vector2, Vector2>();
+        came_from.put(fromCoords, null);
+
+        while (!frontier.isEmpty()){
+            Vector2 current = frontier.pop();
+
+            if (Math.round(current.x) == Math.round(destinationX) && Math.round(current.y) == Math.round(destinationY))
+                return came_from;
+
+            for (Vector2 v :terrain.isWalkableNeighbor(current.x, current.y)) {
+                if(!came_from.containsKey(v)){
+                    frontier.push(v);
+                    //came_from.remove(v);
+                    came_from.put(v,current);
+                }
+            }
+        }
+
+        return came_from;
+    }
+
+    public Vector2 getPlayerPosition(){
+        return new Vector2(player.getX(), player.getY());
+    }
 
     public void movePlayer(float knobPercentX, float knobPercentY) {
         float dt = Gdx.graphics.getDeltaTime();
@@ -95,4 +130,7 @@ public class World {
             e.update();
         }
     }
+
 }
+
+

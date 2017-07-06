@@ -6,6 +6,7 @@ import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.view.Tile;
 import com.jiedro.canels.view.Textures;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +43,10 @@ public class Terrain {
         return terrain.get(screenToMap(x, y)) != null && terrain.get(screenToMap(x, y)).isWalkable();
     }
 
+    public boolean canMapMove(double x, double y){
+        return terrain.get(mapToMap(x,y)) != null && terrain.get(mapToMap(x,y)).isWalkable();
+    }
+
     public static Vector2 screenToMap(double x, double y){
         final Vector2 screenToMap = new Vector2();
         if(x<0 && y>0){
@@ -58,6 +63,50 @@ public class Terrain {
             screenToMap.y = Math.round(y)/GameVariables.TILES_SIZE;
         }
         return screenToMap;
+    }
+
+    /**
+     * when you realised you... missed something...
+     * but who cares :)
+     * @param x waidt
+     * @param y tmnfs
+     * @return that's wrong
+     */
+    public static Vector2 mapToMap(double x, double y){
+        final Vector2 mapToMap = new Vector2();
+        if(x<=0 && y>0){
+            mapToMap.x = (Math.round(x))-1;
+            mapToMap.y = Math.round(y);
+        } else if(x>0 && y<=0) {
+            mapToMap.x = (Math.round(x));
+            mapToMap.y = (Math.round(y))-1;
+        } else if(x<0 && y<0) {
+            mapToMap.x = (Math.round(x))-1;
+            mapToMap.y = (Math.round(y))-1;
+        } else {
+            mapToMap.x = Math.round(x);
+            mapToMap.y = Math.round(y);
+        }
+        return mapToMap;
+    }
+
+    public ArrayList<Vector2> isWalkableNeighbor(float x, float y){
+        ArrayList<Vector2> results = new ArrayList<Vector2>();
+
+            if (canMapMove(x + 1, y)) {
+                results.add(new Vector2(x + 1, y));
+            }
+            if (canMapMove(x - 1, y)) {
+                results.add(new Vector2(x - 1, y));
+            }
+            if (canMapMove(x, y + 1)) {
+                results.add(new Vector2(x, y + 1));
+            }
+            if (canMapMove(x, y - 1)) {
+                results.add(new Vector2(x, y - 1));
+            }
+
+        return results;
     }
 
     public void updateWorld(double xPos, double yPos){
