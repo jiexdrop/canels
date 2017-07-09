@@ -1,7 +1,9 @@
 package com.jiedro.canels.model.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -17,13 +19,18 @@ import java.util.Random;
 public abstract class Entity {
     protected Sprite sprite;
 
-    protected float x;
-    protected float y;
+    protected float x = 0f;
+    protected float y = 0f;
 
     protected float velocityX;
     protected float velocityY;
 
+    private float distance;
+    private Vector2 direction;
+
     protected Entity moveTo;
+
+    protected boolean isMoving;
 
     Random random = new Random();
 
@@ -57,6 +64,13 @@ public abstract class Entity {
 
     public void moveTo(Entity e){
         this.moveTo = e;
+        if(e!=null) {
+            distance = Vector2.dst(this.getX(), this.getY(), e.getX(), e.getY());
+            Vector2 result = new Vector2();
+            result.x = e.getX() - this.getX();
+            result.y = e.getY() - this.getY();
+            direction = result.nor();
+        }
     }
 
     public float getX() {
@@ -67,6 +81,10 @@ public abstract class Entity {
         return y;
     }
 
+    public boolean isMoving() {
+        return moveTo != null;
+    }
+
     public void update() {
         if(velocityX<0){
             this.setOrientation(Orientation.LEFT);
@@ -75,15 +93,13 @@ public abstract class Entity {
         }
 
         if(this.moveTo !=null){
-            if(checkcirclecollide(moveTo.getX(), moveTo.getY(),
-                    GameVariables.CHUNK_SIZE*4, this.x, this.y, GameVariables.CHUNK_SIZE*4)) {
-                move((moveTo.getX() - this.x) / (GameVariables.ENTITIES_SPEED + random.nextInt(16 * 16)),
-                        (moveTo.getY() - this.y) / (GameVariables.ENTITIES_SPEED + random.nextInt(16 * 16)));
-            } else {
-                moveTo(null);
-                velocityX = 0;
-                velocityY = 0;
+            this.x += direction.x * GameVariables.ENTITIES_SPEED * Gdx.graphics.getDeltaTime();
+            this.y += direction.y * GameVariables.ENTITIES_SPEED * Gdx.graphics.getDeltaTime();
+            if(Vector2.dst(moveTo.getX(), moveTo.getY(), this.getX(), this.getY()) >= distance)
+            {
+                this.moveTo = null;
             }
+
         }
 
         this.x += velocityX;
@@ -91,7 +107,4 @@ public abstract class Entity {
         sprite.setPosition(this.x, this.y);
     }
 
-    boolean checkcirclecollide(double x1, double y1, float r1, double x2, double y2, float r2){
-        return Math.abs((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < (r1 + r2) * (r1 + r2);
-    }
 }

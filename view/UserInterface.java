@@ -51,7 +51,9 @@ public class UserInterface {
 
         stage.getBatch().begin();
         font.draw(stage.getBatch(), "FPS: " + Gdx.graphics.getFramesPerSecond()
-                + " RC: " + totalRenderCalls, 10, Gdx.graphics.getHeight()-10);
+                + "\nRENDER_CALLS: " + totalRenderCalls
+                + "\nPLAYER_POS: " + GameVariables.PLAYER_POSITION
+                + "\nENTITIES: " + GameVariables.ENTITIES, 10, Gdx.graphics.getHeight()-10);
         stage.getBatch().end();
     }
 

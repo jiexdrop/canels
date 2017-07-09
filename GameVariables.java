@@ -1,5 +1,7 @@
 package com.jiedro.canels;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  *
  * Created by jorge on 25/05/17.
@@ -76,5 +78,11 @@ public class GameVariables {
     public static final int ENEMIES_SPACING = 256;
 
     public static final float TIME_STEP = 1/60f;
+
+
+    //THIS IS FOR GUI ... TO REVIEW
+    public static int ENTITIES = 0;
+
+    public static Vector2 PLAYER_POSITION = new Vector2(0,0);
 
 }

@@ -56,6 +56,31 @@ public class WorldInput implements InputProcessor {
         Vector3 result = tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
         world.placeTile(result.x, result.y, Textures.getGroundTile());
 
+        HashMap<Vector2, Vector2> breadthFirstSearch = world.breadthFirstSearch(GameVariables.PLAYER_POSITION.x,
+                GameVariables.PLAYER_POSITION.y,
+                result.x,
+                result.y);
+
+
+        Vector2 whereGo = breadthFirstSearch.get(new Vector2(Math.round(result.x/GameVariables.TILES_SIZE),
+                Math.round(result.y/GameVariables.TILES_SIZE)));
+
+
+        Vector2 whereNow = whereGo;
+
+        Vector2 whereFrom = GameVariables.PLAYER_POSITION;
+
+        if(whereGo!=null){
+            while (whereNow!=whereFrom && whereGo!=null){
+                whereNow = whereGo;
+                whereGo = breadthFirstSearch.get(whereNow);
+                if(whereGo!=null)
+                    world.placeTile(whereGo.x*GameVariables.TILES_SIZE, whereGo.y*GameVariables.TILES_SIZE, Textures.getDoorTile());
+                world.placeTile(whereNow.x*GameVariables.TILES_SIZE, whereNow.y*GameVariables.TILES_SIZE, Textures.getDoorTile());
+            }
+            System.out.println("found" + whereNow);
+        }
+
         return false;
     }
 
@@ -64,26 +89,12 @@ public class WorldInput implements InputProcessor {
         return false;
     }
 
-    /**
-     * Un nouveau niveau d'ilisibilité, bravo!
-     * @param screenX
-     * @param screenY
-     * @param pointer
-     * @return
-     */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         Vector3 result =  tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
         world.placeTile(result.x, result.y, Textures.getGroundTile());
-        for ( Map.Entry<Vector2, Vector2> v: world.breadthFirstSearch(world.getPlayerPosition().x/GameVariables.TILES_SIZE,
-                world.getPlayerPosition().y/GameVariables.TILES_SIZE,
-                result.x/GameVariables.TILES_SIZE,
-                result.y/GameVariables.TILES_SIZE).entrySet()) {
-            if(v.getValue()!=null) {
-                world.placeTile(v.getKey().x * GameVariables.TILES_SIZE, v.getKey().y * GameVariables.TILES_SIZE, Textures.getDoorTile());
-                world.placeTile(v.getValue().x * GameVariables.TILES_SIZE, v.getValue().y * GameVariables.TILES_SIZE, Textures.getDoorTile());
-            }
-        }
+
+
         return false;
     }
 

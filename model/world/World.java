@@ -54,15 +54,17 @@ public class World {
 
     public HashMap<Vector2, Vector2> breadthFirstSearch(float startX, float startY, float destinationX, float destinationY){
         Deque<Vector2> frontier = new ArrayDeque<Vector2>();
-        Vector2 fromCoords = new Vector2(startX, startY);
+
+        Vector2 fromCoords = terrain.screenToMap(startX, startY);
         frontier.push(fromCoords);
         HashMap<Vector2, Vector2> came_from = new HashMap<Vector2, Vector2>();
         came_from.put(fromCoords, null);
 
         while (!frontier.isEmpty()){
-            Vector2 current = frontier.pop();
+            Vector2 current = frontier.pollLast();
 
-            if (Math.round(current.x) == Math.round(destinationX) && Math.round(current.y) == Math.round(destinationY))
+            if (current.x == terrain.screenToMap(destinationX, 0f).x
+                    && current.y == terrain.screenToMap(destinationY, 0f).y)
                 return came_from;
 
             for (Vector2 v :terrain.isWalkableNeighbor(current.x, current.y)) {
@@ -75,10 +77,6 @@ public class World {
         }
 
         return came_from;
-    }
-
-    public Vector2 getPlayerPosition(){
-        return new Vector2(player.getX(), player.getY());
     }
 
     public void movePlayer(float knobPercentX, float knobPercentY) {
@@ -107,6 +105,8 @@ public class World {
         for (Entity e:entities) {
             e.getSprite().draw(tilemapBatch);
         }
+
+        GameVariables.ENTITIES = entities.size();
     }
 
     public void drawEntities(SpriteBatch entitiesBatch, OrthographicCamera entitiesCamera) {
@@ -126,11 +126,32 @@ public class World {
         player.update();
 
         for (Entity e:entities) {
-            e.moveTo(player);
+
+            //TODO REFACTOR
+            if(!e.isMoving()) {
+                if(checkcirclecollide(player.getX(), player.getY(),
+                        GameVariables.CHUNK_SIZE*4, e.getX(), e.getY(), GameVariables.CHUNK_SIZE*4)) {
+                    e.moveTo(player);
+                }else {
+                    e.moveTo(null);
+                }
+            } else {
+                if(!checkcirclecollide(player.getX(), player.getY(),
+                        GameVariables.CHUNK_SIZE*4, e.getX(), e.getY(), GameVariables.CHUNK_SIZE*4)) {
+                    e.moveTo(null);
+                } else {
+                    e.moveTo(player);
+                }
+            }
+
             e.update();
+
         }
     }
 
+    boolean checkcirclecollide(double x1, double y1, float r1, double x2, double y2, float r2){
+        return Math.abs((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < (r1 + r2) * (r1 + r2);
+    }
 }
 
 

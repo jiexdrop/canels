@@ -7,6 +7,7 @@ import com.jiedro.canels.view.Tile;
 import com.jiedro.canels.view.Textures;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -105,6 +106,10 @@ public class Terrain {
             if (canMapMove(x, y - 1)) {
                 results.add(new Vector2(x, y - 1));
             }
+
+        if ((x + y) % 2 == 0){
+            Collections.reverse(results);
+        }
 
         return results;
     }

@@ -3,6 +3,7 @@ package com.jiedro.canels.model.entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 
 /**
@@ -21,6 +22,10 @@ public class Player extends Entity {
 
     @Override
     public void update() {
+        GameVariables.PLAYER_POSITION.x = this.x;
+        GameVariables.PLAYER_POSITION.y = this.y;
+
+
         if(velocityX<0){
             this.setOrientation(Orientation.LEFT);
         } else if(velocityX>0) {
