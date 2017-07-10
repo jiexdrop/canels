@@ -22,8 +22,8 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        GameVariables.PLAYER_POSITION.x = this.x;
-        GameVariables.PLAYER_POSITION.y = this.y;
+        GameVariables.PLAYER_POSITION.x = getX();
+        GameVariables.PLAYER_POSITION.y = getY();
 
 
         if(velocityX<0){

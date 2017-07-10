@@ -52,19 +52,19 @@ public class World {
     }
 
 
-    public HashMap<Vector2, Vector2> breadthFirstSearch(float startX, float startY, float destinationX, float destinationY){
+    public HashMap<Vector2, Vector2> breadthFirstSearch(Vector2 start, Vector2 destination){
         Deque<Vector2> frontier = new ArrayDeque<Vector2>();
 
-        Vector2 fromCoords = terrain.screenToMap(startX, startY);
-        frontier.push(fromCoords);
+
+        frontier.push(start);
         HashMap<Vector2, Vector2> came_from = new HashMap<Vector2, Vector2>();
-        came_from.put(fromCoords, null);
+        came_from.put(start, null);
 
         while (!frontier.isEmpty()){
             Vector2 current = frontier.pollLast();
 
-            if (current.x == terrain.screenToMap(destinationX, 0f).x
-                    && current.y == terrain.screenToMap(destinationY, 0f).y)
+            if (current.x == destination.x
+                    && current.y == destination.y)
                 return came_from;
 
             for (Vector2 v :terrain.isWalkableNeighbor(current.x, current.y)) {
@@ -86,12 +86,18 @@ public class World {
                 player.getY() + (knobPercentY * (dt * GameVariables.PLAYER_SPEED)))){
             player.move(knobPercentX * (dt * GameVariables.PLAYER_SPEED),
                     knobPercentY * (dt * GameVariables.PLAYER_SPEED));
-
-            terrain.updateWorld(player.getX() - GameVariables.TILEMAP_CENTER,
-                    player.getY() - GameVariables.TILEMAP_CENTER);
-        } else {
+        } else if (terrain.canMove(player.getX(),
+                player.getY() + (knobPercentY * (dt * GameVariables.PLAYER_SPEED)))){
+            player.move(0f, knobPercentY * (dt * GameVariables.PLAYER_SPEED));
+        } else if  (terrain.canMove(player.getX() + (knobPercentX * (dt * GameVariables.PLAYER_SPEED)),
+                player.getY())) {
+            player.move(knobPercentX * (dt * GameVariables.PLAYER_SPEED), 0f);
+        }
+        else {
             player.move(0,0);
         }
+        terrain.updateWorld(player.getX() - GameVariables.TILEMAP_CENTER,
+                player.getY() - GameVariables.TILEMAP_CENTER);
 
     }
 
@@ -131,16 +137,18 @@ public class World {
             if(!e.isMoving()) {
                 if(checkcirclecollide(player.getX(), player.getY(),
                         GameVariables.CHUNK_SIZE*4, e.getX(), e.getY(), GameVariables.CHUNK_SIZE*4)) {
-                    e.moveTo(player);
+                    e.moveTowards(Helpers.convertMovementPoints(breadthFirstSearch(Helpers.screenToMap(e.getX(), e.getY()),
+                            Helpers.screenToMap(player.getX(), player.getY()))));
                 }else {
-                    e.moveTo(null);
+                    e.moveTowards(new ArrayDeque<Vector2>());
                 }
             } else {
                 if(!checkcirclecollide(player.getX(), player.getY(),
                         GameVariables.CHUNK_SIZE*4, e.getX(), e.getY(), GameVariables.CHUNK_SIZE*4)) {
-                    e.moveTo(null);
+                    e.moveTowards(new ArrayDeque<Vector2>());
                 } else {
-                    e.moveTo(player);
+                    e.moveTowards(Helpers.convertMovementPoints(breadthFirstSearch(Helpers.screenToMap(e.getX(), e.getY()),
+                            Helpers.screenToMap(player.getX(), player.getY()))));
                 }
             }
 

@@ -37,59 +37,17 @@ public class Terrain {
     }
 
     public void placeTile(double x, double y, Tile tile){
-        terrain.put(screenToMap(x,y), tile);
+        terrain.put(Helpers.screenToMap(x,y), tile);
     }
 
     public boolean canMove(double x, double y){
-        return terrain.get(screenToMap(x, y)) != null && terrain.get(screenToMap(x, y)).isWalkable();
+        return terrain.get(Helpers.screenToMap(x, y)) != null && terrain.get(Helpers.screenToMap(x, y)).isWalkable();
     }
 
     public boolean canMapMove(double x, double y){
-        return terrain.get(mapToMap(x,y)) != null && terrain.get(mapToMap(x,y)).isWalkable();
+        return terrain.get(Helpers.mapToMap(x,y)) != null && terrain.get(Helpers.mapToMap(x,y)).isWalkable();
     }
 
-    public static Vector2 screenToMap(double x, double y){
-        final Vector2 screenToMap = new Vector2();
-        if(x<0 && y>0){
-            screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE)-1;
-            screenToMap.y = Math.round(y)/GameVariables.TILES_SIZE;
-        } else if(x>0 && y<0) {
-            screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE);
-            screenToMap.y = (Math.round(y)/GameVariables.TILES_SIZE)-1;
-        } else if(x<0 && y<0) {
-            screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE)-1;
-            screenToMap.y = (Math.round(y)/GameVariables.TILES_SIZE)-1;
-        } else {
-            screenToMap.x = Math.round(x)/GameVariables.TILES_SIZE;
-            screenToMap.y = Math.round(y)/GameVariables.TILES_SIZE;
-        }
-        return screenToMap;
-    }
-
-    /**
-     * when you realised you... missed something...
-     * but who cares :)
-     * @param x waidt
-     * @param y tmnfs
-     * @return that's wrong
-     */
-    public static Vector2 mapToMap(double x, double y){
-        final Vector2 mapToMap = new Vector2();
-        if(x<=0 && y>0){
-            mapToMap.x = (Math.round(x))-1;
-            mapToMap.y = Math.round(y);
-        } else if(x>0 && y<=0) {
-            mapToMap.x = (Math.round(x));
-            mapToMap.y = (Math.round(y))-1;
-        } else if(x<0 && y<0) {
-            mapToMap.x = (Math.round(x))-1;
-            mapToMap.y = (Math.round(y))-1;
-        } else {
-            mapToMap.x = Math.round(x);
-            mapToMap.y = Math.round(y);
-        }
-        return mapToMap;
-    }
 
     public ArrayList<Vector2> isWalkableNeighbor(float x, float y){
         ArrayList<Vector2> results = new ArrayList<Vector2>();
@@ -115,7 +73,7 @@ public class Terrain {
     }
 
     public void updateWorld(double xPos, double yPos){
-        Vector2 playerMapPos = screenToMap(xPos, yPos);
+        Vector2 playerMapPos = Helpers.screenToMap(xPos, yPos);
         int x = (int)playerMapPos.x;
         int y = (int)playerMapPos.y;
 
@@ -144,7 +102,7 @@ public class Terrain {
     }
 
     public void draw(Batch batch, double xPos, double yPos) {
-        Vector2 playerMapPos = screenToMap(xPos, yPos);
+        Vector2 playerMapPos = Helpers.screenToMap(xPos, yPos);
         int x = (int)playerMapPos.x;
         int y = (int)playerMapPos.y;
 

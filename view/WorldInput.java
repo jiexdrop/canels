@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.jiedro.canels.GameVariables;
+import com.jiedro.canels.model.world.Helpers;
 import com.jiedro.canels.model.world.World;
 
 import java.util.HashMap;
@@ -56,10 +57,8 @@ public class WorldInput implements InputProcessor {
         Vector3 result = tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
         world.placeTile(result.x, result.y, Textures.getGroundTile());
 
-        HashMap<Vector2, Vector2> breadthFirstSearch = world.breadthFirstSearch(GameVariables.PLAYER_POSITION.x,
-                GameVariables.PLAYER_POSITION.y,
-                result.x,
-                result.y);
+        HashMap<Vector2, Vector2> breadthFirstSearch = world.breadthFirstSearch(Helpers.screenToMap(GameVariables.PLAYER_POSITION),
+                Helpers.screenToMap(result.x, result.y));
 
 
         Vector2 whereGo = breadthFirstSearch.get(new Vector2(Math.round(result.x/GameVariables.TILES_SIZE),

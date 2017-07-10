@@ -9,6 +9,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.jiedro.canels.GameVariables;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -30,7 +34,7 @@ public abstract class Entity {
 
     protected Entity moveTo;
 
-    protected boolean isMoving;
+    protected ArrayDeque<Vector2> movementPoints = new ArrayDeque<Vector2>();
 
     Random random = new Random();
 
@@ -73,6 +77,19 @@ public abstract class Entity {
         }
     }
 
+    public void moveTowards(ArrayDeque<Vector2> movementPoints){
+        this.movementPoints = movementPoints;
+        if(this.movementPoints !=null && this.movementPoints.size() > 0) {
+            Vector2 first = movementPoints.pollFirst();
+
+            distance = Vector2.dst(this.getX(), this.getY(), first.x, first.y);
+            Vector2 result = new Vector2();
+            result.x = first.x - this.getX();
+            result.y = first.y - this.getY();
+            direction = result.nor();
+        }
+    }
+
     public float getX() {
         return x;
     }
@@ -82,7 +99,7 @@ public abstract class Entity {
     }
 
     public boolean isMoving() {
-        return moveTo != null;
+        return movementPoints.size()>1;
     }
 
     public void update() {
@@ -92,12 +109,15 @@ public abstract class Entity {
             this.setOrientation(Orientation.RIGHT);
         }
 
-        if(this.moveTo !=null){
+        if(this.isMoving()){
             this.x += direction.x * GameVariables.ENTITIES_SPEED * Gdx.graphics.getDeltaTime();
             this.y += direction.y * GameVariables.ENTITIES_SPEED * Gdx.graphics.getDeltaTime();
-            if(Vector2.dst(moveTo.getX(), moveTo.getY(), this.getX(), this.getY()) >= distance)
+
+            if(Vector2.dst(this.movementPoints.peekFirst().x, this.movementPoints.peekFirst().y, this.getX(), this.getY()) >= distance)
             {
-                this.moveTo = null;
+                this.movementPoints.pop();
+
+                moveTowards(this.movementPoints);
             }
 
         }
