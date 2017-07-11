@@ -23,14 +23,13 @@ import java.util.Random;
 public abstract class Entity {
     protected Sprite sprite;
 
-    protected float x = 0f;
-    protected float y = 0f;
-
     protected float velocityX;
     protected float velocityY;
 
     private float distance;
     private Vector2 direction;
+
+    protected Vector2 position;
 
     protected Entity moveTo;
 
@@ -40,6 +39,7 @@ public abstract class Entity {
 
     public Entity(Sprite sprite){
         this.sprite = sprite;
+        this.position = new Vector2(0,0);
     }
 
     public Sprite getSprite() {
@@ -66,15 +66,8 @@ public abstract class Entity {
         this.velocityY = velocityY;
     }
 
-    public void moveTo(Entity e){
-        this.moveTo = e;
-        if(e!=null) {
-            distance = Vector2.dst(this.getX(), this.getY(), e.getX(), e.getY());
-            Vector2 result = new Vector2();
-            result.x = e.getX() - this.getX();
-            result.y = e.getY() - this.getY();
-            direction = result.nor();
-        }
+    public Vector2 getPosition() {
+        return position;
     }
 
     public void moveTowards(ArrayDeque<Vector2> movementPoints){
@@ -91,11 +84,11 @@ public abstract class Entity {
     }
 
     public float getX() {
-        return x;
+        return position.x;
     }
 
     public float getY() {
-        return y;
+        return position.y;
     }
 
     public boolean isMoving() {
@@ -110,21 +103,20 @@ public abstract class Entity {
         }
 
         if(this.isMoving()){
-            this.x += direction.x * GameVariables.ENTITIES_SPEED * Gdx.graphics.getDeltaTime();
-            this.y += direction.y * GameVariables.ENTITIES_SPEED * Gdx.graphics.getDeltaTime();
+            this.position.x += direction.x * GameVariables.ENTITIES_SPEED * Gdx.graphics.getDeltaTime();
+            this.position.y += direction.y * GameVariables.ENTITIES_SPEED * Gdx.graphics.getDeltaTime();
 
             if(Vector2.dst(this.movementPoints.peekFirst().x, this.movementPoints.peekFirst().y, this.getX(), this.getY()) >= distance)
             {
                 this.movementPoints.pop();
-
                 moveTowards(this.movementPoints);
             }
 
         }
 
-        this.x += velocityX;
-        this.y += velocityY;
-        sprite.setPosition(this.x, this.y);
+        //this.x += velocityX;
+        //this.y += velocityY;
+        sprite.setPosition(position.x, position.y);
     }
 
 }

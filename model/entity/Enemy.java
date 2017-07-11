@@ -16,7 +16,7 @@ public class Enemy extends Entity {
         super(new Sprite(Textures.getSlimeSprite()));
         super.setTint(new Color(Color.argb8888(255, 178,106,70)));
         sprite.setPosition(x,y);
-        this.x =x;
-        this.y = y;
+        position.x = x;
+        position.y = y;
     }
 }

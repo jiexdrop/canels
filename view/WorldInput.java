@@ -1,5 +1,6 @@
 package com.jiedro.canels.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -57,27 +58,26 @@ public class WorldInput implements InputProcessor {
         Vector3 result = tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
         world.placeTile(result.x, result.y, Textures.getGroundTile());
 
-        HashMap<Vector2, Vector2> breadthFirstSearch = world.breadthFirstSearch(Helpers.screenToMap(GameVariables.PLAYER_POSITION),
-                Helpers.screenToMap(result.x, result.y));
+        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            HashMap<Vector2, Vector2> breadthFirstSearch = world.breadthFirstSearch(Helpers.screenToMap(GameVariables.PLAYER_POSITION),
+                    Helpers.screenToMap(result.x, result.y));
 
+            Vector2 whereGo = breadthFirstSearch.get(Helpers.screenToMap(result.x, result.y));
 
-        Vector2 whereGo = breadthFirstSearch.get(new Vector2(Math.round(result.x/GameVariables.TILES_SIZE),
-                Math.round(result.y/GameVariables.TILES_SIZE)));
+            Vector2 whereNow = whereGo;
 
+            Vector2 whereFrom = GameVariables.PLAYER_POSITION;
 
-        Vector2 whereNow = whereGo;
-
-        Vector2 whereFrom = GameVariables.PLAYER_POSITION;
-
-        if(whereGo!=null){
-            while (whereNow!=whereFrom && whereGo!=null){
-                whereNow = whereGo;
-                whereGo = breadthFirstSearch.get(whereNow);
-                if(whereGo!=null)
-                    world.placeTile(whereGo.x*GameVariables.TILES_SIZE, whereGo.y*GameVariables.TILES_SIZE, Textures.getDoorTile());
-                world.placeTile(whereNow.x*GameVariables.TILES_SIZE, whereNow.y*GameVariables.TILES_SIZE, Textures.getDoorTile());
+            if (whereGo != null) {
+                while (whereNow != whereFrom && whereGo != null) {
+                    whereNow = whereGo;
+                    whereGo = breadthFirstSearch.get(whereNow);
+                    if (whereGo != null) {
+                        //world.placeTile(Helpers.mapToScreen(whereGo), Textures.getDoorTile());
+                        world.placeTile(Helpers.mapToScreen(whereNow), Textures.getDoorTile());
+                    }
+                }
             }
-            System.out.println("found" + whereNow);
         }
 
         return false;

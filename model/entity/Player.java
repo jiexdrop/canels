@@ -32,8 +32,8 @@ public class Player extends Entity {
             this.setOrientation(Orientation.RIGHT);
         }
 
-        this.x += velocityX;
-        this.y += velocityY;
+        this.position.x += velocityX;
+        this.position.y += velocityY;
     }
 
 }

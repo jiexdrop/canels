@@ -2,6 +2,7 @@ package com.jiedro.canels.model.world;
 
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
+import com.jiedro.canels.view.Textures;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -17,19 +18,8 @@ public class Helpers {
 
     public static Vector2 screenToMap(double x, double y){
         final Vector2 screenToMap = new Vector2();
-        if(x<0 && y>0){
-            screenToMap.x = (Math.round(x)/ GameVariables.TILES_SIZE)-1;
-            screenToMap.y = Math.round(y)/GameVariables.TILES_SIZE;
-        } else if(x>0 && y<0) {
-            screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE);
-            screenToMap.y = (Math.round(y)/GameVariables.TILES_SIZE)-1;
-        } else if(x<0 && y<0) {
-            screenToMap.x = (Math.round(x)/GameVariables.TILES_SIZE)-1;
-            screenToMap.y = (Math.round(y)/GameVariables.TILES_SIZE)-1;
-        } else {
-            screenToMap.x = Math.round(x)/GameVariables.TILES_SIZE;
-            screenToMap.y = Math.round(y)/GameVariables.TILES_SIZE;
-        }
+        screenToMap.x = Math.round((x-(GameVariables.TILES_SIZE/2))/GameVariables.TILES_SIZE);
+        screenToMap.y = Math.round((y-(GameVariables.TILES_SIZE/2))/GameVariables.TILES_SIZE);
         return screenToMap;
     }
 
@@ -37,46 +27,17 @@ public class Helpers {
         return screenToMap(screenToMap.x, screenToMap.y);
     }
 
-    /**
-     * when you realised you... missed something...
-     * TODO I care
-     * @param x waidt
-     * @param y tmnfs
-     * @return that's wrong
-     */
     public static Vector2 mapToMap(double x, double y){
         final Vector2 mapToMap = new Vector2();
-        if(x<=0 && y>0){
-            mapToMap.x = (Math.round(x))-1;
-            mapToMap.y = Math.round(y);
-        } else if(x>0 && y<=0) {
-            mapToMap.x = (Math.round(x));
-            mapToMap.y = (Math.round(y))-1;
-        } else if(x<0 && y<0) {
-            mapToMap.x = (Math.round(x))-1;
-            mapToMap.y = (Math.round(y))-1;
-        } else {
-            mapToMap.x = Math.round(x);
-            mapToMap.y = Math.round(y);
-        }
+        mapToMap.x = Math.round(x);
+        mapToMap.y = Math.round(y);
         return mapToMap;
     }
 
     public static Vector2 mapToScreen(double x, double y){
         final Vector2 mapToScreen = new Vector2();
-        if(x<0 && y>0){
-            mapToScreen.x = (Math.round(x)* GameVariables.TILES_SIZE)-1;
-            mapToScreen.y = Math.round(y)*GameVariables.TILES_SIZE;
-        } else if(x>0 && y<0) {
-            mapToScreen.x = (Math.round(x)*GameVariables.TILES_SIZE);
-            mapToScreen.y = (Math.round(y)*GameVariables.TILES_SIZE)-1;
-        } else if(x<0 && y<0) {
-            mapToScreen.x = (Math.round(x)*GameVariables.TILES_SIZE)-1;
-            mapToScreen.y = (Math.round(y)*GameVariables.TILES_SIZE)-1;
-        } else {
-            mapToScreen.x = Math.round(x)*GameVariables.TILES_SIZE;
-            mapToScreen.y = Math.round(y)*GameVariables.TILES_SIZE;
-        }
+        mapToScreen.x = Math.round(x*GameVariables.TILES_SIZE);
+        mapToScreen.y = Math.round(y*GameVariables.TILES_SIZE);
         return mapToScreen;
     }
 
@@ -84,18 +45,25 @@ public class Helpers {
         return mapToScreen(map.x, map.y);
     }
 
-    public static ArrayDeque<Vector2> convertMovementPoints(HashMap<Vector2, Vector2> movementPoints){
+    public static ArrayDeque<Vector2> getMovementPoints(World world, Vector2 start, Vector2 destination){
         ArrayDeque<Vector2> result = new ArrayDeque<Vector2>();
-        ArrayList<Vector2> list = new ArrayList<Vector2>();
-        if(movementPoints!=null) {
-            for (Map.Entry<Vector2, Vector2> e : movementPoints.entrySet()) {
-                list.add(e.getKey());
-                if(e.getValue()!=null)
-                list.add(e.getValue());
-            }
-            Collections.reverse(list);
-            for (Vector2 v:list) {
-                result.push(mapToScreen(v));
+        HashMap<Vector2, Vector2> breadthFirstSearch = world.breadthFirstSearch(Helpers.screenToMap(start),
+                Helpers.screenToMap(destination));
+
+        Vector2 whereGo = breadthFirstSearch.get(Helpers.screenToMap(destination));
+
+        Vector2 whereNow = whereGo;
+
+        Vector2 whereFrom = GameVariables.PLAYER_POSITION;
+
+        if (whereGo != null) {
+            while (whereNow != whereFrom && whereGo != null) {
+                whereNow = whereGo;
+                whereGo = breadthFirstSearch.get(whereNow);
+                if (whereGo != null) {
+                    //result.push(Helpers.mapToScreen(whereGo));
+                    result.push(Helpers.mapToScreen(whereNow));
+                }
             }
         }
         return result;

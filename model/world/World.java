@@ -116,6 +116,7 @@ public class World {
     }
 
     public void drawEntities(SpriteBatch entitiesBatch, OrthographicCamera entitiesCamera) {
+
         player.getSprite().draw(entitiesBatch);
 
 
@@ -123,6 +124,10 @@ public class World {
 
     public void placeTile(float x, float y, Tile groundTile) {
         terrain.placeTile(x,y,groundTile);
+    }
+
+    public void placeTile(Vector2 pos, Tile groundTile) {
+        terrain.placeTile(pos.x,pos.y,groundTile);
     }
 
     /**
@@ -137,8 +142,7 @@ public class World {
             if(!e.isMoving()) {
                 if(checkcirclecollide(player.getX(), player.getY(),
                         GameVariables.CHUNK_SIZE*4, e.getX(), e.getY(), GameVariables.CHUNK_SIZE*4)) {
-                    e.moveTowards(Helpers.convertMovementPoints(breadthFirstSearch(Helpers.screenToMap(e.getX(), e.getY()),
-                            Helpers.screenToMap(player.getX(), player.getY()))));
+                    e.moveTowards(Helpers.getMovementPoints(this, e.getPosition(), player.getPosition()));
                 }else {
                     e.moveTowards(new ArrayDeque<Vector2>());
                 }
@@ -147,8 +151,7 @@ public class World {
                         GameVariables.CHUNK_SIZE*4, e.getX(), e.getY(), GameVariables.CHUNK_SIZE*4)) {
                     e.moveTowards(new ArrayDeque<Vector2>());
                 } else {
-                    e.moveTowards(Helpers.convertMovementPoints(breadthFirstSearch(Helpers.screenToMap(e.getX(), e.getY()),
-                            Helpers.screenToMap(player.getX(), player.getY()))));
+                    e.moveTowards(Helpers.getMovementPoints(this, e.getPosition(), player.getPosition()));
                 }
             }
 
