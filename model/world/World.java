@@ -38,10 +38,6 @@ public class World {
         placeEnemies();
     }
 
-    public void moveEnemies(){
-
-    }
-
     public void placeEnemies(){
         Random random = new Random();
         for (int i = 0; i < GameVariables.ENEMIES_PAR_LEVEL; i++) {
@@ -101,25 +97,35 @@ public class World {
 
     }
 
-    public void drawTilemap(SpriteBatch tilemapBatch, OrthographicCamera tilemapCamera) {
+    public void drawTilemapBackground(SpriteBatch tilemapBatch, OrthographicCamera tilemapCamera) {
         tilemapCamera.position.set(player.getX(),
                 player.getY(), 0.f);
-        terrain.draw(tilemapBatch,
+
+        terrain.drawBackground(tilemapBatch,
                 player.getX() - GameVariables.TILEMAP_CENTER,
                 player.getY() - GameVariables.TILEMAP_CENTER);
 
-        for (Entity e:entities) {
-            e.getSprite().draw(tilemapBatch);
-        }
 
         GameVariables.ENTITIES = entities.size();
     }
 
-    public void drawEntities(SpriteBatch entitiesBatch, OrthographicCamera entitiesCamera) {
+    public void drawTilemapForeground(SpriteBatch tilemapBatch, OrthographicCamera tilemapCamera) {
+        tilemapCamera.position.set(player.getX(),
+                player.getY(), 0.f);
 
-        player.getSprite().draw(entitiesBatch);
+        terrain.drawForeground(tilemapBatch,
+                player.getX() - GameVariables.TILEMAP_CENTER,
+                player.getY() - GameVariables.TILEMAP_CENTER);
 
+        GameVariables.ENTITIES = entities.size();
+    }
 
+    public void drawEntities(SpriteBatch batch, OrthographicCamera entitiesCamera) {
+        player.getSprite().draw(batch);
+
+        for (Entity e:entities) {
+            e.getSprite().draw(batch);
+        }
     }
 
     public void placeTile(float x, float y, Tile groundTile) {

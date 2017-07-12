@@ -15,6 +15,8 @@ public class Tile extends Sprite {
 
     private boolean walkable = true;
 
+    private boolean foreground = false;
+
     public Tile(TextureRegion textureRegion, int id){
         this.setRegion(textureRegion);
         this.id = id;
@@ -24,6 +26,13 @@ public class Tile extends Sprite {
         this.setRegion(textureRegion);
         this.id = id;
         this.walkable = walkable;
+    }
+
+    public Tile(TextureRegion textureRegion, int id, boolean walkable, boolean foreground){
+        this.setRegion(textureRegion);
+        this.id = id;
+        this.walkable = walkable;
+        this.foreground = foreground;
     }
 
 
@@ -47,4 +56,6 @@ public class Tile extends Sprite {
     public boolean isWalkable(){
         return this.walkable;
     }
+
+    public boolean isForeground() { return this.foreground; }
 }

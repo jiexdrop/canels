@@ -26,6 +26,8 @@ public class Textures {
     private static Tile grassTile = new Tile(textureRegions[0][2],3);
     private static Tile wallTile = new Tile(textureRegions[1][0], 4, false);
     private static Tile doorTile = new Tile(textureRegions[1][1],5, false);
+    private static Tile leavesTile = new Tile(textureRegions[1][2],5, true, true);
+    private static Tile logTile = new Tile(textureRegions[2][2],5, false);
 
     public static final Tile getWaterTile() {
         return waterTile;
@@ -46,6 +48,15 @@ public class Textures {
     public static final Tile getDoorTile() {
         return doorTile;
     }
+
+    public static final Tile getLeavesTile() {
+        return leavesTile;
+    }
+
+    public static final Tile getLogTile() {
+        return logTile;
+    }
+
 
     public static final TextureRegion getSlimeSprite() {
         return enemiesTextureRegions[0][0];

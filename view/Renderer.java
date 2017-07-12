@@ -21,9 +21,7 @@ public class Renderer implements Disposable {
 
     private OrthographicCamera tilemapCamera;
 
-    private SpriteBatch tilemapBatch;
-
-    private SpriteBatch entitiesBatch;
+    private SpriteBatch batch;
 
     private UserInterface userInterface;
 
@@ -37,14 +35,13 @@ public class Renderer implements Disposable {
     public Renderer(){
         world = new World();
 
-        entitiesBatch = new SpriteBatch();
-        tilemapBatch = new SpriteBatch();
+        batch = new SpriteBatch();
 
         tilemapCamera = setupCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         entitiesCamera = setupCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
         worldInput = new WorldInput(world, tilemapCamera, entitiesCamera);
-        userInterface = new UserInterface(world, entitiesBatch);
+        userInterface = new UserInterface(world, batch);
 
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(userInterface.getStage());
@@ -54,25 +51,23 @@ public class Renderer implements Disposable {
     }
 
     public void renderTerrain(){
-        tilemapBatch.totalRenderCalls = 0;
+        batch.totalRenderCalls = 0;
 
         world.update();
 
         tilemapCamera.update();
         entitiesCamera.update();
 
-        entitiesBatch.setProjectionMatrix(entitiesCamera.combined);
-        tilemapBatch.setProjectionMatrix(tilemapCamera.combined);
+        batch.setProjectionMatrix(tilemapCamera.combined);
 
-        tilemapBatch.begin();
-        world.drawTilemap(tilemapBatch, tilemapCamera);
-        tilemapBatch.end();
+        batch.begin();
+        world.drawTilemapBackground(batch, tilemapCamera);
+        world.drawEntities(batch, entitiesCamera);
+        world.drawTilemapForeground(batch, tilemapCamera);
 
-        entitiesBatch.begin();
-        world.drawEntities(entitiesBatch, entitiesCamera);
-        entitiesBatch.end();
+        batch.end();
 
-        totalRenderCalls = tilemapBatch.totalRenderCalls;
+        totalRenderCalls = batch.totalRenderCalls;
 
         userInterface.draw(totalRenderCalls);
     }
@@ -87,8 +82,7 @@ public class Renderer implements Disposable {
 
     @Override
     public void dispose(){
-        entitiesBatch.dispose();
-        tilemapBatch.dispose();
+        batch.dispose();
     }
 
 

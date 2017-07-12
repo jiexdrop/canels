@@ -16,8 +16,7 @@ public class Player extends Entity {
     public Player(){
         super(new Sprite(new Texture(GameVariables.PLAYER)));
         super.setTint(new Color(Color.rgb888(1,1,1)));
-        sprite.setPosition(GameVariables.CHUNK_SIZE*(GameVariables.CHUNK_SIZE-2),
-                (GameVariables.CHUNK_SIZE*GameVariables.CHUNK_SIZE)/2);
+
     }
 
     @Override
@@ -34,6 +33,8 @@ public class Player extends Entity {
 
         this.position.x += velocityX;
         this.position.y += velocityY;
+
+        sprite.setPosition(this.position.x, this.position.y);
     }
 
 }

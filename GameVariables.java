@@ -61,7 +61,9 @@ public class GameVariables {
 
     public static float ZOOM_INPUT = 0.1f;
 
-    public static double FREQUENCY = 0.01d;//0.01d
+    public static double TERRAIN_FREQUENCY = 0.01d;//0.01d
+
+    public static double TREES_FREQUENCY = 1d;//1d
 
     public static int TILES_SIZE = 16;
 
