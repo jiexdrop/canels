@@ -2,7 +2,9 @@ package com.jiedro.canels.model.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Enemy;
@@ -29,6 +31,8 @@ public class World {
     private Terrain terrain;
 
     private ArrayList<Entity> entities;
+
+    private float elapsedTime;
 
 
     public World() {
@@ -121,11 +125,15 @@ public class World {
     }
 
     public void drawEntities(SpriteBatch batch, OrthographicCamera entitiesCamera) {
-        player.getSprite().draw(batch);
-
         for (Entity e:entities) {
-            e.getSprite().draw(batch);
+            batch.setColor(e.getColor());
+            batch.draw(e.getCurrentFrame(), e.getX(), e.getY());
         }
+
+
+        batch.setColor(player.getColor());
+        batch.draw(player.getCurrentFrame(), player.getX(), player.getY());
+
     }
 
     public void placeTile(float x, float y, Tile groundTile) {

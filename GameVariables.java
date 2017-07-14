@@ -1,5 +1,6 @@
 package com.jiedro.canels;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -43,6 +44,12 @@ public class GameVariables {
 
     public static final String PLAYER_CLOTH_PANTS = PLAYER_PANTS_FOLDER + "cloth.png";
 
+    public static final Color PLAYER_SKIN_PLAINS = new Color(0xfaa87aff);
+
+    public static final Color PLAYER_SKIN_MOUNTAINS = new Color(0xfab87aff);
+
+    public static final Color PLAYER_SKIN_DESERT = new Color(0x6d4128ff);
+
     //USER INTERFACE
     public static final String TOUCH_PAD_KNOB = USER_INTERFACE_FOLDER + "touch_pad_knob.png";
 
@@ -80,6 +87,22 @@ public class GameVariables {
     public static final int ENEMIES_SPACING = 256;
 
     public static final float TIME_STEP = 1/60f;
+
+    //DESERT COLORS
+    public static final Color CACTUS_DESERT = new Color(0x35b720ff);
+
+    public static final Color GROUND_DESERT = new Color(0xe5e47cff);
+
+    //PLAIN COLORS
+    public static final Color WATER_PLAIN = new Color(0x35b7c1ff);
+
+    public static final Color GRASS_PLAIN = new Color(0x35b720ff);
+
+    public static final Color TREE_PLAIN = new Color(0x35b720ff);
+
+    public static final Color WOOD_PLAIN = new Color(0x635230ff);
+
+    public static final Color GROUND_PLAIN = new Color(0xfaa87aff);
 
 
     //THIS IS FOR GUI ... TO REVIEW

@@ -1,5 +1,6 @@
 package com.jiedro.canels.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,26 +14,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Tile extends Sprite {
     private int id = 0;
 
-    private boolean walkable = true;
+    private boolean walkable;
 
-    private boolean foreground = false;
-
-    public Tile(TextureRegion textureRegion, int id){
+    public Tile(TextureRegion textureRegion, int id, boolean walkable, Color color){
         this.setRegion(textureRegion);
-        this.id = id;
-    }
 
-    public Tile(TextureRegion textureRegion, int id, boolean walkable){
-        this.setRegion(textureRegion);
         this.id = id;
         this.walkable = walkable;
-    }
+        this.setColor(color);
 
-    public Tile(TextureRegion textureRegion, int id, boolean walkable, boolean foreground){
-        this.setRegion(textureRegion);
-        this.id = id;
-        this.walkable = walkable;
-        this.foreground = foreground;
     }
 
 
@@ -57,5 +47,5 @@ public class Tile extends Sprite {
         return this.walkable;
     }
 
-    public boolean isForeground() { return this.foreground; }
+
 }

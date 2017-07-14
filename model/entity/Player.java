@@ -1,9 +1,9 @@
 package com.jiedro.canels.model.entity;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jiedro.canels.GameVariables;
 
 /**
@@ -14,13 +14,16 @@ import com.jiedro.canels.GameVariables;
 public class Player extends Entity {
 
     public Player(){
-        super(new Sprite(new Texture(GameVariables.PLAYER)));
-        super.setTint(new Color(Color.rgb888(1,1,1)));
+        super(GameVariables.PLAYER, 4);
 
+        color = GameVariables.PLAYER_SKIN_MOUNTAINS;
     }
 
     @Override
     public void update() {
+        elapsedTime += Gdx.graphics.getDeltaTime();
+        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(elapsedTime,true);
+
         GameVariables.PLAYER_POSITION.x = getX();
         GameVariables.PLAYER_POSITION.y = getY();
 
@@ -34,7 +37,8 @@ public class Player extends Entity {
         this.position.x += velocityX;
         this.position.y += velocityY;
 
-        sprite.setPosition(this.position.x, this.position.y);
     }
+
+
 
 }
