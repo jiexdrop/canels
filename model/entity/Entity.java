@@ -4,19 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.jiedro.canels.GameVariables;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Random;
 
 /**
  *
@@ -24,56 +16,35 @@ import java.util.Random;
  */
 
 public abstract class Entity {
+    float elapsedTime;
 
-    protected static Texture entityTexture;
-
-    protected float elapsedTime;
-
-    protected float velocityX;
-    protected float velocityY;
+    float velocityX;
+    float velocityY;
 
     private float distance;
     private Vector2 direction;
+    Vector2 position;
 
-    protected Vector2 position;
+    Animation<TextureRegion> walkAnimation;
 
-    protected Color color;
+    TextureRegion currentFrame;
+    Color color;
+    private ArrayDeque<Vector2> movementPoints = new ArrayDeque<Vector2>();
 
-    protected ArrayDeque<Vector2> movementPoints = new ArrayDeque<Vector2>();
+    //RPG
+    int health = 0;
 
-    protected TextureRegion[] entityFrames;
-
-    protected TextureRegion currentFrame;
-
-    protected Animation walkAnimation;
-
-    public Entity(String texture, int frames){
-        entityTexture = new Texture(texture);
-        TextureRegion[][] tmp = TextureRegion.split(entityTexture, entityTexture.getWidth()/4,entityTexture.getHeight());
-        entityFrames = new TextureRegion[frames];
-
-        for (int i = 0; i < frames; i++) {
-            entityFrames[i] = tmp[0][i];
-        }
-
-        walkAnimation = new Animation(0.2f, entityFrames);
-        this.position = new Vector2(0,0);
-
-        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(elapsedTime,true);
-    }
 
     public Entity(TextureRegion[][] texture, int frames){
 
-        entityFrames = new TextureRegion[frames];
+        TextureRegion[] entityFrames = new TextureRegion[frames];
 
-        for (int i = 0; i < frames; i++) {
-            entityFrames[i] = texture[0][i];
-        }
+        System.arraycopy(texture[0], 0, entityFrames, 0, frames);
 
-        walkAnimation = new Animation(0.2f, entityFrames);
+        walkAnimation = new Animation<TextureRegion>(0.2f, entityFrames);
         this.position = new Vector2(0,0);
 
-        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(elapsedTime,true);
+        currentFrame = walkAnimation.getKeyFrame(elapsedTime,true);
     }
 
 
@@ -86,6 +57,9 @@ public abstract class Entity {
             case RIGHT:
                 if(currentFrame.isFlipX())
                     currentFrame.flip(true, false);
+                break;
+            case STILL:
+                currentFrame = walkAnimation.getKeyFrame(0);
                 break;
         }
     }
@@ -125,11 +99,10 @@ public abstract class Entity {
         return movementPoints.size()>1;
     }
 
-
     public void update() {
         elapsedTime += Gdx.graphics.getDeltaTime();
 
-        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(elapsedTime,true);
+        currentFrame = walkAnimation.getKeyFrame(elapsedTime,true);
 
         if(this.isMoving()){
             this.position.x += direction.x * GameVariables.ENTITIES_SPEED * Gdx.graphics.getDeltaTime();
@@ -141,16 +114,15 @@ public abstract class Entity {
                 moveTowards(this.movementPoints);
             }
 
-
             if(direction.x<0){
                 setOrientation(Orientation.LEFT);
             } else if(direction.x>0) {
                 setOrientation(Orientation.RIGHT);
+            } else {
+                setOrientation(Orientation.STILL);
             }
 
         }
-
-
 
     }
 

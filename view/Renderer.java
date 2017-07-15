@@ -1,5 +1,6 @@
 package com.jiedro.canels.view;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,7 +14,7 @@ import com.jiedro.canels.model.world.World;
  * Created by jiexdrop on 14/06/17.
  */
 
-public class Renderer implements Disposable {
+public class Renderer implements Disposable, ApplicationListener {
 
     private World world;
 
@@ -29,9 +30,6 @@ public class Renderer implements Disposable {
 
     private InputMultiplexer inputMultiplexer;
 
-    private int totalRenderCalls = 0;
-
-
     public Renderer(){
         world = new World();
 
@@ -44,13 +42,24 @@ public class Renderer implements Disposable {
         userInterface = new UserInterface(world, batch);
 
         inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(userInterface.getStage());
+        inputMultiplexer.addProcessor(userInterface);
         inputMultiplexer.addProcessor(worldInput);
 
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
-    public void renderTerrain(){
+    @Override
+    public void create() {
+
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        userInterface.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void render(){
         batch.totalRenderCalls = 0;
 
         world.update();
@@ -67,9 +76,19 @@ public class Renderer implements Disposable {
 
         batch.end();
 
-        totalRenderCalls = batch.totalRenderCalls;
+        GameVariables.RENDER_CALLS = batch.totalRenderCalls;
 
-        userInterface.draw(totalRenderCalls);
+        userInterface.draw();
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
     }
 
     private static OrthographicCamera setupCamera(float width, float height){
@@ -83,6 +102,7 @@ public class Renderer implements Disposable {
     @Override
     public void dispose(){
         batch.dispose();
+        userInterface.dispose();
     }
 
 

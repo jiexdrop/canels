@@ -20,46 +20,42 @@ import com.jiedro.canels.model.world.World;
  * Created by jiexdrop on 30/06/17.
  */
 
-public class UserInterface {
+public class UserInterface extends Stage{
     private World world;
 
     private Touchpad touchpad;
-    private Stage stage;
-    private Viewport viewport = new ScreenViewport();
     private BitmapFont font;
 
 
     public UserInterface(World world, Batch batch){
-        this.world = world;
+        super(new ScreenViewport(), batch);
 
-        this.stage = new Stage(viewport, batch);
+        this.world = world;
 
         touchpad = new Touchpad(10,getTouchpadStyle());
         touchpad.setBounds(0, 0, GameVariables.TOUCH_PAD_SIZE, GameVariables.TOUCH_PAD_SIZE);
 
         touchpad.setPosition(GameVariables.TOUCH_PAD_OFFSET_X,GameVariables.TOUCH_PAD_OFFSET_Y);
-        stage.addActor(touchpad);
+        addActor(touchpad);
 
         font = new BitmapFont();
     }
 
-    public void draw(int totalRenderCalls){
+    @Override
+    public void draw(){
+        super.draw();
 
         world.movePlayer(touchpad.getKnobPercentX(), touchpad.getKnobPercentY());
 
-        stage.draw();
 
-        stage.getBatch().begin();
-        font.draw(stage.getBatch(), "FPS: " + Gdx.graphics.getFramesPerSecond()
-                + "\nRENDER_CALLS: " + totalRenderCalls
+        getBatch().begin();
+        font.draw(getBatch(), "FPS: " + Gdx.graphics.getFramesPerSecond()
+                + "\nRENDER_CALLS: " + GameVariables.RENDER_CALLS
                 + "\nPLAYER_POS: " + GameVariables.PLAYER_POSITION
                 + "\nENTITIES: " + GameVariables.ENTITIES, 10, Gdx.graphics.getHeight()-10);
-        stage.getBatch().end();
+        getBatch().end();
     }
 
-    public Stage getStage() {
-        return stage;
-    }
 
     private static Touchpad.TouchpadStyle getTouchpadStyle() {
         Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
@@ -74,6 +70,9 @@ public class UserInterface {
         return touchpadStyle;
     }
 
-
-
+    @Override
+    public void dispose() {
+        super.dispose();
+        font.dispose();
+    }
 }

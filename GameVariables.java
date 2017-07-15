@@ -108,6 +108,8 @@ public class GameVariables {
     //THIS IS FOR GUI ... TO REVIEW
     public static int ENTITIES = 0;
 
+    public static int RENDER_CALLS = 0;
+
     public static Vector2 PLAYER_POSITION = new Vector2(0,0);
 
 }

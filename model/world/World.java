@@ -2,9 +2,7 @@ package com.jiedro.canels.model.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Enemy;
@@ -16,8 +14,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
 import java.util.Random;
 
 /**
@@ -154,14 +150,14 @@ public class World {
 
             //TODO REFACTOR
             if(!e.isMoving()) {
-                if(checkcirclecollide(player.getX(), player.getY(),
+                if(checkNear(player.getX(), player.getY(),
                         GameVariables.CHUNK_SIZE*4, e.getX(), e.getY(), GameVariables.CHUNK_SIZE*4)) {
                     e.moveTowards(Helpers.getMovementPoints(this, e.getPosition(), player.getPosition()));
                 }else {
                     e.moveTowards(new ArrayDeque<Vector2>());
                 }
             } else {
-                if(!checkcirclecollide(player.getX(), player.getY(),
+                if(!checkNear(player.getX(), player.getY(),
                         GameVariables.CHUNK_SIZE*4, e.getX(), e.getY(), GameVariables.CHUNK_SIZE*4)) {
                     e.moveTowards(new ArrayDeque<Vector2>());
                 } else {
@@ -174,7 +170,7 @@ public class World {
         }
     }
 
-    boolean checkcirclecollide(double x1, double y1, float r1, double x2, double y2, float r2){
+    private boolean checkNear(double x1, double y1, float r1, double x2, double y2, float r2){
         return Math.abs((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < (r1 + r2) * (r1 + r2);
     }
 }

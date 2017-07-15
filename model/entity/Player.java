@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
+import com.jiedro.canels.view.Textures;
 
 /**
  *
@@ -14,7 +16,7 @@ import com.jiedro.canels.GameVariables;
 public class Player extends Entity {
 
     public Player(){
-        super(GameVariables.PLAYER, 4);
+        super(Textures.getPlayerTexture(), 3);
 
         color = GameVariables.PLAYER_SKIN_MOUNTAINS;
     }
@@ -22,7 +24,7 @@ public class Player extends Entity {
     @Override
     public void update() {
         elapsedTime += Gdx.graphics.getDeltaTime();
-        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(elapsedTime,true);
+        currentFrame = walkAnimation.getKeyFrame(elapsedTime,true);
 
         GameVariables.PLAYER_POSITION.x = getX();
         GameVariables.PLAYER_POSITION.y = getY();
@@ -32,13 +34,13 @@ public class Player extends Entity {
             this.setOrientation(Orientation.LEFT);
         } else if(velocityX>0) {
             this.setOrientation(Orientation.RIGHT);
+        } else {
+            this.setOrientation(Orientation.STILL);
         }
 
         this.position.x += velocityX;
         this.position.y += velocityY;
-
     }
-
 
 
 }

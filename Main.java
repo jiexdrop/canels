@@ -19,7 +19,7 @@ public class Main extends Game {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.renderTerrain();
+        renderer.render();
     }
 
     @Override
@@ -27,5 +27,9 @@ public class Main extends Game {
         renderer.dispose();
     }
 
-
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        renderer.resize(width, height);
+    }
 }

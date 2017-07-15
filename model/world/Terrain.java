@@ -91,11 +91,7 @@ public class Terrain {
         boolean result = false;
         for (HashMap<Vector2,Tile> terrain:terrains) {
             if(terrain.get(Helpers.screenToMap(x, y)) != null){
-                if(terrain.get(Helpers.screenToMap(x, y)).isWalkable()) {
-                    result = true;
-                } else {
-                    result = false;
-                }
+                result = terrain.get(Helpers.screenToMap(x, y)).isWalkable();
             }
         }
         return result;
@@ -105,11 +101,7 @@ public class Terrain {
         boolean result = false;
         for (HashMap<Vector2,Tile> terrain:terrains) {
             if(terrain.get(Helpers.mapToMap(x, y)) != null){
-                if(terrain.get(Helpers.mapToMap(x, y)).isWalkable()) {
-                    result = true;
-                } else {
-                    result = false;
-                }
+                result = terrain.get(Helpers.mapToMap(x, y)).isWalkable();
             }
         }
         return result;
@@ -194,8 +186,8 @@ public class Terrain {
     }
 
     public void drawTerrain(Batch batch, HashMap<Vector2, Tile> terrain, int x, int y){
-        for (int i = x-GameVariables.CHUNK_SIZE/2; i< x + GameVariables.CHUNK_SIZE+(GameVariables.CHUNK_SIZE/2); i++){
-            for (int j = y; j< y + GameVariables.CHUNK_SIZE+(GameVariables.CHUNK_SIZE/2); j++) {
+        for (int i = x-GameVariables.CHUNK_SIZE; i< x + GameVariables.CHUNK_SIZE+(GameVariables.CHUNK_SIZE/2); i++){
+            for (int j = y -GameVariables.CHUNK_SIZE; j< y + GameVariables.CHUNK_SIZE+(GameVariables.CHUNK_SIZE/2); j++) {
                 p.x = i;
                 p.y = j;
                 Tile tile = terrain.get(p);
