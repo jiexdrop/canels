@@ -56,8 +56,37 @@ public class WorldInput implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 result = tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
-        world.placeTile(result.x, result.y, Textures.getGroundTile());
+        world.interpretClick(result.x, result.y);
 
+        if(GameVariables.DEBUG) debug(result);
+
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        Vector3 result =  tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
+        world.interpretDrag(result.x, result.y);
+
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+
+    private void debug(Vector3 result){
         if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             HashMap<Vector2, Vector2> breadthFirstSearch = world.breadthFirstSearch(Helpers.screenToMap(GameVariables.PLAYER_POSITION),
                     Helpers.screenToMap(result.x, result.y));
@@ -79,31 +108,5 @@ public class WorldInput implements InputProcessor {
                 }
             }
         }
-
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Vector3 result =  tilemapCamera.unproject(new Vector3(screenX, screenY, 0.f));
-        world.placeTile(result.x, result.y, Textures.getGroundTile());
-
-
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
     }
 }

@@ -35,7 +35,7 @@ public abstract class Entity {
     int health = 0;
 
 
-    public Entity(TextureRegion[][] texture, int frames){
+    public Entity(TextureRegion[][] texture, int frames, int health){
 
         TextureRegion[] entityFrames = new TextureRegion[frames];
 
@@ -45,6 +45,8 @@ public abstract class Entity {
         this.position = new Vector2(0,0);
 
         currentFrame = walkAnimation.getKeyFrame(elapsedTime,true);
+
+        this.health = health;
     }
 
 
@@ -63,7 +65,6 @@ public abstract class Entity {
                 break;
         }
     }
-
 
     public void move(float velocityX, float velocityY){
         this.velocityX = velocityX;
@@ -130,7 +131,7 @@ public abstract class Entity {
         return currentFrame;
     }
 
-    public  Color getColor() {
+    public Color getColor() {
         return color;
     }
 }

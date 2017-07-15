@@ -52,7 +52,8 @@ public class UserInterface extends Stage{
         font.draw(getBatch(), "FPS: " + Gdx.graphics.getFramesPerSecond()
                 + "\nRENDER_CALLS: " + GameVariables.RENDER_CALLS
                 + "\nPLAYER_POS: " + GameVariables.PLAYER_POSITION
-                + "\nENTITIES: " + GameVariables.ENTITIES, 10, Gdx.graphics.getHeight()-10);
+                + "\nENTITIES: " + GameVariables.ENTITIES
+                + "\nPLAYER_HEALTH: " + GameVariables.PLAYER_HEALTH, 10, Gdx.graphics.getHeight()-10);
         getBatch().end();
     }
 

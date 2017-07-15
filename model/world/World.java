@@ -8,6 +8,7 @@ import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Enemy;
 import com.jiedro.canels.model.entity.Entity;
 import com.jiedro.canels.model.entity.Player;
+import com.jiedro.canels.view.Textures;
 import com.jiedro.canels.view.Tile;
 
 import java.util.ArrayDeque;
@@ -132,12 +133,35 @@ public class World {
 
     }
 
-    public void placeTile(float x, float y, Tile groundTile) {
-        terrain.placeTile(x,y,groundTile);
-    }
-
     public void placeTile(Vector2 pos, Tile groundTile) {
         terrain.placeTile(pos.x,pos.y,groundTile);
+    }
+
+    public void interpretClick(float x, float y){
+        ArrayList<Entity> selectedEntities = getSelectedEntities(x, y);
+
+        if(selectedEntities.size()>0) {
+            for (Entity e : getSelectedEntities(x, y)) {
+                entities.remove(e);
+            }
+        } else {
+            terrain.placeTile(x, y, Textures.getGrassTile());
+        }
+    }
+
+    public void interpretDrag(float x, float y){
+        terrain.placeTile(x, y, Textures.getGrassTile()); //TODO player selected tile from inventory ?
+    }
+
+    public ArrayList<Entity> getSelectedEntities(float x, float y){
+        ArrayList<Entity> result = new ArrayList<Entity>();
+        for(Entity e:entities){
+            if(checkNear(x, y, GameVariables.CURSOR_SIZE, e.getX(), e.getY(), GameVariables.ENEMY_SIZE)){
+                result.add(e);
+            }
+        }
+
+        return result;
     }
 
     /**

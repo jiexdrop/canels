@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.view.Textures;
+import com.jiedro.canels.view.Tile;
 
 /**
  *
@@ -15,8 +16,9 @@ import com.jiedro.canels.view.Textures;
 
 public class Player extends Entity {
 
+
     public Player(){
-        super(Textures.getPlayerTexture(), 3);
+        super(Textures.getPlayerTexture(), 3, 3);
 
         color = GameVariables.PLAYER_SKIN_MOUNTAINS;
     }
@@ -25,10 +27,6 @@ public class Player extends Entity {
     public void update() {
         elapsedTime += Gdx.graphics.getDeltaTime();
         currentFrame = walkAnimation.getKeyFrame(elapsedTime,true);
-
-        GameVariables.PLAYER_POSITION.x = getX();
-        GameVariables.PLAYER_POSITION.y = getY();
-
 
         if(velocityX<0){
             this.setOrientation(Orientation.LEFT);
@@ -40,7 +38,16 @@ public class Player extends Entity {
 
         this.position.x += velocityX;
         this.position.y += velocityY;
+
+        updateGameVariables();
     }
 
+    void updateGameVariables(){
+
+        GameVariables.PLAYER_POSITION.x = getX();
+        GameVariables.PLAYER_POSITION.y = getY();
+
+        GameVariables.PLAYER_HEALTH = health;
+    }
 
 }

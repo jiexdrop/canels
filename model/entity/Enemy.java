@@ -13,7 +13,7 @@ import com.jiedro.canels.view.Textures;
 
 public class Enemy extends Entity {
     public Enemy(float x, float y) {
-        super(Textures.getEnemiesTextures(), 1);
+        super(Textures.getEnemiesTextures(), 1, 3);
         color = GameVariables.CACTUS_DESERT;
         position.x = x;
         position.y = y;

@@ -186,8 +186,8 @@ public class Terrain {
     }
 
     public void drawTerrain(Batch batch, HashMap<Vector2, Tile> terrain, int x, int y){
-        for (int i = x-GameVariables.CHUNK_SIZE; i< x + GameVariables.CHUNK_SIZE+(GameVariables.CHUNK_SIZE/2); i++){
-            for (int j = y -GameVariables.CHUNK_SIZE; j< y + GameVariables.CHUNK_SIZE+(GameVariables.CHUNK_SIZE/2); j++) {
+        for (int i = x-GameVariables.CHUNK_SIZE/2; i< x + GameVariables.CHUNK_SIZE+(GameVariables.CHUNK_SIZE/2); i++){
+            for (int j = y -GameVariables.CHUNK_SIZE/8; j< y + GameVariables.CHUNK_SIZE+(GameVariables.CHUNK_SIZE/8); j++) {
                 p.x = i;
                 p.y = j;
                 Tile tile = terrain.get(p);

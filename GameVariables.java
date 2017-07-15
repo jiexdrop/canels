@@ -86,6 +86,10 @@ public class GameVariables {
 
     public static final int ENEMIES_SPACING = 256;
 
+    public static final int ENEMY_SIZE = 16;
+
+    public static final int CURSOR_SIZE = 16;
+
     public static final float TIME_STEP = 1/60f;
 
     //DESERT COLORS
@@ -110,6 +114,11 @@ public class GameVariables {
 
     public static int RENDER_CALLS = 0;
 
+    public static int PLAYER_HEALTH = 0;
+
     public static Vector2 PLAYER_POSITION = new Vector2(0,0);
+
+    //DEBUG
+    public static boolean DEBUG = true;
 
 }
