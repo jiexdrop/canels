@@ -1,13 +1,10 @@
 package com.jiedro.canels.model.entity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.view.Textures;
-import com.jiedro.canels.view.Tile;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -16,6 +13,7 @@ import com.jiedro.canels.view.Tile;
 
 public class Player extends Entity {
 
+    ItemSlot itemSlots[] = new ItemSlot[GameVariables.PLAYER_ITEM_SLOTS];
 
     public Player(){
         super(Textures.getPlayerTexture(), 3, 3);
@@ -48,6 +46,10 @@ public class Player extends Entity {
         GameVariables.PLAYER_POSITION.y = getY();
 
         GameVariables.PLAYER_HEALTH = health;
+    }
+
+    public ItemSlot[] getItemSlots(){
+        return itemSlots;
     }
 
 }

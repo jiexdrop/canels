@@ -50,31 +50,20 @@ public class GameVariables {
 
     public static final Color PLAYER_SKIN_DESERT = new Color(0x6d4128ff);
 
-    //USER INTERFACE
-    public static final String TOUCH_PAD_KNOB = USER_INTERFACE_FOLDER + "touch_pad_knob.png";
-
-    public static final String TOUCH_PAD_BACKGROUND = USER_INTERFACE_FOLDER + "touch_pad_background.png";
-
-    public static final int TOUCH_PAD_SIZE = 200;
-
-    public static final int TOUCH_PAD_OFFSET_X = 10;
-
-    public static final int TOUCH_PAD_OFFSET_Y = 10;
-
     //CONSTANTS
-    public static int TEXTURES_NUMBER = 256;
+    public static final int TEXTURES_NUMBER = 256;
 
-    public static int ZOOM_LEVEL = 256;
+    public static final int ZOOM_LEVEL = 256;
 
-    public static float ZOOM_INPUT = 0.1f;
+    public static final float ZOOM_INPUT = 0.1f;
 
-    public static double TERRAIN_FREQUENCY = 0.01d;//0.01d
+    public static final double TERRAIN_FREQUENCY = 0.01d;//0.01d
 
-    public static double TREES_FREQUENCY = 1d;//1d
+    public static final double TREES_FREQUENCY = 1d;//1d
 
-    public static int TILES_SIZE = 16;
+    public static final int TILES_SIZE = 16;
 
-    public static int CHUNK_SIZE = TILES_SIZE;
+    public static final int CHUNK_SIZE = TILES_SIZE;
 
     public static final float PLAYER_SPEED = 80;
 
@@ -108,13 +97,28 @@ public class GameVariables {
 
     public static final Color GROUND_PLAIN = new Color(0xfaa87aff);
 
+    //USER INTERFACE
+    public static final String MAIN_UI = USER_INTERFACE_FOLDER + "main_ui.png";
 
-    //THIS IS FOR GUI ... TO REVIEW
+    public static final int UI_TEXTURE_SIZE = 16;
+
+    public static final int TOUCH_PAD_SIZE = 200;
+
+    public static final int UI_OFFSET = 16;
+
+    public static int SIDEBAR_WIDTH = UI_TEXTURE_SIZE*6;
+
     public static int ENTITIES = 0;
 
     public static int RENDER_CALLS = 0;
 
     public static int PLAYER_HEALTH = 0;
+
+    public static final int PLAYER_ITEM_SLOTS = 16;
+
+    public static final int VISIBLE_PLAYER_ITEM_SLOTS = PLAYER_ITEM_SLOTS/4;
+
+    public static String EMPTY = "";
 
     public static Vector2 PLAYER_POSITION = new Vector2(0,0);
 

@@ -78,6 +78,7 @@ public class Renderer implements Disposable, ApplicationListener {
 
         GameVariables.RENDER_CALLS = batch.totalRenderCalls;
 
+        userInterface.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         userInterface.draw();
     }
 

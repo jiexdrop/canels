@@ -140,7 +140,9 @@ public class World {
     public void interpretClick(float x, float y){
         ArrayList<Entity> selectedEntities = getSelectedEntities(x, y);
 
-        if(selectedEntities.size()>0) {
+        if(isVegetationSelected(x,y)){
+            //TODO
+        } else if(selectedEntities.size()>0) {
             for (Entity e : getSelectedEntities(x, y)) {
                 entities.remove(e);
             }
@@ -162,6 +164,11 @@ public class World {
         }
 
         return result;
+    }
+
+    public boolean isVegetationSelected(float x, float y){
+
+        return false;
     }
 
     /**
@@ -196,6 +203,10 @@ public class World {
 
     private boolean checkNear(double x1, double y1, float r1, double x2, double y2, float r2){
         return Math.abs((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < (r1 + r2) * (r1 + r2);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
 

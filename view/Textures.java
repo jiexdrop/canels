@@ -1,10 +1,7 @@
 package com.jiedro.canels.view;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.jiedro.canels.GameVariables;
 
 /**
@@ -24,6 +21,11 @@ public class Textures {
     private static final Texture mainEnemiesTextures = new Texture(GameVariables.MAIN_ENEMIES);
     private static final TextureRegion[][] enemiesTextureRegions = TextureRegion.split(mainEnemiesTextures,
             GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
+
+    private static final Texture mainUITextures = new Texture(GameVariables.MAIN_UI);
+    private static final TextureRegion[][] mainUITextureRegions = TextureRegion.split(mainUITextures,
+            GameVariables.UI_TEXTURE_SIZE, GameVariables.UI_TEXTURE_SIZE);
+
 
     private static Tile waterTile = new Tile(textureRegions[0][0],1, false, GameVariables.WATER_PLAIN);
     private static Tile groundTile = new Tile(textureRegions[0][1],2, true, GameVariables.GROUND_DESERT);
@@ -84,5 +86,20 @@ public class Textures {
         return enemiesTextureRegions;
     }
 
+    public static TextureRegion getTouchPadBackgroundTexture() {
+        return mainUITextureRegions[0][0];
+    }
+
+    public static TextureRegion getTouchPadKnobTexture() {
+        return mainUITextureRegions[0][1];
+    }
+
+    public static TextureRegion getSideBarTexture() {
+        return mainUITextureRegions[1][0];
+    }
+
+    public static TextureRegion getSlotTexture() {
+        return mainUITextureRegions[1][1];
+    }
 
 }
