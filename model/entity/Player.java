@@ -13,29 +13,24 @@ import java.util.ArrayList;
 
 public class Player extends Entity {
 
-    ItemSlot itemSlots[] = new ItemSlot[GameVariables.PLAYER_ITEM_SLOTS];
-
     public Player(){
-        super(Textures.getPlayerTexture(), 3, 3);
-
+        health = 3;
         color = GameVariables.PLAYER_SKIN_MOUNTAINS;
     }
 
     @Override
     public void update() {
-        elapsedTime += Gdx.graphics.getDeltaTime();
-        currentFrame = walkAnimation.getKeyFrame(elapsedTime,true);
 
-        if(velocityX<0){
-            this.setOrientation(Orientation.LEFT);
-        } else if(velocityX>0) {
-            this.setOrientation(Orientation.RIGHT);
+        if(velocity.x>0){
+            setOrientation(Orientation.RIGHT);
+        } else if(velocity.x<0) {
+            setOrientation(Orientation.LEFT);
         } else {
-            this.setOrientation(Orientation.STILL);
+            setOrientation(Orientation.STILL);
         }
 
-        this.position.x += velocityX;
-        this.position.y += velocityY;
+        position.x += velocity.x;
+        position.y += velocity.y;
 
         updateGameVariables();
     }
@@ -47,9 +42,4 @@ public class Player extends Entity {
 
         GameVariables.PLAYER_HEALTH = health;
     }
-
-    public ItemSlot[] getItemSlots(){
-        return itemSlots;
-    }
-
 }

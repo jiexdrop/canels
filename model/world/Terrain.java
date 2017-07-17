@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * The terain is where we render tiles
+ * The terrain is where we render tiles
  *
- * Created by jorge on 25/05/17.
+ * Created by jiexdrop on 25/05/17.
  */
 
 public class Terrain {
@@ -42,6 +42,7 @@ public class Terrain {
 
         Vector2 where = new Vector2(x, y);
 
+        //TODO Better generation
 
         if(!foregroundTerrain.containsKey(where)) {
             double simplexRockNoise = SimplexNoise.noise(freqX * GameVariables.CHUNK_SIZE, freqY * GameVariables.CHUNK_SIZE);
@@ -87,7 +88,7 @@ public class Terrain {
         backgroundTerrain.put(Helpers.screenToMap(x,y), tile);
     }
 
-    public boolean canMove(double x, double y){
+    public boolean isScreenWalkable(double x, double y){
         boolean result = false;
         for (HashMap<Vector2,Tile> terrain:terrains) {
             if(terrain.get(Helpers.screenToMap(x, y)) != null){
@@ -97,7 +98,7 @@ public class Terrain {
         return result;
     }
 
-    public boolean canMapMove(double x, double y){
+    public boolean isMapWalkable(double x, double y){
         boolean result = false;
         for (HashMap<Vector2,Tile> terrain:terrains) {
             if(terrain.get(Helpers.mapToMap(x, y)) != null){
@@ -111,18 +112,18 @@ public class Terrain {
     public ArrayList<Vector2> isWalkableNeighbor(float x, float y){
         ArrayList<Vector2> results = new ArrayList<Vector2>();
 
-            if (canMapMove(x + 1, y)) {
-                results.add(new Vector2(x + 1, y));
-            }
-            if (canMapMove(x - 1, y)) {
-                results.add(new Vector2(x - 1, y));
-            }
-            if (canMapMove(x, y + 1)) {
-                results.add(new Vector2(x, y + 1));
-            }
-            if (canMapMove(x, y - 1)) {
-                results.add(new Vector2(x, y - 1));
-            }
+        if (isMapWalkable(x + 1, y)) {
+            results.add(new Vector2(x + 1, y));
+        }
+        if (isMapWalkable(x - 1, y)) {
+            results.add(new Vector2(x - 1, y));
+        }
+        if (isMapWalkable(x, y + 1)) {
+            results.add(new Vector2(x, y + 1));
+        }
+        if (isMapWalkable(x, y - 1)) {
+            results.add(new Vector2(x, y - 1));
+        }
 
         if ((x + y) % 2 == 0){
             Collections.reverse(results);
@@ -193,7 +194,6 @@ public class Terrain {
                 Tile tile = terrain.get(p);
                 if(tile!=null) {
                     batch.setColor(tile.getColor());
-                    batch.setBlendFunction(Batch.C1,Batch.X4);
                     batch.draw(tile.getTexture(),
                             p.x * GameVariables.TILES_SIZE,
                             p.y * GameVariables.TILES_SIZE,

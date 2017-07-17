@@ -5,6 +5,6 @@ package com.jiedro.canels.model.entity;
  * Created by jiexdrop on 04/07/17.
  */
 
-enum Orientation {
+public enum Orientation {
     LEFT, RIGHT, STILL
 }

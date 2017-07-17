@@ -8,10 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.world.Helpers;
-import com.jiedro.canels.model.world.World;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by jiexdrop on 03/07/17.

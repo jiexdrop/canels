@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Helpers to convert coordinates from screen to map
  * Created by jiexdrop on 09/07/17.
  */
 
@@ -45,28 +46,5 @@ public class Helpers {
         return mapToScreen(map.x, map.y);
     }
 
-    public static ArrayDeque<Vector2> getMovementPoints(World world, Vector2 start, Vector2 destination){
-        ArrayDeque<Vector2> result = new ArrayDeque<Vector2>();
-        HashMap<Vector2, Vector2> breadthFirstSearch = world.breadthFirstSearch(Helpers.screenToMap(start),
-                Helpers.screenToMap(destination));
-
-        Vector2 whereGo = breadthFirstSearch.get(Helpers.screenToMap(destination));
-
-        Vector2 whereNow = whereGo;
-
-        Vector2 whereFrom = GameVariables.PLAYER_POSITION;
-
-        if (whereGo != null) {
-            while (whereNow != whereFrom && whereGo != null) {
-                whereNow = whereGo;
-                whereGo = breadthFirstSearch.get(whereNow);
-                if (whereGo != null) {
-                    //result.push(Helpers.mapToScreen(whereGo));
-                    result.push(Helpers.mapToScreen(whereNow));
-                }
-            }
-        }
-        return result;
-    }
 
 }

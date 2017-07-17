@@ -14,9 +14,9 @@ public class Textures {
     private static final TextureRegion[][] textureRegions = TextureRegion.split(mainTextures,
             GameVariables.TILES_SIZE, GameVariables.TILES_SIZE);
 
-    private static Texture playerTexture = new Texture(GameVariables.PLAYER);
+    private static final Texture playerTexture = new Texture(GameVariables.PLAYER);
     private static final TextureRegion[][] playerTextureRegions = TextureRegion.split(playerTexture,
-            playerTexture.getWidth()/3, playerTexture.getHeight());
+            playerTexture.getWidth()/GameVariables.PLAYER_FRAMES, playerTexture.getHeight());
 
     private static final Texture mainEnemiesTextures = new Texture(GameVariables.MAIN_ENEMIES);
     private static final TextureRegion[][] enemiesTextureRegions = TextureRegion.split(mainEnemiesTextures,
@@ -82,7 +82,7 @@ public class Textures {
         return playerTextureRegions;
     }
 
-    public static TextureRegion[][] getEnemiesTextures() {
+    public static TextureRegion[][] getSlimesTextures() {
         return enemiesTextureRegions;
     }
 

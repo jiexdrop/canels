@@ -7,14 +7,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.jiedro.canels.GameVariables;
-import com.jiedro.canels.model.world.World;
 
 /**
  * Renders the entities
  * Created by jiexdrop on 14/06/17.
  */
 
-public class Renderer implements Disposable, ApplicationListener {
+public class Renderer implements Disposable {
 
     private World world;
 
@@ -48,17 +47,10 @@ public class Renderer implements Disposable, ApplicationListener {
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
-    @Override
-    public void create() {
-
-    }
-
-    @Override
     public void resize(int width, int height) {
         userInterface.getViewport().update(width, height, true);
     }
 
-    @Override
     public void render(){
         batch.totalRenderCalls = 0;
 
@@ -71,25 +63,14 @@ public class Renderer implements Disposable, ApplicationListener {
 
         batch.begin();
         world.drawTilemapBackground(batch, tilemapCamera);
-        world.drawEntities(batch, entitiesCamera);
+        world.drawEntities(batch);
         world.drawTilemapForeground(batch, tilemapCamera);
-
         batch.end();
 
         GameVariables.RENDER_CALLS = batch.totalRenderCalls;
 
         userInterface.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         userInterface.draw();
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
     }
 
     private static OrthographicCamera setupCamera(float width, float height){

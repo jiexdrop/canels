@@ -35,6 +35,8 @@ public class GameVariables {
     //ENEMIES
     public static final String MAIN_ENEMIES = ENEMIES_FOLDER + "main_enemies.png";
 
+    public static final int SLIME_FRAMES = 3;
+
     //PLAYER
     public static final String PLAYER = PLAYER_FOLDER + "player.png";
 
@@ -50,9 +52,9 @@ public class GameVariables {
 
     public static final Color PLAYER_SKIN_DESERT = new Color(0x6d4128ff);
 
-    //CONSTANTS
-    public static final int TEXTURES_NUMBER = 256;
+    public static final int PLAYER_FRAMES = 3;
 
+    //CONSTANTS
     public static final int ZOOM_LEVEL = 256;
 
     public static final float ZOOM_INPUT = 0.1f;
