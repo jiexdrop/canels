@@ -2,6 +2,7 @@ package com.jiedro.canels.model.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.jiedro.canels.GameVariables;
+import com.jiedro.canels.model.world.World;
 import com.jiedro.canels.view.Textures;
 
 import java.util.ArrayList;
@@ -19,7 +20,8 @@ public class Player extends Entity {
     }
 
     @Override
-    public void update() {
+    public void update(World world) {
+        elapsedTime += world.deltaTime;
 
         if(velocity.x>0){
             setOrientation(Orientation.RIGHT);
@@ -29,10 +31,14 @@ public class Player extends Entity {
             setOrientation(Orientation.STILL);
         }
 
-        position.x += velocity.x;
-        position.y += velocity.y;
+        position.add(velocity);
 
         updateGameVariables();
+    }
+
+    @Override
+    public void hit(Entity e) {
+        e.health--;
     }
 
     void updateGameVariables(){

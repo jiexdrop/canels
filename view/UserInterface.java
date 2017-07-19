@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jiedro.canels.GameVariables;
+import com.jiedro.canels.model.world.World;
 
 /**
  * Display user controls
@@ -36,7 +37,7 @@ public class UserInterface extends Stage {
     private Table sideBar;
 
 
-    public UserInterface(World world, Batch batch){
+    public UserInterface(com.jiedro.canels.model.world.World world, Batch batch){
         super(new ScreenViewport(), batch);
         this.world = world;
 

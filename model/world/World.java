@@ -1,4 +1,4 @@
-package com.jiedro.canels.view;
+package com.jiedro.canels.model.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,7 +8,9 @@ import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Enemy;
 import com.jiedro.canels.model.entity.Entity;
 import com.jiedro.canels.model.entity.Player;
+import com.jiedro.canels.model.entity.routine.MoveTo;
 import com.jiedro.canels.model.world.Terrain;
+import com.jiedro.canels.view.AnimatedEntity;
 import com.jiedro.canels.view.Textures;
 import com.jiedro.canels.view.Tile;
 
@@ -26,31 +28,34 @@ import java.util.Random;
 
 public class World {
     private Player player;
-    private AnimatedEntity playerAnimation = new AnimatedEntity(Textures.getPlayerTexture(),GameVariables.PLAYER_FRAMES);
+
     private Terrain terrain;
 
     private ArrayList<Entity> entities;
-    private AnimatedEntity slimesAnimation = new AnimatedEntity(Textures.getSlimesTextures(),GameVariables.SLIME_FRAMES);
 
-    private float elapsedTime = 0f;
+    private ArrayList<Entity> entitiesToClean;
 
+    public float deltaTime;
 
     public World() {
         player = new Player();
         terrain = new Terrain();
         entities = new ArrayList<Entity>();
-        placeEnemies();
+        entitiesToClean = new ArrayList<Entity>();
+
     }
 
     public void placeEnemies(){
         Random random = new Random();
-        for (int i = 0; i < GameVariables.ENEMIES_PAR_LEVEL; i++) {
-            entities.add( new Enemy(random.nextInt(GameVariables.ENEMIES_SPACING) -random.nextInt(GameVariables.ENEMIES_SPACING),
-                    random.nextInt(GameVariables.ENEMIES_SPACING) -random.nextInt(GameVariables.ENEMIES_SPACING) ));
 
+        while (entities.size() < GameVariables.ENEMIES_PAR_LEVEL){
+            int x = random.nextInt(GameVariables.ENEMIES_SPACING) - random.nextInt(GameVariables.ENEMIES_SPACING);
+            int y = random.nextInt(GameVariables.ENEMIES_SPACING) - random.nextInt(GameVariables.ENEMIES_SPACING);
+            if(terrain.isScreenWalkable(x + player.getX(),y + player.getY())) {
+                entities.add(new Enemy(x + player.getX(), y+player.getY()));
+            }
         }
     }
-
 
     public HashMap<Vector2, Vector2> breadthFirstSearch(Vector2 start, Vector2 destination){
         Deque<Vector2> frontier = new ArrayDeque<Vector2>();
@@ -78,15 +83,6 @@ public class World {
         return came_from;
     }
 
-    public boolean areCollidingAt(Vector2 pos) {
-        for (Entity entity : entities) {
-            if (checkNear(pos.x,pos.y,GameVariables.ENEMY_SIZE, entity.getX(), entity.getY(), GameVariables.ENEMY_SIZE)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     public void movePlayer(float knobPercentX, float knobPercentY) {
         float dt = Gdx.graphics.getDeltaTime();
@@ -108,39 +104,9 @@ public class World {
         terrain.updateWorld(player.getX() - GameVariables.TILEMAP_CENTER,
                 player.getY() - GameVariables.TILEMAP_CENTER);
 
-    }
-
-    public void drawEntities(SpriteBatch batch) {
-        for (Entity e:entities) {
-            batch.setColor(e.getColor());
-            batch.draw(slimesAnimation.getCurrentFrame(elapsedTime, e.getOrientation()), e.getX(), e.getY());
+        if(entities.size()<GameVariables.ENEMIES_PAR_LEVEL){
+            placeEnemies();
         }
-
-        batch.setColor(player.getColor());
-        batch.draw(playerAnimation.getCurrentFrame(elapsedTime, player.getOrientation()), player.getX(), player.getY());
-    }
-
-    public void drawTilemapBackground(SpriteBatch tilemapBatch, OrthographicCamera tilemapCamera) {
-        tilemapCamera.position.set(player.getX(),
-                player.getY(), 0.f);
-
-        terrain.drawBackground(tilemapBatch,
-                player.getX() - GameVariables.TILEMAP_CENTER,
-                player.getY() - GameVariables.TILEMAP_CENTER);
-
-
-        GameVariables.ENTITIES = entities.size();
-    }
-
-    public void drawTilemapForeground(SpriteBatch tilemapBatch, OrthographicCamera tilemapCamera) {
-        tilemapCamera.position.set(player.getX(),
-                player.getY(), 0.f);
-
-        terrain.drawForeground(tilemapBatch,
-                player.getX() - GameVariables.TILEMAP_CENTER,
-                player.getY() - GameVariables.TILEMAP_CENTER);
-
-        GameVariables.ENTITIES = entities.size();
     }
 
 
@@ -152,10 +118,11 @@ public class World {
         ArrayList<Entity> selectedEntities = getSelectedEntities(x, y);
 
         if(isVegetationSelected(x,y)){
-            //TODO
+            //TODO no, destroy anithung instead
+            terrain.removeTree(x,y);
         } else if(selectedEntities.size()>0) {
             for (Entity e : getSelectedEntities(x, y)) {
-                entities.remove(e);
+                player.hit(e);
             }
         } else {
             terrain.placeTile(x, y, Textures.getGrassTile());
@@ -169,7 +136,7 @@ public class World {
     public ArrayList<Entity> getSelectedEntities(float x, float y){
         ArrayList<Entity> result = new ArrayList<Entity>();
         for(Entity e:entities){
-            if(checkNear(x, y, GameVariables.CURSOR_SIZE, e.getX(), e.getY(), GameVariables.ENEMY_SIZE)){
+            if(Helpers.checkIfNear(x, y, GameVariables.CURSOR_SIZE, e.getX(), e.getY(), GameVariables.ENEMY_SIZE)){
                 result.add(e);
             }
         }
@@ -178,7 +145,12 @@ public class World {
     }
 
     public boolean isVegetationSelected(float x, float y){
-
+        for (Tile t:terrain.getSelectedTiles(x,y)){
+            if(t == Textures.getLogTile())
+                return true;
+            if(t == Textures.getLeavesTile())
+                return true;
+        }
         return false;
     }
 
@@ -186,16 +158,53 @@ public class World {
      * Can update the model from here
      */
     public void update() {
-        elapsedTime += Gdx.graphics.getDeltaTime();
-        player.update();
+        deltaTime = Gdx.graphics.getDeltaTime();
+
+        player.update(this);
+
+        cleanEntities();
+
+        for (Entity e:entitiesToClean) {
+            entities.remove(e);
+        }
 
         for (Entity e:entities) {
-            e.update();
+            setEntitiesRoutines(e);
+
+            e.update(this);
+        }
+
+    }
+
+    private void cleanEntities() {
+        // If entities outside of range then clear them or died
+        for (Entity e:entities) {
+            if (!Helpers.checkIfNear(player.getX(), player.getY(), GameVariables.ENEMIES_SPACING,
+                    e.getX(), e.getY(), GameVariables.ENEMIES_SPACING)) {
+                entitiesToClean.add(e);
+            }
+            if(!e.isAlive()){
+                entitiesToClean.add(e);
+            }
         }
     }
 
-    private boolean checkNear(double x1, double y1, float r1, double x2, double y2, float r2){
-        return Math.abs((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < (r1 + r2) * (r1 + r2);
+    private void setEntitiesRoutines(Entity e){
+        if(Helpers.checkIfNear(player.getX(), player.getY(), GameVariables.ENEMY_SIZE,
+                e.getX(), e.getY(), GameVariables.ENEMY_SIZE)) {
+            // If player is near then move to player
+            if (e.getRoutine() == null) {
+                e.setRoutine(new MoveTo(e.getX(), e.getY(), player.getX(), player.getY()));
+            }
+
+            if (e.getRoutine().hasSucceeded()) {
+                e.setRoutine(null);
+            }
+        } else {
+            //Wander
+        }
+
+
     }
 
     public Player getPlayer() {
@@ -204,6 +213,10 @@ public class World {
 
     public ArrayList<Entity> getEntities() {
         return entities;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
     }
 }
 

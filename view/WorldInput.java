@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.jiedro.canels.GameVariables;
-import com.jiedro.canels.model.world.Helpers;
+import com.jiedro.canels.model.world.*;
 
 import java.util.HashMap;
 
 /**
+ * UI for
  * Created by jiexdrop on 03/07/17.
  */
 
@@ -22,7 +23,7 @@ public class WorldInput implements InputProcessor {
 
     private OrthographicCamera entitiesCamera;
 
-    public WorldInput(World world, OrthographicCamera tilemapCamera, OrthographicCamera entitiesCamera){
+    public WorldInput(com.jiedro.canels.model.world.World world, OrthographicCamera tilemapCamera, OrthographicCamera entitiesCamera){
         this.world = world;
         this.tilemapCamera = tilemapCamera;
         this.entitiesCamera = entitiesCamera;

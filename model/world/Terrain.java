@@ -214,4 +214,34 @@ public class Terrain {
         drawTerrain(batch, foregroundTerrain, x, y);
     }
 
+    public ArrayList<Tile> getSelectedTiles(float x, float y) {
+        ArrayList<Tile> selectedTiles = new ArrayList<Tile>();
+
+        Vector2 tilesPos = Helpers.screenToMap(x, y);
+
+        selectedTiles.add(foregroundTerrain.get(tilesPos));
+
+        return selectedTiles;
+    }
+
+    public void removeTree(float x, float y) {
+        Vector2 tilesPos = Helpers.screenToMap(x, y);
+        for (Vector2 t:getTreeTiles(tilesPos)) {
+            foregroundTerrain.remove(t);
+        }
+    }
+
+    private ArrayList<Vector2> getTreeTiles(Vector2 treePos){
+        ArrayList<Vector2> result = new ArrayList<Vector2>();
+        result.add(treePos.cpy());
+        boolean completed = false;
+
+        while (!completed){
+            treePos.add(0,1);
+            if(foregroundTerrain.get(treePos)==null)
+                completed = true;
+            result.add(treePos.cpy());
+        }
+        return result;
+    }
 }

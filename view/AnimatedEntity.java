@@ -14,7 +14,7 @@ public class AnimatedEntity {
 
     TextureRegion stillFrame;
 
-    AnimatedEntity(TextureRegion[][] textureRegions, int frames){
+    public AnimatedEntity(TextureRegion[][] textureRegions, int frames){
 
         TextureRegion[] framesTextures = new TextureRegion[frames];
         int index = 0;
@@ -27,7 +27,7 @@ public class AnimatedEntity {
         stillFrame = animation.getKeyFrame(0);
     }
 
-    TextureRegion getCurrentFrame(float elapsedTime, Orientation orientation){
+    public TextureRegion getCurrentFrame(float elapsedTime, Orientation orientation){
         switch (orientation) {
             case LEFT:
                 for (int i = 0; i < animation.getKeyFrames().length; i++) {

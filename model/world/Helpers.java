@@ -46,5 +46,8 @@ public class Helpers {
         return mapToScreen(map.x, map.y);
     }
 
+    public static boolean checkIfNear(double x1, double y1, float r1, double x2, double y2, float r2){
+        return Math.abs((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < (r1 + r2) * (r1 + r2);
+    }
 
 }

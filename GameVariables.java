@@ -37,6 +37,8 @@ public class GameVariables {
 
     public static final int SLIME_FRAMES = 3;
 
+    public static final Color SLIME_COLOR = new Color(0x35b72000);
+
     //PLAYER
     public static final String PLAYER = PLAYER_FOLDER + "player.png";
 
@@ -69,7 +71,7 @@ public class GameVariables {
 
     public static final float PLAYER_SPEED = 80;
 
-    public static final float ENTITIES_SPEED = 60;
+    public static final float ENTITIES_SPEED = 10;
 
     public static final int TILEMAP_CENTER = (GameVariables.CHUNK_SIZE*GameVariables.CHUNK_SIZE)/2;
 
@@ -104,7 +106,7 @@ public class GameVariables {
 
     public static final int UI_TEXTURE_SIZE = 16;
 
-    public static final int TOUCH_PAD_SIZE = 200;
+    public static final int TOUCH_PAD_SIZE = 192;
 
     public static final int UI_OFFSET = 16;
 
