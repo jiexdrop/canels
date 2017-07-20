@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Entity;
+import com.jiedro.canels.model.entity.Living;
 import com.jiedro.canels.model.world.World;
 
 /**
@@ -24,20 +26,23 @@ public class Renderer implements Disposable {
 
     private SpriteBatch batch;
 
+    private ShapeRenderer shapeRenderer;
+
     private UserInterface userInterface;
 
     private WorldInput worldInput;
 
     private InputMultiplexer inputMultiplexer;
 
-    private AnimatedEntity slimesAnimation = new AnimatedEntity(Textures.getSlimesTextures(),GameVariables.SLIME_FRAMES);
+    private AnimatedEntity slimesAnimation = new AnimatedEntity(GameTextures.getSlimesTextures(),GameVariables.SLIME_FRAMES);
 
-    private AnimatedEntity playerAnimation = new AnimatedEntity(Textures.getPlayerTexture(),GameVariables.PLAYER_FRAMES);
+    private AnimatedEntity playerAnimation = new AnimatedEntity(GameTextures.getPlayerTexture(),GameVariables.PLAYER_FRAMES);
 
     public Renderer(){
         world = new World();
 
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
 
         tilemapCamera = setupCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         entitiesCamera = setupCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
@@ -65,12 +70,19 @@ public class Renderer implements Disposable {
         entitiesCamera.update();
 
         batch.setProjectionMatrix(tilemapCamera.combined);
+        shapeRenderer.setProjectionMatrix(tilemapCamera.combined);
 
         batch.begin();
         drawTilemapBackground(batch, tilemapCamera);
-        drawEntities(batch);
+        drawLivings(batch);
         drawTilemapForeground(batch, tilemapCamera);
         batch.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        drawLivings(shapeRenderer);
+        shapeRenderer.end();
+
+
 
         GameVariables.RENDER_CALLS = batch.totalRenderCalls;
 
@@ -78,17 +90,32 @@ public class Renderer implements Disposable {
         userInterface.draw();
     }
 
-    public void drawEntities(SpriteBatch batch) {
+    private void drawLivings(ShapeRenderer shapeRenderer) {
         for (Entity e:world.getEntities()) {
-            batch.setColor(e.getColor());
-            batch.draw(slimesAnimation.getCurrentFrame(e.getElapsedTime(), e.getOrientation()), e.getX(), e.getY());
+            if(!e.isAlive()) {
+                shapeRenderer.rect(e.getX(),e.getY(), GameVariables.ITEM_SIZE, GameVariables.ITEM_SIZE);
+            }
         }
 
+    }
+
+    public void drawLivings(SpriteBatch batch) {
         batch.setColor(world.getPlayer().getColor());
         batch.draw(playerAnimation.getCurrentFrame(world.getPlayer().getElapsedTime(),
                 world.getPlayer().getOrientation()),
                 world.getPlayer().getX(),
                 world.getPlayer().getY());
+
+        for (Entity e:world.getEntities()) {
+            batch.setColor(e.getColor());
+            if(e.isAlive()) {
+                batch.draw(slimesAnimation.getCurrentFrame(e.getElapsedTime(), ((Living)e).getOrientation()), e.getX(), e.getY());
+            }
+            else {
+                batch.draw(GameTextures.getTextureRegionByName(e.getName()), e.getX(), e.getY(), GameVariables.ITEM_SIZE,GameVariables.ITEM_SIZE);
+            }
+        }
+
     }
 
     public void drawTilemapBackground(SpriteBatch tilemapBatch, OrthographicCamera tilemapCamera) {

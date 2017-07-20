@@ -3,6 +3,7 @@ package com.jiedro.canels.model.entity.routine;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Entity;
+import com.jiedro.canels.model.entity.Living;
 import com.jiedro.canels.model.world.Helpers;
 import com.jiedro.canels.model.world.World;
 
@@ -33,11 +34,12 @@ public class MoveTo extends Routine {
     @Override
     public void act(Entity entity, World world) {
         if(isRunning()){
-            if(!entity.isAlive()){
-                entity.move(0,0);
+            if (!entity.isAlive()) {
+                entity.move(0, 0);
                 fail();
                 return;
             }
+
             if(!hasReachedDestination(entity.getX(), entity.getY())){
                 move(entity,world);
             }

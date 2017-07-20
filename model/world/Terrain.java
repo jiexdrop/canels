@@ -3,8 +3,9 @@ package com.jiedro.canels.model.world;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
+import com.jiedro.canels.view.GameTextures;
+import com.jiedro.canels.view.GameTiles;
 import com.jiedro.canels.view.Tile;
-import com.jiedro.canels.view.Textures;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,11 +53,11 @@ public class Terrain {
 
 
             if (simplexRockNoise > 0.11 && simplexRockNoise < 0.111) { //Dungeon
-                foregroundTerrain.put(where, Textures.getDoorTile());
+                foregroundTerrain.put(where, GameTiles.getDoorTile());
             }
 
             if (simplexRockNoise > 0.90 && simplexRockNoise < 1) { //Rocks
-                vegetationTerrain.put(where, Textures.getGrassRockTile());
+                vegetationTerrain.put(where, GameTiles.getGrassRockTile());
             }
 
             if (simplexTreesNoise > 0 && simplexTreesNoise < 0.09) {
@@ -64,11 +65,11 @@ public class Terrain {
 
                 int last = random.nextInt(2)+1;
 
-                foregroundTerrain.put(where, Textures.getLogTile());
+                foregroundTerrain.put(where, GameTiles.getLogTile());
                 for (int i = 0; i < last; i++) {
-                    foregroundTerrain.put(where.cpy().add(0,i), Textures.getLogTile());
+                    foregroundTerrain.put(where.cpy().add(0,i), GameTiles.getLogTile());
                 }
-                foregroundTerrain.put(where.cpy().add(0,last), Textures.getLeavesTile());
+                foregroundTerrain.put(where.cpy().add(0,last), GameTiles.getLeavesTile());
             }
         }
     }
@@ -80,7 +81,7 @@ public class Terrain {
         double simplexNoise = SimplexNoise.noise(freqX, freqY);
 
         if(simplexNoise > 0.5 && simplexNoise < 0.51) {
-            foregroundTerrain.put(new Vector2(x, y), Textures.getCactusTile());
+            foregroundTerrain.put(new Vector2(x, y), GameTiles.getCactusTile());
         }
     }
 
@@ -149,24 +150,24 @@ public class Terrain {
                     double simplexNoise = SimplexNoise.noise(freqX, freqY);
 
                     if (simplexNoise < 0) {
-                        backgroundTerrain.put(new Vector2(i+x, j+y), Textures.getWaterTile());
+                        backgroundTerrain.put(new Vector2(i+x, j+y), GameTiles.getWaterTile());
                     } else if ((simplexNoise > 0.35)  //Land
                             && (simplexNoise < 0.55)) {
-                        backgroundTerrain.put(new Vector2(i + x, j + y), Textures.getGrassTile());
+                        backgroundTerrain.put(new Vector2(i + x, j + y), GameTiles.getGrassTile());
                         generateVegetation(i+x, j+y, GameVariables.TREES_FREQUENCY);
                     }
                     else if ((simplexNoise > 0.55)
                             && (simplexNoise < 0.75)){
-                        backgroundTerrain.put(new Vector2(i + x, j + y), Textures.getGrassTile());
+                        backgroundTerrain.put(new Vector2(i + x, j + y), GameTiles.getGrassTile());
                         generateVegetation(i+x, j+y, GameVariables.TREES_FREQUENCY);
                     }
                     else if ((simplexNoise > 0.75) //Mountain
                             && (simplexNoise < 1)){
-                        backgroundTerrain.put(new Vector2(i + x, j + y), Textures.getGrassTile());
+                        backgroundTerrain.put(new Vector2(i + x, j + y), GameTiles.getGrassTile());
                         generateVegetation(i+x, j+y, GameVariables.TREES_FREQUENCY);
                     }
                     else {
-                        backgroundTerrain.put(new Vector2(i+x, j+y), Textures.getGroundTile());
+                        backgroundTerrain.put(new Vector2(i+x, j+y), GameTiles.getGroundTile());
                         generateCactus(i+x,j+y, GameVariables.TREES_FREQUENCY*GameVariables.CHUNK_SIZE);
                     }
                 }
@@ -214,12 +215,21 @@ public class Terrain {
         drawTerrain(batch, foregroundTerrain, x, y);
     }
 
-    public ArrayList<Tile> getSelectedTiles(float x, float y) {
-        ArrayList<Tile> selectedTiles = new ArrayList<Tile>();
+    public HashMap<Vector2,Tile> getSelectedTiles(float x, float y) {
+
+        HashMap<Vector2,Tile> selectedTiles = new HashMap<Vector2, Tile>();
 
         Vector2 tilesPos = Helpers.screenToMap(x, y);
 
-        selectedTiles.add(foregroundTerrain.get(tilesPos));
+        if(foregroundTerrain.containsKey(tilesPos)) {
+            selectedTiles.put(tilesPos, foregroundTerrain.get(tilesPos));
+        }
+        if(backgroundTerrain.containsKey(tilesPos)) {
+            selectedTiles.put(tilesPos, backgroundTerrain.get(tilesPos));
+        }
+        if(vegetationTerrain.containsKey(tilesPos)) {
+            selectedTiles.put(tilesPos, vegetationTerrain.get(tilesPos));
+        }
 
         return selectedTiles;
     }
@@ -229,6 +239,17 @@ public class Terrain {
         for (Vector2 t:getTreeTiles(tilesPos)) {
             foregroundTerrain.remove(t);
         }
+    }
+
+    public void removeTile(Vector2 pos) {
+        if(foregroundTerrain.containsKey(pos))
+            foregroundTerrain.remove(pos);
+        if(backgroundTerrain.containsKey(pos))
+            backgroundTerrain.remove(pos);
+        if(vegetationTerrain.containsKey(pos))
+            vegetationTerrain.remove(pos);
+        if(!backgroundTerrain.containsKey(pos))
+            backgroundTerrain.put(pos, GameTiles.getRockTile());
     }
 
     private ArrayList<Vector2> getTreeTiles(Vector2 treePos){

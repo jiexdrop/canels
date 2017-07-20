@@ -2,13 +2,6 @@ package com.jiedro.canels.model.world;
 
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
-import com.jiedro.canels.view.Textures;
-
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Helpers to convert coordinates from screen to map

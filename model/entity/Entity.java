@@ -15,15 +15,12 @@ import com.jiedro.canels.model.world.World;
 
 public abstract class Entity {
 
+    String name;
+
     Vector2 velocity;
     Vector2 position;
 
     Color color;
-
-    Orientation orientation;
-
-    //RPG
-    int health = 0;
 
     Routine routine;
 
@@ -31,20 +28,13 @@ public abstract class Entity {
 
 
     public Entity(){
+        name = "";
         this.position = new Vector2(0,0);
         this.velocity = new Vector2(0,0);
-        this.orientation = Orientation.STILL;
     }
 
-
-    public Orientation getOrientation() {
-        return orientation;
-    }
-
-    public void setOrientation(Orientation orientation){
-        this.orientation = orientation;
-
-    }
+    public abstract boolean isAlive();
+    public abstract boolean toClean();
 
     public void setRoutine(Routine routine) {
         this.routine = routine;
@@ -67,13 +57,7 @@ public abstract class Entity {
         return position.y;
     }
 
-    public boolean isAlive(){
-        return health>0;
-    }
-
     public abstract void update(World world);
-
-    public abstract void hit(Entity e);
 
     public Color getColor() {
         return color.add(0, 0, 0, elapsedTime / 256);
@@ -81,5 +65,9 @@ public abstract class Entity {
 
     public float getElapsedTime() {
         return elapsedTime;
+    }
+
+    public String getName() {
+        return name;
     }
 }

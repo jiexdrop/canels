@@ -1,23 +1,23 @@
 package com.jiedro.canels.model.world;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Enemy;
 import com.jiedro.canels.model.entity.Entity;
+import com.jiedro.canels.model.entity.Item;
+import com.jiedro.canels.model.entity.Living;
 import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.model.entity.routine.MoveTo;
-import com.jiedro.canels.model.world.Terrain;
-import com.jiedro.canels.view.AnimatedEntity;
-import com.jiedro.canels.view.Textures;
+import com.jiedro.canels.view.GameTextures;
+import com.jiedro.canels.view.GameTiles;
 import com.jiedro.canels.view.Tile;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -116,21 +116,23 @@ public class World {
 
     public void interpretClick(float x, float y){
         ArrayList<Entity> selectedEntities = getSelectedEntities(x, y);
+        HashMap<Vector2,Tile> selectedTiles = terrain.getSelectedTiles(x, y);
 
-        if(isVegetationSelected(x,y)){
-            //TODO no, destroy anithung instead
-            terrain.removeTree(x,y);
+        if(selectedTiles.size()>0){
+            for (Map.Entry<Vector2,Tile> st:selectedTiles.entrySet()) {
+                entities.add(new Item(st.getValue().getName(), Helpers.mapToScreen(st.getKey()), st.getValue().getColor()));
+                terrain.removeTile(st.getKey());
+            }
         } else if(selectedEntities.size()>0) {
             for (Entity e : getSelectedEntities(x, y)) {
-                player.hit(e);
+                if(e.isAlive())
+                    player.hit((Living)e);
             }
-        } else {
-            terrain.placeTile(x, y, Textures.getGrassTile());
         }
     }
 
     public void interpretDrag(float x, float y){
-        terrain.placeTile(x, y, Textures.getGrassTile()); //TODO player selected tile from inventory ?
+        terrain.placeTile(x, y, GameTiles.getGrassTile()); //TODO player selected tile from inventory ?
     }
 
     public ArrayList<Entity> getSelectedEntities(float x, float y){
@@ -144,15 +146,6 @@ public class World {
         return result;
     }
 
-    public boolean isVegetationSelected(float x, float y){
-        for (Tile t:terrain.getSelectedTiles(x,y)){
-            if(t == Textures.getLogTile())
-                return true;
-            if(t == Textures.getLeavesTile())
-                return true;
-        }
-        return false;
-    }
 
     /**
      * Can update the model from here
@@ -183,9 +176,10 @@ public class World {
                     e.getX(), e.getY(), GameVariables.ENEMIES_SPACING)) {
                 entitiesToClean.add(e);
             }
-            if(!e.isAlive()){
+
+            if(!e.isAlive() && e.toClean())
                 entitiesToClean.add(e);
-            }
+
         }
     }
 

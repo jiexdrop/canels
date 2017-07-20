@@ -12,17 +12,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 
 public class Tile extends Sprite {
-    private int id = 0;
+
+    private String name = "";
 
     private boolean walkable;
 
-    public Tile(TextureRegion textureRegion, int id, boolean walkable, Color color){
+    public Tile(TextureRegion textureRegion, String name, boolean walkable, Color color){
         this.setRegion(textureRegion);
 
-        this.id = id;
         this.walkable = walkable;
         this.setColor(color);
-
+        this.name = name;
     }
 
 
@@ -47,5 +47,7 @@ public class Tile extends Sprite {
         return this.walkable;
     }
 
-
+    public String getName() {
+        return name;
+    }
 }

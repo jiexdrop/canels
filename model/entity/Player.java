@@ -1,20 +1,17 @@
 package com.jiedro.canels.model.entity;
 
-import com.badlogic.gdx.Gdx;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.world.World;
-import com.jiedro.canels.view.Textures;
-
-import java.util.ArrayList;
 
 /**
  *
  * Created by on 23/05/17.
  */
 
-public class Player extends Entity {
+public class Player extends Living {
 
     public Player(){
+        name = "player";
         health = 3;
         color = GameVariables.PLAYER_SKIN_MOUNTAINS;
     }
@@ -37,7 +34,7 @@ public class Player extends Entity {
     }
 
     @Override
-    public void hit(Entity e) {
+    public void hit(Living e) {
         e.health--;
     }
 

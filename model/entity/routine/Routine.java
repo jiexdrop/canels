@@ -1,6 +1,7 @@
 package com.jiedro.canels.model.entity.routine;
 
 import com.jiedro.canels.model.entity.Entity;
+import com.jiedro.canels.model.entity.Living;
 import com.jiedro.canels.model.world.World;
 
 /**

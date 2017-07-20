@@ -101,8 +101,7 @@ public class WorldInput implements InputProcessor {
                     whereNow = whereGo;
                     whereGo = breadthFirstSearch.get(whereNow);
                     if (whereGo != null) {
-                        //world.placeTile(Helpers.mapToScreen(whereGo), Textures.getDoorTile());
-                        world.placeTile(Helpers.mapToScreen(whereNow), Textures.getDoorTile());
+                        world.placeTile(Helpers.mapToScreen(whereNow), GameTiles.getDoorTile());
                     }
                 }
             }

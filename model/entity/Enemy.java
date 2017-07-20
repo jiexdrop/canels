@@ -1,21 +1,15 @@
 package com.jiedro.canels.model.entity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.jiedro.canels.GameVariables;
-import com.jiedro.canels.model.entity.routine.MoveTo;
-import com.jiedro.canels.model.entity.routine.Routine;
 import com.jiedro.canels.model.world.World;
-import com.jiedro.canels.view.Textures;
 
 /**
  *
  * Created by jiexdrop on 04/07/17.
  */
 
-public class Enemy extends Entity {
+public class Enemy extends Living {
 
     public Enemy(float x, float y) {
         health = 3;
@@ -44,7 +38,7 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void hit(Entity e) {
+    public void hit(Living l) {
 
     }
 }

@@ -81,6 +81,8 @@ public class GameVariables {
 
     public static final int ENEMY_SIZE = 16;
 
+    public static final int ITEM_SIZE = TILES_SIZE/4;
+
     public static final int CURSOR_SIZE = 16;
 
     public static final float TIME_STEP = 1/60f;
@@ -99,7 +101,9 @@ public class GameVariables {
 
     public static final Color WOOD_PLAIN = new Color(0x635230ff);
 
-    public static final Color GROUND_PLAIN = new Color(0xfaa87aff);
+    public static final Color GROUND_PLAIN = new Color(0x5a553bff);
+
+    public static final Color ROCK_PLAIN = new Color(0xa9a9a9ff);
 
     //USER INTERFACE
     public static final String MAIN_UI = USER_INTERFACE_FOLDER + "main_ui.png";
@@ -109,6 +113,7 @@ public class GameVariables {
     public static final int TOUCH_PAD_SIZE = 192;
 
     public static final int UI_OFFSET = 16;
+
 
     public static int SIDEBAR_WIDTH = UI_TEXTURE_SIZE*6;
 

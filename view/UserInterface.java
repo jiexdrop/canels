@@ -93,11 +93,11 @@ public class UserInterface extends Stage {
 
     private void setupSideBar(){
         sideBar = new Table();
-        //sideBar.setBackground(new TiledDrawable(Textures.getSideBarTexture()));
+        //sideBar.setBackground(new TiledDrawable(GameTextures.getSideBarTexture()));
         rightTable.add(sideBar).width(GameVariables.SIDEBAR_WIDTH).top().right().expandY();
 
         for(int i =0; i < GameVariables.VISIBLE_PLAYER_ITEM_SLOTS; i++){
-            sideBar.add(new Image(Textures.getSlotTexture())).width(GameVariables.SIDEBAR_WIDTH).height(GameVariables.SIDEBAR_WIDTH).row();
+            sideBar.add(new Image(GameTextures.getSlotTexture())).width(GameVariables.SIDEBAR_WIDTH).height(GameVariables.SIDEBAR_WIDTH).row();
         }
     }
 
@@ -105,9 +105,9 @@ public class UserInterface extends Stage {
     private static Touchpad.TouchpadStyle getTouchpadStyle() {
         Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
         Skin touchpadSkin = new Skin();
-        touchpadSkin.add("touchBackground", Textures.getTouchPadBackgroundTexture());
+        touchpadSkin.add("touchBackground", GameTextures.getTouchPadBackgroundTexture());
 
-        touchpadSkin.add("touchKnob", Textures.getTouchPadKnobTexture());
+        touchpadSkin.add("touchKnob", GameTextures.getTouchPadKnobTexture());
 
         touchpadStyle.background  = touchpadSkin.getDrawable("touchBackground");
         touchpadStyle.knob  = touchpadSkin.getDrawable("touchKnob");
