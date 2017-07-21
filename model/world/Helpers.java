@@ -35,6 +35,13 @@ public class Helpers {
         return mapToScreen;
     }
 
+    public static Vector2 itemToScreen(Vector2 pos, int i){
+        final Vector2 mapToScreen = new Vector2();
+        mapToScreen.x = Math.round((pos.x*GameVariables.TILES_SIZE)+(GameVariables.ITEM_SIZE*1.5));
+        mapToScreen.y = Math.round((pos.y*GameVariables.TILES_SIZE)+(GameVariables.ITEM_SIZE*1.5));
+        return mapToScreen;
+    }
+
     public static Vector2 mapToScreen(Vector2 map){
         return mapToScreen(map.x, map.y);
     }

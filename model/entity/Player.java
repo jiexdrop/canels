@@ -3,6 +3,8 @@ package com.jiedro.canels.model.entity;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.world.World;
 
+import java.util.ArrayList;
+
 /**
  *
  * Created by on 23/05/17.
@@ -10,10 +12,16 @@ import com.jiedro.canels.model.world.World;
 
 public class Player extends Living {
 
+    ArrayList<ItemSlot> itemSlots = new ArrayList<ItemSlot>();
+
     public Player(){
         name = "player";
         health = 3;
         color = GameVariables.PLAYER_SKIN_MOUNTAINS;
+
+        for (int i = 0; i < GameVariables.PLAYER_ITEM_SLOTS; i++){
+            itemSlots.add(new ItemSlot());
+        }
     }
 
     @Override
@@ -44,5 +52,26 @@ public class Player extends Living {
         GameVariables.PLAYER_POSITION.y = getY();
 
         GameVariables.PLAYER_HEALTH = health;
+    }
+
+    public void addItem(Item i) {
+        ItemSlot is = nextSlot(i);
+        if(is!=null){
+            is.addItem(i);
+        }
+    }
+
+    private ItemSlot nextSlot(Item i){
+        for (ItemSlot is:itemSlots) {
+            if(!is.equals(i)){
+                return is;
+            }
+        }
+        for (ItemSlot is:itemSlots) {
+            if(!is.hasItem()){
+                return is;
+            }
+        }
+       return null;
     }
 }

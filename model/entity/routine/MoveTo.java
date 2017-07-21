@@ -15,33 +15,33 @@ import com.jiedro.canels.model.world.World;
 public class MoveTo extends Routine {
 
     Vector2 destination = new Vector2(0,0);
-    Vector2 start = new Vector2(0,0);
     Vector2 direction = new Vector2(0,0);
 
     float distance;
 
-    public MoveTo(float startX, float startY, float endX, float endY){
+    public MoveTo(Vector2 start, Vector2 end){
         super();
         start();
-        destination.x = endX;
-        destination.y = endY;
-        start.x = startX;
-        start.y = startY;
-        distance = Vector2.dst(startX, startY, endX, endY);
-        direction = destination.sub(startX, startY).nor();
+        destination = end.cpy();
+        distance = Vector2.dst(start.x, start.y, end.x, end.y);
+        direction = destination.sub(start.x, start.y).nor();
     }
 
     @Override
     public void act(Entity entity, World world) {
         if(isRunning()){
-            if (!entity.isAlive()) {
+            if (!entity.canMove()) {
                 entity.move(0, 0);
                 fail();
                 return;
             }
 
-            if(!hasReachedDestination(entity.getX(), entity.getY())){
+            if(!hasReachedDestination(entity.getX(), entity.getY(), entity.getSize(),
+                    world.getPlayer().getX(), world.getPlayer().getY(), world.getPlayer().getSize())){
                 move(entity,world);
+            } else {
+                entity.move(0,0);
+                succeed();
             }
         }
     }
@@ -52,18 +52,17 @@ public class MoveTo extends Routine {
      * @param world where the entity moves
      */
     private void move(Entity entity, World world){
-        entity.move(direction.x * GameVariables.ENTITIES_SPEED * world.deltaTime,
-                direction.y * GameVariables.ENTITIES_SPEED * world.deltaTime);
-        if(hasReachedDestination(entity.getX() + (direction.x * GameVariables.ENTITIES_SPEED * world.deltaTime),
-                entity.getY() + (direction.y * GameVariables.ENTITIES_SPEED * world.deltaTime))){
-            entity.move(0,0);
-            succeed();
-        }
+        distance = Vector2.dst(entity.getX(), entity.getY(), world.getPlayer().getX(), world.getPlayer().getY());
+        destination = world.getPlayer().getPosition().cpy();
+        direction = destination.sub(entity.getX(), entity.getY()).nor();
+
+        entity.move(direction.x * entity.getSpeed() * world.deltaTime,
+                direction.y * entity.getSpeed() * world.deltaTime);
 
     }
 
-    private boolean hasReachedDestination(float x, float y) {
-        return Vector2.dst(start.x, start.y, x, y) >= distance;
+    private boolean hasReachedDestination(float startX, float startY, int sizeA, float playerX, float playerY, int sizeB) {
+        return Helpers.checkIfNear(startX, startY, sizeA/4, playerX, playerY, sizeB/4);
     }
 
 }

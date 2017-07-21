@@ -23,7 +23,12 @@ public abstract class Living extends Entity {
 
     @Override
     public boolean toClean() {
-        return true;
+        return isAlive();
+    }
+
+    @Override
+    public boolean canMove() {
+        return isAlive();
     }
 
     public abstract void hit(Living e);

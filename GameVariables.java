@@ -69,15 +69,21 @@ public class GameVariables {
 
     public static final int CHUNK_SIZE = TILES_SIZE;
 
-    public static final float PLAYER_SPEED = 80;
+    public static final int PLAYER_SPEED = 80;
 
-    public static final float ENTITIES_SPEED = 10;
+    public static final int SLIMES_SPEED = 10;
+
+    public static final int ENTITIES_SPEED = 10;
+
+    public static final int NORMAL_SPEED = 100;
 
     public static final int TILEMAP_CENTER = (GameVariables.CHUNK_SIZE*GameVariables.CHUNK_SIZE)/2;
 
     public static final int ENEMIES_PAR_LEVEL = 10;
 
     public static final int ENEMIES_SPACING = 256;
+
+    public static final int NORMAL_SIZE = 16;
 
     public static final int ENEMY_SIZE = 16;
 

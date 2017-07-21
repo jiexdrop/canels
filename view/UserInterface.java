@@ -97,6 +97,7 @@ public class UserInterface extends Stage {
         rightTable.add(sideBar).width(GameVariables.SIDEBAR_WIDTH).top().right().expandY();
 
         for(int i =0; i < GameVariables.VISIBLE_PLAYER_ITEM_SLOTS; i++){
+
             sideBar.add(new Image(GameTextures.getSlotTexture())).width(GameVariables.SIDEBAR_WIDTH).height(GameVariables.SIDEBAR_WIDTH).row();
         }
     }

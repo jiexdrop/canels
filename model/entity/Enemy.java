@@ -1,6 +1,7 @@
 package com.jiedro.canels.model.entity;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.world.World;
 
@@ -16,6 +17,8 @@ public class Enemy extends Living {
         color = new Color(GameVariables.SLIME_COLOR);
 
         position.set(x,y);
+
+        this.size = GameVariables.ENEMY_SIZE;
     }
 
     @Override

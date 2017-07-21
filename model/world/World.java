@@ -120,7 +120,7 @@ public class World {
 
         if(selectedTiles.size()>0){
             for (Map.Entry<Vector2,Tile> st:selectedTiles.entrySet()) {
-                entities.add(new Item(st.getValue().getName(), Helpers.mapToScreen(st.getKey()), st.getValue().getColor()));
+                entities.add(new Item(st.getValue().getName(), Helpers.itemToScreen(st.getKey(), 1), st.getValue().getColor()));
                 terrain.removeTile(st.getKey());
             }
         } else if(selectedEntities.size()>0) {
@@ -180,6 +180,13 @@ public class World {
             if(!e.isAlive() && e.toClean())
                 entitiesToClean.add(e);
 
+            if(!e.toClean()) {
+                //clean items at ground
+                if (Helpers.checkIfNear(player.getX(), player.getY(), GameVariables.ITEM_SIZE,e.getX(), e.getY(), 1 )){
+                    entitiesToClean.add(e);
+                    player.addItem((Item)e);
+                }
+            }
         }
     }
 
@@ -188,16 +195,18 @@ public class World {
                 e.getX(), e.getY(), GameVariables.ENEMY_SIZE)) {
             // If player is near then move to player
             if (e.getRoutine() == null) {
-                e.setRoutine(new MoveTo(e.getX(), e.getY(), player.getX(), player.getY()));
+                e.setRoutine(new MoveTo(e.getPosition(), player.getPosition()));
             }
 
-            if (e.getRoutine().hasSucceeded()) {
-                e.setRoutine(null);
-            }
+
         } else {
             //Wander
-        }
 
+            //& reset things
+            if (e.getRoutine() != null && e.getRoutine().hasSucceeded()) {
+                e.setRoutine(null);
+            }
+        }
 
     }
 

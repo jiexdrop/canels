@@ -20,6 +20,9 @@ public abstract class Entity {
     Vector2 velocity;
     Vector2 position;
 
+    int size;
+    int speed;
+
     Color color;
 
     Routine routine;
@@ -31,10 +34,14 @@ public abstract class Entity {
         name = "";
         this.position = new Vector2(0,0);
         this.velocity = new Vector2(0,0);
+
+        this.size = GameVariables.NORMAL_SIZE;
+        this.speed = GameVariables.ENTITIES_SPEED;
     }
 
     public abstract boolean isAlive();
     public abstract boolean toClean();
+    public abstract boolean canMove();
 
     public void setRoutine(Routine routine) {
         this.routine = routine;
@@ -69,5 +76,17 @@ public abstract class Entity {
 
     public String getName() {
         return name;
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 }
