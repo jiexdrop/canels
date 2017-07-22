@@ -39,6 +39,8 @@ public class WorldInput implements InputProcessor {
             tilemapCamera.zoom += GameVariables.ZOOM_INPUT;
             entitiesCamera.zoom += GameVariables.ZOOM_INPUT;
         }
+
+        if(keycode==Input.Keys.D) GameVariables.DEBUG = !GameVariables.DEBUG;
         return false;
     }
 

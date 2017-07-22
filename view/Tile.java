@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.jiedro.canels.GameVariables;
 
 /**
  *
@@ -13,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Tile extends Sprite {
 
-    private String name = "";
+    private String name = GameVariables.EMPTY;
 
     private boolean walkable;
 

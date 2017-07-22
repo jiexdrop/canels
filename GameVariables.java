@@ -120,8 +120,9 @@ public class GameVariables {
 
     public static final int UI_OFFSET = 16;
 
-
     public static int SIDEBAR_WIDTH = UI_TEXTURE_SIZE*6;
+
+    public static int SIDEBAR_BUTTON_HEIGHT = UI_TEXTURE_SIZE*6;
 
     public static int ENTITIES = 0;
 
@@ -138,6 +139,6 @@ public class GameVariables {
     public static Vector2 PLAYER_POSITION = new Vector2(0,0);
 
     //DEBUG
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
 }

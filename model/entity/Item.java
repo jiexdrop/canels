@@ -24,6 +24,19 @@ public class Item extends Entity {
 
     public Item() {
         this.name = GameVariables.EMPTY;
+        this.color = Color.CLEAR;
+    }
+
+
+    public Item cpy(){
+        Item cpy = new Item();
+        cpy.position = this.position.cpy();
+        cpy.color = this.color.cpy();
+        cpy.name = this.getName();
+
+        cpy.size = this.getSize();
+        cpy.speed = this.getSpeed();
+        return cpy;
     }
 
     @Override

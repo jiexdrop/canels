@@ -51,16 +51,23 @@ public class GameTextures {
         return mainUITextureRegions[1][1];
     }
 
+    static TextureRegion getSlotOverlayTexture() {
+        return mainUITextureRegions[0][2];
+    }
+
+    static TextureRegion getCheckedSlotTexture() {
+        return mainUITextureRegions[1][2];
+    }
+
     public static TextureRegion[][] getTextureRegions() {
         return textureRegions;
     }
 
     public static TextureRegion getTextureRegionByName(String name){
-        if (name.equals("grass")) {
-            return GameTiles.getGrassTile();
-        } else {
-            return GameTiles.getDoorTile();
-        }
+        if (name.equals("grass")) return GameTiles.getGrassTile();
+        if (name.equals("ground")) return GameTiles.getGroundTile();
+        if (name.equals("water")) return GameTiles.getWaterTile();
 
+        return GameTiles.getDoorTile();
     }
 }

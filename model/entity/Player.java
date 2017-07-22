@@ -54,6 +54,10 @@ public class Player extends Living {
         GameVariables.PLAYER_HEALTH = health;
     }
 
+    public ArrayList<ItemSlot> getItemSlots() {
+        return itemSlots;
+    }
+
     public void addItem(Item i) {
         ItemSlot is = nextSlot(i);
         if(is!=null){
@@ -63,7 +67,7 @@ public class Player extends Living {
 
     private ItemSlot nextSlot(Item i){
         for (ItemSlot is:itemSlots) {
-            if(!is.equals(i)){
+            if(is.equals(i)){
                 return is;
             }
         }

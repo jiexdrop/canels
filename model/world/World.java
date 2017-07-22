@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Random;
 
 /**
@@ -26,7 +27,7 @@ import java.util.Random;
  * Created by jiexdrop on 03/07/17.
  */
 
-public class World {
+public class World extends Observable{
     private Player player;
 
     private Terrain terrain;
@@ -42,7 +43,6 @@ public class World {
         terrain = new Terrain();
         entities = new ArrayList<Entity>();
         entitiesToClean = new ArrayList<Entity>();
-
     }
 
     public void placeEnemies(){
@@ -107,6 +107,9 @@ public class World {
         if(entities.size()<GameVariables.ENEMIES_PAR_LEVEL){
             placeEnemies();
         }
+
+        setChanged();
+        notifyObservers();
     }
 
 
@@ -129,10 +132,16 @@ public class World {
                     player.hit((Living)e);
             }
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     public void interpretDrag(float x, float y){
         terrain.placeTile(x, y, GameTiles.getGrassTile()); //TODO player selected tile from inventory ?
+
+        setChanged();
+        notifyObservers();
     }
 
     public ArrayList<Entity> getSelectedEntities(float x, float y){
