@@ -36,7 +36,13 @@ public class World extends Observable{
 
     private ArrayList<Entity> entitiesToClean;
 
+    HashMap<Vector2,Tile> workingTiles;
+
     public float deltaTime;
+
+    private boolean holding;
+
+    private int holdTime;
 
     public World() {
         player = new Player();
@@ -118,14 +124,12 @@ public class World extends Observable{
     }
 
     public void interpretClick(float x, float y){
+        holding = true;
         ArrayList<Entity> selectedEntities = getSelectedEntities(x, y);
         HashMap<Vector2,Tile> selectedTiles = terrain.getSelectedTiles(x, y);
 
         if(selectedTiles.size()>0){
-            for (Map.Entry<Vector2,Tile> st:selectedTiles.entrySet()) {
-                entities.add(new Item(st.getValue().getName(), Helpers.itemToScreen(st.getKey(), 1), st.getValue().getColor()));
-                terrain.removeTile(st.getKey());
-            }
+            workingTiles = selectedTiles;
         } else if(selectedEntities.size()>0) {
             for (Entity e : getSelectedEntities(x, y)) {
                 if(e.isAlive())
@@ -133,12 +137,16 @@ public class World extends Observable{
             }
         }
 
-        setChanged();
-        notifyObservers();
     }
 
     public void interpretDrag(float x, float y){
         terrain.placeTile(x, y, GameTiles.getGrassTile()); //TODO player selected tile from inventory ?
+    }
+
+    public void endInterpret(){
+
+        holding = false;
+        holdTime = 0;
 
         setChanged();
         notifyObservers();
@@ -161,9 +169,12 @@ public class World extends Observable{
      */
     public void update() {
         deltaTime = Gdx.graphics.getDeltaTime();
+        if (holding) holdTime++;
+        GameVariables.HOLD_TIME = holdTime;
 
         player.update(this);
 
+        updateTiles();
         cleanEntities();
 
         for (Entity e:entitiesToClean) {
@@ -176,6 +187,22 @@ public class World extends Observable{
             e.update(this);
         }
 
+    }
+
+    public void updateTiles(){
+        if(workingTiles!=null && workingTiles.size()>0){
+            for (Map.Entry<Vector2,Tile> st:workingTiles.entrySet()) {
+                if(st.getValue().getResistance() < holdTime) {
+                    entities.add(new Item(st.getValue().getName(), Helpers.itemToScreen(st.getKey(), 1), st.getValue().getColor()));
+                    terrain.removeTile(st.getKey());
+
+                    holding = false;
+                    holdTime = 0;
+                } else {
+                    terrain.breakingTile(st.getKey());
+                }
+            }
+        }
     }
 
     private void cleanEntities() {

@@ -18,12 +18,16 @@ public class Tile extends Sprite {
 
     private boolean walkable;
 
-    public Tile(TextureRegion textureRegion, String name, boolean walkable, Color color){
+    private int resistance;
+
+    public Tile(TextureRegion textureRegion, String name, boolean walkable, Color color, int resistance){
         this.setRegion(textureRegion);
 
         this.walkable = walkable;
         this.setColor(color);
         this.name = name;
+        this.resistance = resistance;
+
     }
 
 
@@ -46,6 +50,10 @@ public class Tile extends Sprite {
 
     public boolean isWalkable(){
         return this.walkable;
+    }
+
+    public int getResistance() {
+        return resistance;
     }
 
     public String getName() {

@@ -14,6 +14,8 @@ public class Player extends Living {
 
     ArrayList<ItemSlot> itemSlots = new ArrayList<ItemSlot>();
 
+    ItemSlot selectedSlot;
+
     public Player(){
         name = "player";
         health = 3;
@@ -77,5 +79,13 @@ public class Player extends Living {
             }
         }
        return null;
+    }
+
+    public ItemSlot getSelectedSlot() {
+        return selectedSlot;
+    }
+
+    public void setSelectedSlot(ItemSlot selectedSlot) {
+        this.selectedSlot = selectedSlot;
     }
 }

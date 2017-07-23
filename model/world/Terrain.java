@@ -265,4 +265,8 @@ public class Terrain {
         }
         return result;
     }
+
+    public void breakingTile(Vector2 tilePos) {
+        backgroundTerrain.get(tilePos);
+    }
 }

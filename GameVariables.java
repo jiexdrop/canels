@@ -128,6 +128,8 @@ public class GameVariables {
 
     public static int RENDER_CALLS = 0;
 
+    public static int HOLD_TIME = 0;
+
     public static int PLAYER_HEALTH = 0;
 
     public static final int PLAYER_ITEM_SLOTS = 16;

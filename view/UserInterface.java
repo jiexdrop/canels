@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
@@ -124,6 +126,7 @@ public class UserInterface extends Stage implements Observer {
             imageTextButton.add(imageTextButton.getLabel());
 
 
+
             itemSlots.add(imageTextButton);
             sideBar.add(imageTextButton).width(GameVariables.SIDEBAR_WIDTH).height(GameVariables.SIDEBAR_BUTTON_HEIGHT).row();
         }
@@ -178,7 +181,8 @@ public class UserInterface extends Stage implements Observer {
                     + "\nRENDER_CALLS: " + GameVariables.RENDER_CALLS
                     + "\nPLAYER_POS: " + GameVariables.PLAYER_POSITION
                     + "\nENTITIES: " + GameVariables.ENTITIES
-                    + "\nPLAYER_HEALTH: " + GameVariables.PLAYER_HEALTH);
+                    + "\nPLAYER_HEALTH: " + GameVariables.PLAYER_HEALTH
+                    + "\nHOLD_TIME:" + GameVariables.HOLD_TIME);
         }
         else {
             debugLabel.setText(GameVariables.EMPTY);

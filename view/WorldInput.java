@@ -66,6 +66,7 @@ public class WorldInput implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        world.endInterpret();
         return false;
     }
 
