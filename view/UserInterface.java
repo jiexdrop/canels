@@ -52,6 +52,8 @@ public class UserInterface extends Stage implements Observer {
 
     private ArrayList<ImageTextButton> itemSlots;
 
+    private ImageTextButton selectedSlot;
+
 
     public UserInterface(World world, Batch batch){
         super(new ScreenViewport(), batch);
@@ -89,7 +91,7 @@ public class UserInterface extends Stage implements Observer {
 
     private void setupDebugLabel(){
         font = new BitmapFont();
-        debugLabel = new Label(GameVariables.EMPTY, new Label.LabelStyle(font, Color.WHITE));
+        debugLabel = new Label(GameVariables.CLEAR, new Label.LabelStyle(font, Color.WHITE));
 
         leftTable.add(debugLabel).width(GameVariables.TOUCH_PAD_SIZE).top().expand().row();
     }
@@ -104,8 +106,10 @@ public class UserInterface extends Stage implements Observer {
         for (int i = 0; i < world.getPlayer().getItemSlots().size(); i++) {
             ItemSlot item = world.getPlayer().getItemSlots().get(i);
             itemSlots.get(i).setText(item.toString());
+
+            TileType tileType = TileType.valueOf(item.getItemName().toUpperCase());
             itemSlots.get(i).getStyle().imageUp =
-                    new TextureRegionDrawable(GameTextures.getTextureRegionByName(item.getItemName()))
+                    new TextureRegionDrawable(GameTextures.getTextureRegion(tileType))
                             .tint(item.getItemColor());
 
         }
@@ -124,7 +128,6 @@ public class UserInterface extends Stage implements Observer {
             imageTextButton.add(imageTextButton.getImage()).height(GameVariables.SIDEBAR_BUTTON_HEIGHT/2)
                     .width(GameVariables.SIDEBAR_BUTTON_HEIGHT/2).fill().row();
             imageTextButton.add(imageTextButton.getLabel());
-
 
 
             itemSlots.add(imageTextButton);
@@ -185,7 +188,7 @@ public class UserInterface extends Stage implements Observer {
                     + "\nHOLD_TIME:" + GameVariables.HOLD_TIME);
         }
         else {
-            debugLabel.setText(GameVariables.EMPTY);
+            debugLabel.setText(GameVariables.CLEAR);
         }
 
     }

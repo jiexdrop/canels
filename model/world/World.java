@@ -9,9 +9,7 @@ import com.jiedro.canels.model.entity.Item;
 import com.jiedro.canels.model.entity.Living;
 import com.jiedro.canels.model.entity.Player;
 import com.jiedro.canels.model.entity.routine.MoveTo;
-import com.jiedro.canels.view.GameTextures;
-import com.jiedro.canels.view.GameTiles;
-import com.jiedro.canels.view.Tile;
+import com.jiedro.canels.view.TileType;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class World extends Observable{
 
     private ArrayList<Entity> entitiesToClean;
 
-    HashMap<Vector2,Tile> workingTiles;
+    private Vector2 workingTile;
 
     public float deltaTime;
 
@@ -114,22 +112,24 @@ public class World extends Observable{
             placeEnemies();
         }
 
+        //TODO better
         setChanged();
         notifyObservers();
     }
 
 
-    public void placeTile(Vector2 pos, Tile groundTile) {
-        terrain.placeTile(pos.x,pos.y,groundTile);
+    public void placeTile(Vector2 pos, TileType tileType) {
+        terrain.placeTile(pos.x,pos.y, tileType);
     }
 
     public void interpretClick(float x, float y){
         holding = true;
         ArrayList<Entity> selectedEntities = getSelectedEntities(x, y);
-        HashMap<Vector2,Tile> selectedTiles = terrain.getSelectedTiles(x, y);
+        Vector2 selectedPos = Helpers.screenToMap(x,y);
+        TileType selectedTile = terrain.getVegetationTileFromPos(selectedPos);
 
-        if(selectedTiles.size()>0){
-            workingTiles = selectedTiles;
+        if(selectedTile != null){
+            workingTile = selectedPos;
         } else if(selectedEntities.size()>0) {
             for (Entity e : getSelectedEntities(x, y)) {
                 if(e.isAlive())
@@ -140,11 +140,18 @@ public class World extends Observable{
     }
 
     public void interpretDrag(float x, float y){
-        terrain.placeTile(x, y, GameTiles.getGrassTile()); //TODO player selected tile from inventory ?
+        //TODO player selected tile from inventory ?
+        holding = true;
+
+            Vector2 selectedPos = Helpers.screenToMap(x,y);
+            TileType selectedTile = terrain.getVegetationTileFromPos(selectedPos);
+
+            if(selectedTile != null)
+                workingTile = selectedPos;
+
     }
 
     public void endInterpret(){
-
         holding = false;
         holdTime = 0;
 
@@ -190,17 +197,15 @@ public class World extends Observable{
     }
 
     public void updateTiles(){
-        if(workingTiles!=null && workingTiles.size()>0){
-            for (Map.Entry<Vector2,Tile> st:workingTiles.entrySet()) {
-                if(st.getValue().getResistance() < holdTime) {
-                    entities.add(new Item(st.getValue().getName(), Helpers.itemToScreen(st.getKey(), 1), st.getValue().getColor()));
-                    terrain.removeTile(st.getKey());
+        TileType tileType = terrain.getVegetationTileFromPos(workingTile);
+        if(workingTile!=null && tileType!=null){
+            if(tileType.resistance < holdTime) {
+                entities.add(new Item(tileType.name(), Helpers.itemToScreen(workingTile, 1), tileType.color));
+                terrain.removeTile(workingTile);
 
-                    holding = false;
-                    holdTime = 0;
-                } else {
-                    terrain.breakingTile(st.getKey());
-                }
+                holding = false;
+                workingTile = null;
+                holdTime = 0;
             }
         }
     }
@@ -256,6 +261,14 @@ public class World extends Observable{
 
     public Terrain getTerrain() {
         return terrain;
+    }
+
+    public int getHoldTime() {
+        return holdTime;
+    }
+
+    public Vector2 getWorkingTile() {
+        return workingTile;
     }
 }
 

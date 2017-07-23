@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.jiedro.canels.GameVariables;
-import com.jiedro.canels.model.world.*;
+import com.jiedro.canels.model.world.Helpers;
+import com.jiedro.canels.model.world.World;
 
 import java.util.HashMap;
 
@@ -23,7 +24,7 @@ public class WorldInput implements InputProcessor {
 
     private OrthographicCamera entitiesCamera;
 
-    public WorldInput(com.jiedro.canels.model.world.World world, OrthographicCamera tilemapCamera, OrthographicCamera entitiesCamera){
+    public WorldInput(World world, OrthographicCamera tilemapCamera, OrthographicCamera entitiesCamera){
         this.world = world;
         this.tilemapCamera = tilemapCamera;
         this.entitiesCamera = entitiesCamera;
@@ -104,7 +105,7 @@ public class WorldInput implements InputProcessor {
                     whereNow = whereGo;
                     whereGo = breadthFirstSearch.get(whereNow);
                     if (whereGo != null) {
-                        world.placeTile(Helpers.mapToScreen(whereNow), GameTiles.getDoorTile());
+                        world.placeTile(Helpers.mapToScreen(whereNow), TileType.DOOR);
                     }
                 }
             }

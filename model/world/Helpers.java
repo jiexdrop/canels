@@ -1,5 +1,8 @@
 package com.jiedro.canels.model.world;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.jiedro.canels.GameVariables;
 
@@ -48,6 +51,23 @@ public class Helpers {
 
     public static boolean checkIfNear(double x1, double y1, float r1, double x2, double y2, float r2){
         return Math.abs((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < (r1 + r2) * (r1 + r2);
+    }
+
+    public TextureRegion combineTextureRegions(TextureRegion textureRegionA, TextureRegion textureRegionB){
+        if (!textureRegionA.getTexture().getTextureData().isPrepared()) {
+            textureRegionA.getTexture().getTextureData().prepare();
+        }
+
+        if (!textureRegionB.getTexture().getTextureData().isPrepared()) {
+            textureRegionB.getTexture().getTextureData().prepare();
+        }
+
+        Pixmap pixmap = textureRegionA.getTexture().getTextureData().consumePixmap();
+
+        pixmap.drawPixmap(textureRegionB.getTexture().getTextureData().consumePixmap(),0,0);
+
+        textureRegionA.setTexture(new Texture(pixmap));
+        return textureRegionA;
     }
 
 }

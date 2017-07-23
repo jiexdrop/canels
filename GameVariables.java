@@ -37,6 +37,12 @@ public class GameVariables {
 
     public static final int SLIME_FRAMES = 3;
 
+    public static final int SLIME_ID = 0;
+
+    public static final int BREAK_ID = 5;
+
+    public static final int BREAK_FRAMES = 6;
+
     public static final Color SLIME_COLOR = new Color(0x35b72000);
 
     //PLAYER
@@ -55,6 +61,8 @@ public class GameVariables {
     public static final Color PLAYER_SKIN_DESERT = new Color(0x6d4128ff);
 
     public static final int PLAYER_FRAMES = 3;
+
+    public static final int PLAYER_ID = 0;
 
     //CONSTANTS
     public static final int ZOOM_LEVEL = 256;
@@ -111,6 +119,8 @@ public class GameVariables {
 
     public static final Color ROCK_PLAIN = new Color(0xa9a9a9ff);
 
+    public static final Color DIRT_PLAIN = new Color(0x5a553bff);
+
     //USER INTERFACE
     public static final String MAIN_UI = USER_INTERFACE_FOLDER + "main_ui.png";
 
@@ -136,11 +146,13 @@ public class GameVariables {
 
     public static final int VISIBLE_PLAYER_ITEM_SLOTS = PLAYER_ITEM_SLOTS/4;
 
-    public static String EMPTY = "";
+    public static String EMPTY = "EMPTY";
+
+    public static String CLEAR = "";
 
     public static Vector2 PLAYER_POSITION = new Vector2(0,0);
 
     //DEBUG
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
 
 }

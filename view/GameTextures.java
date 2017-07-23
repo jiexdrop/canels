@@ -43,10 +43,6 @@ public class GameTextures {
         return mainUITextureRegions[0][1];
     }
 
-    static TextureRegion getSideBarTexture() {
-        return mainUITextureRegions[1][0];
-    }
-
     static TextureRegion getSlotTexture() {
         return mainUITextureRegions[1][1];
     }
@@ -55,19 +51,29 @@ public class GameTextures {
         return mainUITextureRegions[0][2];
     }
 
-    static TextureRegion getCheckedSlotTexture() {
-        return mainUITextureRegions[1][2];
-    }
+    public static TextureRegion getTextureRegion(TileType tileType){
+        switch (tileType){
+            case WATER:
+                return textureRegions[0][0];
+            case GRASS:
+                return textureRegions[0][1];
+            case GROUND:
+                return textureRegions[0][2];
+            case WALL:
+                return textureRegions[1][0];
+            case LEAVES:
+                return textureRegions[1][2];
+            case ROCK:
+                return textureRegions[2][0];
+            case LOG:
+                return textureRegions[2][2];
+            case DOOR:
+                return textureRegions[1][1];
+            case CACTUS:
+                return textureRegions[3][0];
 
-    public static TextureRegion[][] getTextureRegions() {
-        return textureRegions;
-    }
-
-    public static TextureRegion getTextureRegionByName(String name){
-        if (name.equals("grass")) return GameTiles.getGrassTile();
-        if (name.equals("ground")) return GameTiles.getGroundTile();
-        if (name.equals("water")) return GameTiles.getWaterTile();
-
-        return GameTiles.getDoorTile();
+            default:
+                return textureRegions[0][0];
+        }
     }
 }

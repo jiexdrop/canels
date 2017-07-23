@@ -5,10 +5,13 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.jiedro.canels.GameVariables;
 import com.jiedro.canels.model.entity.Entity;
 import com.jiedro.canels.model.entity.Living;
+import com.jiedro.canels.model.entity.Orientation;
+import com.jiedro.canels.model.world.Helpers;
 import com.jiedro.canels.model.world.World;
 
 /**
@@ -34,9 +37,11 @@ public class Renderer implements Disposable {
 
     private InputMultiplexer inputMultiplexer;
 
-    private AnimatedEntity slimesAnimation = new AnimatedEntity(GameTextures.getSlimesTextures(),GameVariables.SLIME_FRAMES);
+    private AnimatedEntity slimesAnimation = new AnimatedEntity(GameTextures.getSlimesTextures(),GameVariables.SLIME_FRAMES, GameVariables.SLIME_ID);
 
-    private AnimatedEntity playerAnimation = new AnimatedEntity(GameTextures.getPlayerTexture(),GameVariables.PLAYER_FRAMES);
+    private AnimatedEntity breakingAnimation = new AnimatedEntity(GameTextures.getSlimesTextures(), 18f, GameVariables.BREAK_FRAMES, GameVariables.BREAK_ID);
+
+    private AnimatedEntity playerAnimation = new AnimatedEntity(GameTextures.getPlayerTexture(),GameVariables.PLAYER_FRAMES, GameVariables.PLAYER_ID);
 
     public Renderer(){
         world = new World();
@@ -76,10 +81,11 @@ public class Renderer implements Disposable {
         drawTilemapBackground(batch, tilemapCamera);
         drawLivings(batch);
         drawTilemapForeground(batch, tilemapCamera);
+        drawHints(batch);
         batch.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        drawLivings(shapeRenderer);
+        drawHints(shapeRenderer);
         shapeRenderer.end();
 
 
@@ -90,11 +96,21 @@ public class Renderer implements Disposable {
         userInterface.draw();
     }
 
-    private void drawLivings(ShapeRenderer shapeRenderer) {
+    private void drawHints(ShapeRenderer shapeRenderer) {
+        //Draw square arround items on the ground
         for (Entity e:world.getEntities()) {
             if(!e.isAlive()) {
                 shapeRenderer.rect(e.getX(),e.getY(), GameVariables.ITEM_SIZE, GameVariables.ITEM_SIZE);
             }
+        }
+    }
+
+    private void drawHints(SpriteBatch batch) {
+        //Breaking animation
+        if(world.getWorkingTile()!=null) {
+            Vector2 pos = Helpers.mapToScreen(world.getWorkingTile());
+            batch.draw(breakingAnimation.getCurrentFrame(world.getHoldTime(), Orientation.RIGHT),
+                    pos.x, pos.y);
         }
 
     }
@@ -109,10 +125,14 @@ public class Renderer implements Disposable {
         for (Entity e:world.getEntities()) {
             batch.setColor(e.getColor());
             if(e.isAlive()) {
-                batch.draw(slimesAnimation.getCurrentFrame(e.getElapsedTime(), ((Living)e).getOrientation()), e.getX(), e.getY());
+                batch.draw(slimesAnimation.getCurrentFrame(e.getElapsedTime(),
+                        ((Living)e).getOrientation()), e.getX(), e.getY());
             }
             else {
-                batch.draw(GameTextures.getTextureRegionByName(e.getName()), e.getX(), e.getY(), GameVariables.ITEM_SIZE,GameVariables.ITEM_SIZE);
+                TileType tileType = TileType.valueOf(e.getName().toUpperCase());
+                batch.draw(GameTextures.getTextureRegion(tileType),
+                        e.getX(), e.getY(),
+                        GameVariables.ITEM_SIZE,GameVariables.ITEM_SIZE);
             }
         }
 

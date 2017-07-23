@@ -14,18 +14,32 @@ public class AnimatedEntity {
 
     TextureRegion stillFrame;
 
-    public AnimatedEntity(TextureRegion[][] textureRegions, int frames){
+    public AnimatedEntity(TextureRegion[][] textureRegions, int frames, int id){
 
         TextureRegion[] framesTextures = new TextureRegion[frames];
         int index = 0;
         for (int i = 0; i < frames; i++) {
-            framesTextures[index++] = textureRegions[0][i];
+            framesTextures[index++] = textureRegions[id][i];
         }
 
-        animation = new Animation<TextureRegion>(0.25f, framesTextures);
+        animation = new Animation<TextureRegion>(0.100f, framesTextures);
 
         stillFrame = animation.getKeyFrame(0);
     }
+
+    public AnimatedEntity(TextureRegion[][] textureRegions, float speed, int frames, int id){
+
+        TextureRegion[] framesTextures = new TextureRegion[frames];
+        int index = 0;
+        for (int i = 0; i < frames; i++) {
+            framesTextures[index++] = textureRegions[id][i];
+        }
+
+        animation = new Animation<TextureRegion>(speed, framesTextures);
+
+        stillFrame = animation.getKeyFrame(0);
+    }
+
 
     public TextureRegion getCurrentFrame(float elapsedTime, Orientation orientation){
         switch (orientation) {
